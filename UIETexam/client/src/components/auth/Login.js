@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showOTPVerification, setShowOTPVerification] = useState(false);
+    const [showOTPVerification, setShowOTPVerification] = useState(true);
     const [otp, setOTP] = useState('');
     const navigate = useNavigate();
     async function submit(e){
@@ -103,13 +103,13 @@ const Login = () => {
       </div>
       {showOTPVerification && ( 
         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-80 bg-gray-600">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-gray-200 p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">OTP Verification</h2>
         <input
           type="text"
           value={otp}
           onChange={(e) => setOTP(e.target.value)}
-          className="w-full border-gray-300 rounded-md shadow-sm px-3 py-2 mb-2"
+          className="w-full border-gray-300 rounded-md shadow-md px-3 py-2 mb-2"
           placeholder="Enter OTP"
         />
         <button
