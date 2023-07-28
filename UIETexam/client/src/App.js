@@ -7,6 +7,7 @@ import Examiners from "./components/controller1/options/Examiners";
 import Papers from "./components/controller1/options/Papers";
 import Payments from "./components/controller1/options/Payments";
 import Logout from "./components/controller1/options/Logout";
+import Login from './components/auth/Login';
 const router = createBrowserRouter([
   {
     path: "/controller1/Home",
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/controller1/Logout",
     element: <Logout/>,
+  },
+  {
+    path: "/auth/Login",
+    element: <Login/>,
   },
 ]);
 
