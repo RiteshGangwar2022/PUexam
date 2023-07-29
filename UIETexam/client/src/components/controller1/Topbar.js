@@ -33,7 +33,7 @@ const Topbar = () => {
                     <div className="relative ml-10 flex items-center justify-between ">
                     <FaUser className={`text-gray-500 cursor-pointer w-8 h-8`} />
 
-                  <div class="text-gray-600 text-lg font-bold shadow-lg ml-4 font-custom-style text-crystal-grey"> 
+                  <div class="text-gray-600 text-lg font-bold  ml-4 font-custom-style text-crystal-grey"> 
                             Username
                         <div class="text-gray-400 text-sm font-normal">
                              Controller
