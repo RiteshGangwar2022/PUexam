@@ -20,12 +20,4 @@ const NavButton = ({ text, to, icon, active, onClick }) => {
 
 export default NavButton;
 
-// const NavButton = ({ text, to, onClick, active }) => {
-//   return (
-//     <li className={`flex items-center py-2 pl-6 ${active ? "bg-blue-600" : ""}`}>
-//       <NavLink to={to} onClick={onClick} activeClassName="text-white">
-//         {text}
-//       </NavLink>
-//     </li>
-//   );
-// };
+
