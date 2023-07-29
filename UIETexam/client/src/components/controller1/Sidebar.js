@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaMoneyBillWave, FaStickyNote ,FaSignOutAlt,FaUsers} from "react-icons/fa";
+import { FaHome, FaMoneyBillWave, FaStickyNote ,FaSignOutAlt,FaUsers,FaUser} from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
 import NavButton from './NavButton';
 
@@ -19,11 +19,22 @@ const Sidebar = () => {
  
 
   return (
-    <div className={`bg-[#181c2c] w-1/6 h-full `}>
+    <div className={` bg-white w-1/6 h-full `}>
      
 
-      <ul className={`flex-1 text-md overflow-y-auto text-white p-4 pr-0`}>
-      
+      <ul className={`flex-1 text-md overflow-y-auto text-black p-4 pr-0`}>
+      <div className="relative ml-1 flex items-center ">
+                    <FaUser className={`text-gray-500 cursor-pointer w-8 h-8`} />
+
+                  <div class="text-gray-600 text-lg font-bold shadow-lg ml-4 font-custom-style text-crystal-grey"> 
+                            Username
+                        <div class="text-gray-400 text-sm font-normal">
+                             Controller
+                                    </div>
+                                           </div>
+
+                    </div>
+                     
       <NavButton
           text="Home"
           to="/controller1/Home"
@@ -60,6 +71,8 @@ const Sidebar = () => {
           onClick={() => handleButtonClick("Profile")}
           active={currentPath === "/controller1/Logout"}
         />
+         
+      
       </ul>
     </div>
   );
