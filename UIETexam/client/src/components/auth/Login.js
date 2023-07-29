@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showOTPVerification, setShowOTPVerification] = useState(true);
+    const [showOTPVerification, setShowOTPVerification] = useState(false);
     const [otp, setOTP] = useState('');
     const navigate = useNavigate();
     async function submit(e){
