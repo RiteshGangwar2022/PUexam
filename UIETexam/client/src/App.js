@@ -1,8 +1,5 @@
-import Home from './components/controller1/options/Home';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import Home from "./components/controller1/options/Home";
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import Examiners from "./components/controller1/options/Examiners";
 import Papers from "./components/controller1/options/Papers";
 import Payments from "./components/controller1/options/Payments";
@@ -10,37 +7,52 @@ import Logout from "./components/controller1/options/Logout";
 import Login from "./components/auth/Login";
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: (
+      <div className=" bg-sky-300  h-screen flex-col flex justify-center items-center text-black">
+        <p className=" font-bold  text-5xl "> welcome !</p>
+        <p className=" underline text-red-900 text-sm ">
+          add middleware to redirect user from this page
+        </p>
+        <Link
+          className=" bg-neutral-500 text-white px-2 py-1 my-2"
+          to={"/controller1/Home"}
+        >
+          <p>controller</p>
+        </Link>
+      </div>
+    ),
+  },
+  {
     path: "/controller1/Home",
-    element: <Home/>,
+    element: <Home />,
   },
   {
     path: "/controller1/Examiners",
-    element: <Examiners/>,
+    element: <Examiners />,
   },
   {
     path: "/controller1/Papers",
-    element: <Papers/>,
+    element: <Papers />,
   },
   {
     path: "/controller1/Payments",
-    element: <Payments/>,
+    element: <Payments />,
   },
   {
     path: "/controller1/Logout",
-    element: <Logout/>,
+    element: <Logout />,
   },
   {
     path: "/auth/Login",
-    element: <Login/>,
+    element: <Login />,
   },
-
 ]);
 
 function App() {
   return (
     <>
-       <RouterProvider router={router} />
-    
+      <RouterProvider router={router} />
     </>
   );
 }
