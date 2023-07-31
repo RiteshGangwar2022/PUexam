@@ -4,7 +4,13 @@ import Examiners from "./components/controller1/options/Examiners";
 import Papers from "./components/controller1/options/Papers";
 import Payments from "./components/controller1/options/Payments";
 import Logout from "./components/controller1/options/Logout";
-import Login from "./components/auth/Login";
+import Examinerhome from "./components/Examiner/options/Home";
+import ExaminerAssignments from "./components/Examiner/options/Assignments";
+import ExaminerQuestionBank from "./components/Examiner/options/QuestionBanks";
+import ExaminerPayments from "./components/Examiner/options/Payments";
+import ExaminerLogouts from "./components/Examiner/options/Logout";
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,9 +49,26 @@ const router = createBrowserRouter([
     path: "/controller1/Logout",
     element: <Logout />,
   },
+
   {
-    path: "/auth/Login",
-    element: <Login />,
+    path: "/Examiner/Home",
+    element: <Examinerhome />,
+  },
+  {
+    path: "/Examiner/Assignments",
+    element: <ExaminerAssignments />,
+  },
+  {
+    path: "/Examiner/Logout",
+    element: <ExaminerLogouts />,
+  },
+  {
+    path: "/Examiner/Payments",
+    element: <ExaminerPayments />,
+  },
+  {
+    path: "/Examiner/QuestionBanks",
+    element: <ExaminerQuestionBank />,
   },
 ]);
 
