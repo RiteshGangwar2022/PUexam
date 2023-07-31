@@ -26,6 +26,13 @@ const router = createBrowserRouter([
         >
           <p>controller</p>
         </Link>
+        <br></br>
+        <Link
+          className=" bg-neutral-500 text-white px-2 py-1 my-2"
+          to={"/Examiner/Home"}
+        >
+          <p>Examiner</p>
+        </Link>
       </div>
     ),
   },
