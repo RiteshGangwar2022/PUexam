@@ -25,7 +25,6 @@ const Login = () => {
               })
               .catch(e=>{
                 alert("Wrong");
-                navigate('/otpPage');
                 console.log(e);
               })
       
