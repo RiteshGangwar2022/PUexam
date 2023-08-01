@@ -1,45 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import Examiner from "../Examiner";
+import { clsx } from "clsx";
+
+const steps = ["setup", "questions", "preview", "publish"];
+
 const Assignments = () => {
-  return (
-    <Examiner>
-      <div className=" rounded-xl flex flex-col items-center bg-white">
-        <h1 className="  relative text-3xl font-bold p-2">Add Examiner</h1>
-        <div className=" w-full  p-6 gap-6 grid grid-cols-2">
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" items-center flex gap-3">
-            <label className=" text-xl">field</label>
-            <input className=" shadow-md bg-neutral-200 px-2 py-1 w-full border-2  rounded-sm " />
-          </div>
-          <div className=" col-span-full flex justify-center ">
-            <button className=" uppercase px-6 py-2 bg-sky-500 text-white rounded-xl">
-              Add
+  const [active, setActive] = useState(0);
+  const Tabs = () => {
+    switch (active) {
+      case 0:
+        return (
+          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            setup
+            <button
+              onClick={() => setActive((active + 1) % 4)}
+              className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+            >
+              Next
             </button>
           </div>
+        );
+      case 1:
+        return (
+          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            questions
+            <button
+              onClick={() => setActive((active + 1) % 4)}
+              className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+            >
+              Next
+            </button>
+          </div>
+        );
+      case 2:
+        return (
+          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            preview
+            <button
+              onClick={() => setActive((active + 1) % 4)}
+              className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+            >
+              Next
+            </button>
+          </div>
+        );
+      case 3:
+        return (
+          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            publish
+            <button
+              onClick={() => setActive((active + 1) % 4)}
+              className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+            >
+              Next
+            </button>
+          </div>
+        );
+      default:
+        return <h1>error </h1>;
+    }
+  };
+
+  return (
+    <Examiner>
+      <div>
+        <div className=" grid   grid-cols-4">
+          {steps.map((x, index) => (
+            <div className="   flex  items-center">
+              <h1
+                onClick={() => setActive(index)}
+                className={clsx(
+                  "  cursor-pointer border-sky-400 border-2 bg-white px-4 py-1 text-xl rounded-full ",
+                  { " font-bold bg-sky-400 text-white ": index === active }
+                )}
+                key={index}
+              >
+                {x}
+              </h1>
+              {index < 3 && <div className="w-full h-[3px]  bg-sky-400"></div>}
+            </div>
+          ))}
         </div>
+        {Tabs()}
       </div>
-      <h1 className=" text-center text-3xl font-bold p-2">Examiners List</h1>
-      <div className=" p-2 my-3 rounded-xl bg-white">Demo</div>
-      <div className=" p-2 my-3 rounded-xl bg-white">Demo</div>
     </Examiner>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { PieChart, Pie, Cell, Label } from 'recharts';
+import React from "react";
+import { PieChart, Pie, Cell, Label } from "recharts";
 
 const Piechart = (props) => {
   // Destructure the data prop from props
@@ -14,7 +14,15 @@ const Piechart = (props) => {
           outerRadius={73}
           innerRadius={34}
           fill="#8884d8"
-          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+          label={({
+            cx,
+            cy,
+            midAngle,
+            innerRadius,
+            outerRadius,
+            percent,
+            index,
+          }) => {
             const RADIAN = Math.PI / 180;
             const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
 
