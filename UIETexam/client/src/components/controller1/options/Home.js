@@ -1,6 +1,7 @@
 import React from "react";
 import Controller1 from "../Controller1";
 import Piechart from "./Piechart";
+import { useState,useEffect } from "react";
 
 const Home = () => {
   const data = [
@@ -8,9 +9,19 @@ const Home = () => {
     { students: 37, fill: 'blue' },
   ];
   const data1 = [
-    {  students: 13, fill: 'orange' },
-    { students: 37, fill: 'green' },
+    {  students: 19, fill: 'orange' },
+    { students: 31, fill: 'green' },
   ];
+
+  const [currentYear, setCurrentYear] = useState('');
+
+  useEffect(() => {
+    
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      setCurrentYear(year);
+    
+  }, []);
 
   return (
     <Controller1>
@@ -45,11 +56,18 @@ const Home = () => {
         </div>
         <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3">
   <h1 className="text-3xl font-bold p-2">Sessions</h1>
-  <div className="flex flex-col items-center gap-4"> {/* Added the items-center class here */}
-    <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">2021-2022</div>
-    <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">2022-2023</div>
-    <div className="bg-gray-200 shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">2023-2024</div>
-  </div>
+  <div className="flex flex-col items-center gap-4">
+            
+            <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
+            {currentYear-2}-{currentYear-1}
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
+            {currentYear-1}-{currentYear}
+            </div>
+            <div className="bg-gray-200 shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
+              {currentYear}-{currentYear+1}
+            </div>
+          </div>
 </div>
 
         <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3"> 
