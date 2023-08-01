@@ -44,7 +44,7 @@ const Sidebar = () => {
         <NavButton
           text="Assignments"
           to="/Examiner/Assignments"
-          icon={<FaUsers className="mr-4" />}
+          icon={<FaStickyNote className="mr-4" />}
           onClick={() => {
             handleButtonClick("Assignments");
           }}
