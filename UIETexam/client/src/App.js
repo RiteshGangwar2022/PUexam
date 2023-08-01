@@ -9,7 +9,8 @@ import ExaminerAssignments from "./components/Examiner/options/Assignments";
 import ExaminerQuestionBank from "./components/Examiner/options/QuestionBanks";
 import ExaminerPayments from "./components/Examiner/options/Payments";
 import ExaminerLogouts from "./components/Examiner/options/Logout";
-
+import OtpPage from "./components/auth/OtpPage";
+import Login from "./components/auth/Login";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,14 @@ const router = createBrowserRouter([
   {
     path: "/Examiner/QuestionBanks",
     element: <ExaminerQuestionBank />,
+  },
+    {
+    path: "/otpPage",
+    element: <OtpPage />,
+  },
+    {
+    path: "/auth/Login",
+    element: <Login/>,
   },
 ]);
 
