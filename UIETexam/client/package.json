@@ -1,18 +1,22 @@
 {
-  "name": "client",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:5000",
   "dependencies": {
-    "@mui/material": "^5.14.2",
-    "@mui/styled-engine-sc": "^5.12.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
+    "clsx": "^2.0.0",
+    "postcss": "^8.4.27",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-form-stepper": "^2.0.3",
+    "react-icons": "^4.10.1",
+    "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
-    "styled-components": "^5.3.11",
+    "recharts": "^2.7.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -38,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
   }
 }
