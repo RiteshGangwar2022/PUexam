@@ -9,18 +9,17 @@ const OtpPage = ({email}) => {
   const navigate = useNavigate();
   const handleVerifyOTP = async () => {
     try {
-      // Make an API call to your backend server or directly to the OTP service API
-      // with the OTP entered by the user and the user's email/phone for verification
+    
       const response = await axios.post('http://localhost:3000/api/r1/verify-otp', {
-        email: email, // Replace 'userEmail' with the user's email
-        otp: otp, // Replace 'otp' with the OTP entered by the user
+        email: email,
+        otp: otp, 
       });
   
       if (response.data === 'success') {
-        // OTP verification successful, handle success accordingly
+
         navigate('/');
       } else {
-        // OTP verification failed, handle failure accordingly
+      
         alert('Invalid OTP. Please try again.');
       }
     } catch (error) {
