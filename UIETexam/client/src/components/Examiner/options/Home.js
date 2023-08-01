@@ -1,7 +1,7 @@
 import React from "react";
 import Examiner from "../Examiner";
 import Piechart from "./Piechart";
-
+import { useState,useEffect } from "react";
 const Home = () => {
   const data = [
     { students: 13, fill: "red" },
@@ -11,8 +11,18 @@ const Home = () => {
     { students: 13, fill: "orange" },
     { students: 37, fill: "green" },
   ];
+  const [currentYear, setCurrentYear] = useState('');
+
+  useEffect(() => {
+    
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      setCurrentYear(year);
+    
+  }, []);
 
   return (
+    
     <Examiner>
       <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-6 p-2">
         <div className=" bg-white shadow-md rounded-xl  p-3">
@@ -53,16 +63,15 @@ const Home = () => {
         <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3">
           <h1 className="text-3xl font-bold p-2">Sessions</h1>
           <div className="flex flex-col items-center gap-4">
-            {" "}
-            {/* Added the items-center class here */}
+            
             <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
-              2021-2022
+            {currentYear-2}-{currentYear-1}
             </div>
             <div className="bg-white shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
-              2022-2023
+            {currentYear-1}-{currentYear}
             </div>
             <div className="bg-gray-200 shadow-lg rounded-xl p-2 w-23 font-bold text-3xl">
-              2023-2024
+              {currentYear}-{currentYear+1}
             </div>
           </div>
         </div>
