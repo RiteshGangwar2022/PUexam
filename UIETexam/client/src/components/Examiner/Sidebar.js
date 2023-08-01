@@ -28,7 +28,7 @@ const Sidebar = () => {
 
           <div class="text-gray-600 text-lg font-bold  ml-4 font-custom-style text-crystal-grey">
             Username
-            <div class="text-gray-400 text-sm font-normal">Controller</div>
+            <div class="text-gray-400 text-sm font-normal">Examiner</div>
           </div>
         </div>
 
