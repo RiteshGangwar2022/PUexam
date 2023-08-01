@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 
-//routes
+// admin routes
 app.use("/api/r1", adminRoutes);
 
 const port=process.env.PORT;
