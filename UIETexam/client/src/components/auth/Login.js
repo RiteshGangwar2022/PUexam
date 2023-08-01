@@ -1,42 +1,35 @@
-import React from 'react';
-import {useState} from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-    async function submit(e){
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  async function submit(e) {
+    e.preventDefault();
 
-        e.preventDefault();
-      
-            try{
-               
-              await axios.post("",{
-                email,password
-              })
-              .then(res=>{
-                if(res.data=='exist'){
-                  navigate('/otpPage');
-                }
-                else if(res.data=="notexist") {
-                  alert("User Not Registered");
-                }
-              })
-              .catch(e=>{
-                alert("Wrong");
-                console.log(e);
-              })
-      
-            }
-            catch(e){
-                 console.log("error: "+e);
-            }
-      
-       }
-     
-      
-      
+    try {
+      await axios
+        .post("", {
+          email,
+          password,
+        })
+        .then((res) => {
+          if (res.data == "exist") {
+            navigate("/otpPage");
+          } else if (res.data == "notexist") {
+            alert("User Not Registered");
+          }
+        })
+        .catch((e) => {
+          alert("Wrong");
+          console.log(e);
+        });
+    } catch (e) {
+      console.log("error: " + e);
+    }
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-300">
@@ -44,7 +37,10 @@ const Login = () => {
         <h2 className="text-2xl font-semibold mb-6">Login</h2>
         <form>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold  mb-1 ">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-bold  mb-1 "
+            >
               Email
             </label>
             <input
@@ -57,7 +53,10 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-1">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-bold mb-1"
+            >
               Password
             </label>
             <input

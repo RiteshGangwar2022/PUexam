@@ -71,7 +71,7 @@ const Assignments = () => {
                 onClick={() => setActive(index)}
                 className={clsx(
                   "  cursor-pointer border-sky-400 border-2 bg-white px-4 py-1 text-xl rounded-full ",
-                  { " font-bold bg-sky-400 text-white ": index === active }
+                  { " font-bold  bg-blue-400 text-white ": index === active }
                 )}
                 key={index}
               >
