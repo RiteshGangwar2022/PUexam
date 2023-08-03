@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-const Admin = require("../Database/Models/Admin");
+const Professor= require("../Database/Models/Professor");
 const bcrpt=require("bcrypt");
 
 
@@ -18,17 +18,13 @@ const Login = async (req, res) => {
         if (!email || !role || !password) {
             res.status(422).json({ error: "enter details properly" });
         }
-        const admindata = await Admin.findOne({ email: email });
-
-        if (admindata) {
-            const ismatch = await bcrpt.compare(password, admindata.password);
-           
-           /* console.log("rolecheck");
-              console.log(admindata.role);
-              console.log(role);*/
-            const checkrole=admindata.role==role;
-            //console.log(checkrole);
-
+        const professordata= await Professor.findOne({ email: email });
+ 
+        if (professordata) {
+            const ismatch = await bcrpt.compare(password, professordata.password);
+     
+            const checkrole=professordata.role==role;
+            // console.log(checkrole)
             if (!ismatch) {
                 
                 res.status(422).json({ message: "invalid credential" });
@@ -43,11 +39,11 @@ const Login = async (req, res) => {
              //we will send an otp on his email to again verify user
 
              //it will send otp to user
-             const sendCode = await sendOtpEmail(req.body.email, admindata._id);
+             const sendCode = await sendOtpEmail(req.body.email, professordata._id);
                    
-             res.status(200).json(admindata);
+             res.status(200).json(professordata);
                 //console.log(admindata)
-            } 
+            }
 
         }
         else {
@@ -65,11 +61,11 @@ const Signup = async(req,res)=>{
 
     
     try {
-            const { name, email,mobile,gender,role, password} = req.body;
+            const { name, email,mobile,gender,department,role, password} = req.body;
                  
             const hash= await hashPassword(req.body.password);
-            const newadmin = new Admin({ name, email, mobile,gender,role, password:hash});
-            const data = await newadmin.save();
+            const newprofessor = new Professor({ name, email,mobile,gender,department,role, password:hash});
+            const data = await newprofessor.save();
             console.log(data);
             res.status(201).json(data);
     }

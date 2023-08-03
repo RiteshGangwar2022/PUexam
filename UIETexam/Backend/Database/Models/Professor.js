@@ -3,11 +3,11 @@ const Subject = require('./Subject')
 
 const ProfessorSchema = new mongoose.Schema({
     
-    Name: {
+    name: {
         type: String,
         required: [true, 'Please provide name of the Professor']
     },
-    Email:{
+    email:{
         type:String,
         require:true
     },
@@ -15,32 +15,53 @@ const ProfessorSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Subject'
     }],
-    Age:{
-        type: Number,
-        required: [true, 'Please provide Age of the Professor']
-    },
-    ContactNumber:{
+    mobile:{
         type: Number,
         required: [true, 'Please provide Contac Number  of the Professor']
     },
-    Gender:{
+    gender:{
         type: String,
-        required: [true, 'Please provide name of the Professor'],
-        enum: ["Male", "Female"]
+        required: [true, 'Please provide name of the Professor']
     },
-    Department:{
+    department:{
         type:String,
         required:true
     },
-    PFnumber:{
+    role:{
+        type:String,
+        required:true
+     },
+    password:{
         type:String,
         required:true
     },
-    Adhaarnumber:{
-        type:String,
-        required:true
-    }
+    tokens:
+    [
+        {
+          token:{
+            type:String,
+            required:true
+          }
+        }
+    ]
 });
+
+
+// generting token
+ProfessorSchema.methods.generatAuthtoken = async function(){
+    try {
+        let token = jwt.sign({ _id:this._id},process.env.SECRET_KEY,{
+            expiresIn:"1d"
+        });
+        this.tokens = this.tokens.concat({token:token});
+        await this.save();
+        return token;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 const Professor =new mongoose.model("Professor", ProfessorSchema);
 

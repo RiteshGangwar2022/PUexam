@@ -20,10 +20,6 @@ const AdminSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Professor'
     }],
-    age:{
-        type: String,
-        required: [true, 'Please provide Age of the Professor']
-    },
     mobile:{
         type:String,
         required: [true, 'Please provide Contact Number  of the Professor']
@@ -31,6 +27,10 @@ const AdminSchema = new mongoose.Schema({
     gender:{
         type: String,
         required: [true, 'Please provide name of the Professor'],
+    },
+    role:{
+       type:String,
+       required:true
     },
     password:{
         type:String,
