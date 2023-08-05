@@ -77,7 +77,7 @@ const Home = () => {
         </div>
 
         <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3">
-          <h1 className="text-3xl font-bold p-2">Subjects</h1>
+          <h1 className="text-3xl font-bold p-2">Question Banks</h1>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center justify-center bg-gray-200 h-14 shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl">
               Subject A
