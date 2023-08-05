@@ -21,8 +21,8 @@ const sendOtpEmail = async (email, _id) => {
   //  host: "smtp-mail.outlook.com", // hostname
     service: "gmail",
     auth: {
-      user: "riteshgangwar2020@gmail.com",
-      pass: process.env.AUTH_PASS,
+      user: "om43singh21@gmail.com",
+      pass: "kqjvogldtdkouadj",
     },
   });
 
@@ -30,9 +30,8 @@ const sendOtpEmail = async (email, _id) => {
 
     //opt code generator
     const code = `${Math.floor(1000 + Math.random() * 9000)}`;
-
-
-    //body of mail
+    
+   //body of mail
     var body_html = `<!DOCTYPE> 
     <html>
       <body>
