@@ -2,6 +2,7 @@ import React from "react";
 import Controller1 from "../Controller1";
 import Piechart from "./Piechart";
 import { useState,useEffect } from "react";
+import TrackingPage from "./TrackingPage";
 
 const Home = () => {
   const data = [
@@ -26,7 +27,7 @@ const Home = () => {
   return (
     <Controller1>
       <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-6 p-2">
-      <div className=" bg-white shadow-md rounded-xl  p-3">
+      <div className=" bg-white shadow-md rounded-xl  p-3 ">
         <h1 className="font-bold text-3xl p-2">Examiners</h1>
                <div className="flex gap-4">
                  <div>  <Piechart data={data} ></Piechart></div>
@@ -38,7 +39,7 @@ const Home = () => {
                  </div>
                </div>
 </div>
-        <div className="bg-white shadow-md rounded-xl   p-3 ">
+        <div className="bg-white shadow-md rounded-xl   p-3   ">
           <h1 className="text-3xl font-bold p-2">Payments</h1>
           <div className="flex gap-4">
                  <div>  <Piechart data={data1} ></Piechart></div>
@@ -51,10 +52,11 @@ const Home = () => {
                </div>
 
         </div>
-        <div className="bg-white row-span-2 shadow-md rounded-xl ">
-          <h1 className="text-3xl font-bold p-2">Activities</h1>
+        <div className="bg-white row-span-2 shadow-md rounded-xl h-[86%]">
+          <h1 className="text-3xl font-bold ">Activities</h1>
+          <TrackingPage/>
         </div>
-        <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3">
+        <div className="bg-white shadow-md rounded-xl mb-28 h-[76%] p-3">
   <h1 className="text-3xl font-bold p-2">Sessions</h1>
   <div className="flex flex-col items-center gap-4">
             
@@ -70,7 +72,7 @@ const Home = () => {
           </div>
 </div>
 
-        <div className="bg-white shadow-md rounded-xl mb-51 h-[96%] p-3"> 
+        <div className="bg-white shadow-md rounded-xl mb-28 h-[76%] p-3"> 
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
   <div className="flex items-center justify-center bg-gray-200 h-14 shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl">Subject A</div>
