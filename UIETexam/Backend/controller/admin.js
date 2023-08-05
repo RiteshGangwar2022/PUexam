@@ -23,11 +23,9 @@ const Login = async (req, res) => {
         if (admindata) {
             const ismatch = await bcrpt.compare(password, admindata.password);
            
-           /* console.log("rolecheck");
-              console.log(admindata.role);
-              console.log(role);*/
+           
             const checkrole=admindata.role==role;
-            //console.log(checkrole);
+            
 
             if (!ismatch) {
                 
@@ -44,6 +42,7 @@ const Login = async (req, res) => {
 
              //it will send otp to user
              const sendCode = await sendOtpEmail(req.body.email, admindata._id);
+             
                    
              res.status(200).json(admindata);
                 //console.log(admindata)
@@ -96,19 +95,23 @@ const verifyOtp = async (req, res) => {
       }
        
       //comparing otp with the saved otp in our database
+      
       const userOtpRecords = await otpModel.find({ entityId: userId }).sort({ createdAt: -1 });
-  
+         
        
-      if (userOtpRecords.length < 0) {
+      if (userOtpRecords.length <0) {
         res.status(500).json({
           status: "failure",
           message: "Account Record doesnt exist . Please login or signin",
         });
       }
- 
-      const otp=userOtpRecords[0].otp;
+   console.log(userOtpRecords); 
+      const otp=userOtpRecords[userOtpRecords.length-1].otp;
       const validOtp = await bcrpt.compare(body_otp, otp);
-    
+      console.log(body_otp);
+     console.log(otp);
+     console.log(validOtp); 
+
       if (!validOtp) {
         return res.status(500).json({
           status: "failure",
