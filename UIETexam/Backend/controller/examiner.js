@@ -26,7 +26,6 @@ const Login = async (req, res) => {
             const checkrole=professordata.role==role;
             // console.log(checkrole)
             if (!ismatch) {
-                
                 res.status(422).json({ message: "invalid credential" });
             }
             else if(checkrole!=true){
