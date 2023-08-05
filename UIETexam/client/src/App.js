@@ -9,33 +9,14 @@ import ExaminerAssignments from "./components/Examiner/options/Assignments";
 import ExaminerQuestionBank from "./components/Examiner/options/QuestionBanks";
 import ExaminerPayments from "./components/Examiner/options/Payments";
 import ExaminerLogouts from "./components/Examiner/options/Logout";
-import OtpPage from "./components/auth/OtpPage";
+
 import Login from "./components/auth/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div className=" bg-sky-300  h-screen flex-col flex justify-center items-center text-black">
-        <p className=" font-bold  text-5xl "> welcome !</p>
-        <p className=" underline text-red-900 text-sm ">
-          add middleware to redirect user from this page
-        </p>
-        <Link
-          className=" bg-neutral-500 text-white px-2 py-1 my-2"
-          to={"/controller1/Home"}
-        >
-          <p>controller</p>
-        </Link>
-        <br></br>
-        <Link
-          className=" bg-neutral-500 text-white px-2 py-1 my-2"
-          to={"/Examiner/Home"}
-        >
-          <p>Examiner</p>
-        </Link>
-      </div>
-    ),
+    element:  <Login/>,
+  
   },
   {
     path: "/controller1/Home",
@@ -78,14 +59,7 @@ const router = createBrowserRouter([
     path: "/Examiner/QuestionBanks",
     element: <ExaminerQuestionBank />,
   },
-    {
-    path: "/otpPage",
-    element: <OtpPage />,
-  },
-    {
-    path: "/auth/Login",
-    element: <Login/>,
-  },
+ 
 ]);
 
 function App() {
