@@ -160,8 +160,8 @@ const Login = () => {
         </form>
       </div>
       {show && (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gray-600">
-          <div className="bg-gray-200 p-6 rounded-lg shadow-md">
+        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center  backdrop-blur">
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">OTP Verification</h2>
             <input
               type="text"
