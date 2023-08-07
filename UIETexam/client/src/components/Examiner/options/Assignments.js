@@ -11,7 +11,7 @@ const Assignments = () => {
       case 0:
         return (
           <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
-            setup
+            setups
             <button
               onClick={() => setActive((active + 1) % 4)}
               className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
@@ -64,20 +64,19 @@ const Assignments = () => {
   return (
     <Examiner>
       <div>
-        <div className=" grid   grid-cols-4">
+        <div className="grid grid-cols-4 ">
           {steps.map((x, index) => (
-            <div className="   flex  items-center">
+            <div className="flex items-center " key={index}>
               <h1
                 onClick={() => setActive(index)}
                 className={clsx(
-                  "  cursor-pointer border-sky-400 border-2 bg-white px-4 py-1 text-xl rounded-full ",
-                  { " font-bold  bg-sky-100 ": index === active }
+                  "cursor-pointer border-sky-400 border-2 bg-white px-4 py-1 text-xl rounded-full",
+                  { "font-bold  text-white bg-blue-400": index === active }
                 )}
-                key={index}
               >
                 {x}
               </h1>
-              {index < 3 && <div className="w-full h-[3px]  bg-sky-400"></div>}
+              {index < 3 && <div className="w-full h-[3px] bg-sky-400"></div>}
             </div>
           ))}
         </div>
