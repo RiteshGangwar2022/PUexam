@@ -26,7 +26,7 @@ const Home = () => {
 
   return (
     <Controller1>
-      <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-6 p-2">
+      <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-4">
       <div className=" bg-white shadow-md rounded-xl  p-3 ">
         <h1 className="font-bold text-3xl p-2">Examiners</h1>
                <div className="flex gap-4">
