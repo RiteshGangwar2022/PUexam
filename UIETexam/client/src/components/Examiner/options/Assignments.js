@@ -11,7 +11,7 @@ const Assignments = () => {
       case 0:
         return (
           <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
-            setups
+            setup
             <button
               onClick={() => setActive((active + 1) % 4)}
               className=" absolute  bottom-2  left-1/2 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
