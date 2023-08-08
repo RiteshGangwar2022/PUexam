@@ -21,8 +21,8 @@ const sendOtpEmail = async (email, _id) => {
   //  host: "smtp-mail.outlook.com", // hostname
     service: "gmail",
     auth: {
-      user: "om43singh21@gmail.com",
-      pass: "kqjvogldtdkouadj",
+      user: "riteshgangwar2020@gmail.com",
+      pass: "bovjckzbkvucuwyj",
     },
   });
 
