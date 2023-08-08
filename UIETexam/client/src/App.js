@@ -9,7 +9,7 @@ import ExaminerAssignments from "./components/Examiner/options/Assignments";
 import ExaminerQuestionBank from "./components/Examiner/options/QuestionBanks";
 import ExaminerPayments from "./components/Examiner/options/Payments";
 import ExaminerLogouts from "./components/Examiner/options/Logout";
-
+import AssignmentInterface from "./components/Examiner/AssignmentInterface"
 import Login from "./components/auth/Login";
 
 const router = createBrowserRouter([
@@ -46,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/Examiner/Assignments",
     element: <ExaminerAssignments />,
+  },
+  {
+    path: "/Examiner/Assignments/:id",
+    element:<AssignmentInterface/>,
   },
   {
     path: "/Examiner/Logout",
