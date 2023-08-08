@@ -25,9 +25,9 @@ const Home = () => {
   return (
     
     <Examiner>
-      <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-4 ">
+       <div className="grid grid-cols-1 h-[calc(100vh-7rem)] md:grid-cols-3 gap-4">
       <div className=" bg-white shadow-md rounded-xl  p-3 ">
-        <h1 className="font-bold text-3xl p-2">Assignments</h1>
+        <h1 className="font-bold text-3xl p-2">Examiners</h1>
                <div className="flex gap-4">
                  <div>  <Piechart data={data} ></Piechart></div>
                  <div className=" bg-gray-100 shadow-md rounded-xl w-60 h-50 border-2 border-gray-500 p-5 pt-5  font-bold  ">
@@ -72,7 +72,7 @@ const Home = () => {
 </div>
 
         <div className="bg-white shadow-md rounded-xl mb-28 h-[76%] p-3"> 
-          <h1 className="text-3xl font-bold p-2">Question Banks</h1>
+          <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
   <div className="flex items-center justify-center bg-gray-200 h-14 shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl">Subject A</div>
   <div className="flex items-center justify-center bg-gray-200 h-14 shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl">Subject B</div>
@@ -83,8 +83,7 @@ const Home = () => {
 </div>
 
         </div>
-      </div>
-    </Examiner>
+      </div>    </Examiner>
   );
 };
 
