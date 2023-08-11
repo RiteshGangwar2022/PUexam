@@ -72,7 +72,7 @@ const AssignmentInterface = () => {
                 onClick={() => setActive(index)}
                 className={clsx(
                   "cursor-pointer border-sky-400 border-2 bg-white px-4 py-1 text-xl rounded-full",
-                  { "font-bold bg-blue-500 text-white": index === active }
+                  { "font-bold bg-sky-300 text-white": index === active }
                 )}
               >
                 {x}
