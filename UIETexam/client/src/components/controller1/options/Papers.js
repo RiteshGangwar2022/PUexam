@@ -48,7 +48,7 @@ const Papers = () => {
                 <div className=''>
                   {i+1}.
                 </div>
-              <div className="  flex-grow  p-1">
+              <div className="  flex-grow  py-[0.2669rem] rounded-md">
                   <p className="text-gray-800">{activity.activity}</p>
                  
                 </div>

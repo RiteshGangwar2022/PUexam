@@ -1,5 +1,6 @@
 import React from 'react'
 import Examiner from '../Examiner'
+import { Link } from "react-router-dom";
 import {
   FaEye
 } from "react-icons/fa";
@@ -33,12 +34,15 @@ const QuestionBanks = () => {
                        <div className="flex flex-col gap-9">
                         <div className='flex flex-col justify-center items-center text-xl font-bold'>Number of Questions: {data.questions}</div>
                         <div className="flex gap-16 ml-24">
-                        <div className="w-2/12 flex items-center justify-center">
+                        <Link to={`/Examiner/QuestionBanks/${i+1}`}  className="w-2/12 flex items-center justify-center">
+                        
             <button className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded-2xl">
               <span className="mr-2">View</span>
               <FaEye className="text-lg" />
             </button>
-          </div>
+          
+              </Link>
+                        
           <div className="w-2/12 flex items-center justify-center">
             <button className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded-2xl">
               <span className="mr-2">Import</span>

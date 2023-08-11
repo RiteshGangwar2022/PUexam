@@ -11,6 +11,7 @@ import ExaminerPayments from "./components/Examiner/options/Payments";
 import ExaminerLogouts from "./components/Examiner/options/Logout";
 import AssignmentInterface from "./components/Examiner/AssignmentInterface"
 import Login from "./components/auth/Login";
+import QuestionBankInterface from "./components/Examiner/QuestionBankInterface";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/Examiner/QuestionBanks",
     element: <ExaminerQuestionBank />,
+  },
+  {
+    path: "/Examiner/QuestionBanks/:id",
+    element: <QuestionBankInterface/>,
   },
  
 ]);
