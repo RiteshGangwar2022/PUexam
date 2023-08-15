@@ -4,21 +4,18 @@ import {
   FaMoneyBillWave,
   FaStickyNote,
   FaSignOutAlt,
-  FaUsers,
   FaUser,
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
 
 const Sidebar = () => {
-  const [activeButton, setActiveButton] = useState("");
+
 
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const handleButtonClick = (text) => {
-    setActiveButton(text);
-  };
+
 
   return (
     <div className={` bg-white w-1/6 h-full `}>
@@ -36,18 +33,14 @@ const Sidebar = () => {
           text="Home"
           to="/Examiner/Home"
           icon={<FaHome className="mr-4" />}
-          onClick={() => {
-            handleButtonClick("Home");
-          }}
+         
           active={currentPath === "/Examiner/Home"}
         />
         <NavButton
           text="Assignments"
           to="/Examiner/Assignments"
           icon={<FaStickyNote className="mr-4" />}
-          onClick={() => {
-            handleButtonClick("Assignments");
-          }}
+      
           active={currentPath === "/Examiner/Assignments"}
         />
 
@@ -55,21 +48,18 @@ const Sidebar = () => {
           text="Question Banks"
           to="/Examiner/QuestionBanks"
           icon={<FaStickyNote className="mr-4" />}
-          onClick={() => handleButtonClick("Question Banks")}
           active={currentPath === "/Examiner/QuestionBanks"}
         />
         <NavButton
           text="Payments"
           to="/Examiner/Payments"
           icon={<FaMoneyBillWave className="mr-4" />}
-          onClick={() => handleButtonClick("Payments")}
           active={currentPath === "/Examiner/Payments"}
         />
         <NavButton
           text="Logout"
           to="/Examiner/Logout"
           icon={<FaSignOutAlt className="mr-4" />}
-          onClick={() => handleButtonClick("Logout")}
           active={currentPath === "/Examiner/Logout"}
         />
       </ul>

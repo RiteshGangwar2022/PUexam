@@ -12,6 +12,7 @@ import ExaminerLogouts from "./components/Examiner/options/Logout";
 import AssignmentInterface from "./components/Examiner/AssignmentInterface"
 import Login from "./components/auth/Login";
 import QuestionBankInterface from "./components/Examiner/QuestionBankInterface";
+import MyContextProvider from "./Context/MyContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -73,9 +74,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <MyContextProvider>
       <RouterProvider router={router} />
-    </>
+    </MyContextProvider>
+      
+    
   );
 }
 
