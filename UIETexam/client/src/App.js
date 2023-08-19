@@ -16,6 +16,8 @@ import MyContextProvider from "./Context/MyContextProvider";
 import AssigneHome from "./components/assigne/options/Home";
 import AssignePapers from "./components/assigne/options/Papers"
 import AssigneExaminers from "./components/assigne/options/Examiner"
+import ConfidentialHome from "./components/Confidential/options/Home"
+import COnfidentialPapers from "./components/Confidential/options/Papers";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -82,6 +84,14 @@ const router = createBrowserRouter([
   {
     path: "/Assigne/Examiners",
     element: <AssigneExaminers/>,
+  },
+  {
+    path: "/confidential/Home",
+    element: <ConfidentialHome/>,
+  },
+  {
+    path: "/confidential/Papers",
+    element: <COnfidentialPapers/>,
   },
  
 ]);
