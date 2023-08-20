@@ -5,6 +5,7 @@ const dotenv=require("dotenv");
 const cors=require("cors");
 const adminRoutes=require("./routes/admin");
 const examinerRoutes=require("./routes/examiner");
+const assignyRoutes=require("./routes/assigny");
 dotenv.config();
 
 //to connect backend to database
@@ -18,6 +19,7 @@ app.use(cors());
 // admin routes
 app.use("/api/r1", adminRoutes);
 app.use("/api/r2", examinerRoutes);
+app.use("/api/r3", assignyRoutes);
 
 const port=process.env.PORT;
 

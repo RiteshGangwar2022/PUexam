@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const Professor = require("../Database/Models/Professor");
+const Assigny = require("../Database/Models/Assigny");
 const bcrpt = require("bcrypt");
 
 const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
+const Subject = require("../Database/Models/Subject");
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -16,13 +17,13 @@ const Login = async (req, res) => {
     if (!email || !role || !password) {
       res.status(422).json({ error: "enter details properly" });
     }
-    const professordata = await Professor.findOne({ email: email });
+    const assignydata = await Assigny.findOne({ email: email });
 
-    if (professordata) {
-      const ismatch = await bcrpt.compare(password, professordata.password);
+    if (assignydata) {
+      const ismatch = await bcrpt.compare(password, assignydata.password);
 
-      const checkrole = professordata.role == role;
-      // console.log(checkrole)
+      const checkrole = assignydata.role == role;
+
       if (!ismatch) {
         res.status(422).json({ message: "invalid credential" });
       } else if (checkrole != true) {
@@ -32,9 +33,9 @@ const Login = async (req, res) => {
         //we will send an otp on his email to again verify user
 
         //it will send otp to user
-        const sendCode = await sendOtpEmail(req.body.email, professordata._id);
+        const sendCode = await sendOtpEmail(req.body.email, assignydata._id);
 
-        res.status(200).json(professordata);
+        res.status(200).json(assignydata);
         //console.log(admindata)
       }
     } else {
@@ -47,24 +48,22 @@ const Login = async (req, res) => {
 
 const Signup = async (req, res) => {
   try {
-    const { name, email, mobile, gender, department, role, password } =
-      req.body;
+    const { name, email, mobile, gender, role, password } = req.body;
 
     const hash = await hashPassword(req.body.password);
-    const newprofessor = new Professor({
+    const newassigny = new Assigny({
       name,
       email,
       mobile,
       gender,
-      department,
       role,
       password: hash,
     });
-    const data = await newprofessor.save();
-    //console.log(data);
+    const data = await newassigny.save();
+    console.log(data);
     res.status(201).json(data);
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     res.status(422).send(err);
   }
 };
@@ -82,6 +81,7 @@ const verifyOtp = async (req, res) => {
     }
 
     //comparing otp with the saved otp in our database
+
     const userOtpRecords = await otpModel
       .find({ entityId: userId })
       .sort({ createdAt: -1 });
@@ -92,10 +92,13 @@ const verifyOtp = async (req, res) => {
         message: "Account Record doesnt exist . Please login or signin",
       });
     }
-
-    const otp = userOtpRecords[0].otp;
+    console.log(userOtpRecords);
+    const otp = userOtpRecords[userOtpRecords.length - 1].otp;
     const validOtp = await bcrpt.compare(body_otp, otp);
-
+    /* console.log(body_otp);
+     console.log(otp);
+     console.log(validOtp); 
+    */
     if (!validOtp) {
       return res.status(500).json({
         status: "failure",
@@ -115,16 +118,56 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-const GetAssignments = async (req, res) => {
+const Assignment = async (req, res) => {
+  const { DOE, ExamCode, Providers } = req.body;
+  if (!DOE || !ExamCode || !Providers) {
+    return res.status(400).send({ message: "Please Fill all the feilds" });
+  }
+
+  console.log(req.body);
+
+  var users = JSON.parse(req.body.Providers);
+  var sub = JSON.parse(req.body.Subject);
+
   try {
-    const data = await Exam.find({})
+    const newExam = new Exam({
+      DOE,
+      ExamCode,
+      Providers: users,
+      Subject: sub,
+    });
+
+    //console.log(newExam)
+
+    const data = await newExam.save();
+
+    const Assignment = await Exam.findOne({ _id: data._id })
       .populate("Providers", "-password")
       .populate("Subject");
-    //console.log(data);
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(422).json(err);
+    //console.log(Assignment)
+
+    res.status(200).json(Assignment);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
   }
 };
 
-module.exports = { Login, Signup, verifyOtp, GetAssignments };
+
+const AllExaminers = async (req, res) => {
+
+  try {
+
+    const data = await Professor.find({});
+    //console.log(data);
+    res.status(200).json(data);
+    
+  } catch (err) {
+
+    res.status(422).json(err);
+
+  }
+};
+
+
+module.exports = { Login, Signup, verifyOtp, Assignment,AllExaminers};

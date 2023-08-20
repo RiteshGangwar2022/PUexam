@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const Subject = require('./Subject')
 
-const ProfessorSchema = new mongoose.Schema({
+const AssignySchema = new mongoose.Schema({
     
     name: {
         type: String,
@@ -18,10 +18,6 @@ const ProfessorSchema = new mongoose.Schema({
     gender:{
         type: String,
         required: [true, 'Please provide name of the Professor']
-    },
-    department:{
-        type:String,
-        required:true
     },
     role:{
         type:String,
@@ -44,7 +40,7 @@ const ProfessorSchema = new mongoose.Schema({
 
 
 // generting token
-ProfessorSchema.methods.generatAuthtoken = async function(){
+AssignySchema.methods.generatAuthtoken = async function(){
     try {
         let token = jwt.sign({ _id:this._id},process.env.SECRET_KEY,{
             expiresIn:"1d"
@@ -59,6 +55,6 @@ ProfessorSchema.methods.generatAuthtoken = async function(){
 }
 
 
-const Professor =new mongoose.model("Professor", ProfessorSchema);
+const Assigny=new mongoose.model("Assigny", AssignySchema);
 
-module.exports=Professor;
+module.exports=Assigny;
