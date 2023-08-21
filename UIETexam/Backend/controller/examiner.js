@@ -127,4 +127,23 @@ const GetAssignments = async (req, res) => {
   }
 };
 
-module.exports = { Login, Signup, verifyOtp, GetAssignments };
+const SingleAssignment=async(req,res)=>{
+
+  try {
+    //getting id of the particular product from database on clicking to the image of that item
+    const _id = req.params.id;
+    console.log(_id)
+    const assigment = await Exam.findById({_id})
+                             .populate("Subject")
+                             .populate("Providers","-password");
+    console.log(assigment)
+    res.status(201).json(assigment);
+}
+catch (err) {
+  console.log(err)
+    res.status(400).json(err);
+}
+
+}
+
+module.exports = { Login, Signup, verifyOtp, GetAssignments,SingleAssignment };
