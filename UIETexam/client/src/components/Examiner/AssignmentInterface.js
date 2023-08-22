@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import Examiner from "./Examiner";
 import { clsx } from "clsx";
+import axios from "axios";
 import {useParams} from "react-router-dom";
 const steps = ["setup", "questions", "preview", "publish"];
 
+const GetAssignmentInfo = async (id) => {
+  try {
+    const response = await axios.get(
+    `http://localhost:5000/api/r2/singleassigmnet/${id}`,
+    )
+    return response.data.value
+  }catch(error){
+    console.log("Exam not found")
+    alert("Exam not found. Try again.");
+  }
+}
+
 const AssignmentInterface = () => {
   const {id} = useParams();
+  var info = GetAssignmentInfo(id)
+  console.log(info)
+
   const [active, setActive] = useState(0);
   const Tabs = () => {
     switch (active) {
@@ -13,7 +29,6 @@ const AssignmentInterface = () => {
         return (
           <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             setup
-            
              <h1 className=" text-2xl   ">ID : {id.toString()}</h1>
             <button
               onClick={() => setActive((active + 1) % 4)}
