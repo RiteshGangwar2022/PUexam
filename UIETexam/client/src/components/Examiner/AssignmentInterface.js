@@ -3,25 +3,34 @@ import Examiner from "./Examiner";
 import { clsx } from "clsx";
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import {generate} from"./TemplateGen"
+
 const steps = ["setup", "questions", "preview", "publish"];
+
 
 const GetAssignmentInfo = async (id) => {
   try {
+    
     const response = await axios.get(
     `http://localhost:5000/api/r2/singleassigmnet/${id}`,
     )
-    return response.data.value
+    
+    return response
+    
   }catch(error){
     console.log("Exam not found")
     alert("Exam not found. Try again.");
   }
 }
 
+const Generate = async (id) => {
+  const info = await GetAssignmentInfo(id)
+  console.log(info.data)
+  generate(info.data)
+}
+
 const AssignmentInterface = () => {
   const {id} = useParams();
-  var info = GetAssignmentInfo(id)
-  console.log(info)
-
   const [active, setActive] = useState(0);
   const Tabs = () => {
     switch (active) {
@@ -36,6 +45,7 @@ const AssignmentInterface = () => {
             >
               Next
             </button>
+            <button onClick={()=>Generate(id)}>Download</button>
           </div>
         );
       case 1:
