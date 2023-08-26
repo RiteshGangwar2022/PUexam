@@ -19,7 +19,7 @@ const numbersToWords = {
 }
 
 // style
-const DocFont = "Times Roman"
+const DocFont = "Times New Roman"
 
 
 function saveDocumentToFile(doc, filename){
@@ -40,11 +40,11 @@ function generate(info){
     console.log(info)
     const ExamCode = info.ExamCode
     const SubCode = info.Subject.SubjectCode
-    const PaperCode = 0
+    const PaperCode = 1234
     const BranchName = "BranchName"
     const SemesterNo = 4
     const SubjectName = info.Subject.Name
-    const filename = `${BranchName}-${SemesterNo}-${SubCode}`
+    const filename = `${SubjectName}_${SubCode}_template`
 
     const ExamCodeline = new TextRun({
         text: `Exam.Code: ${ExamCode}`,
@@ -91,7 +91,7 @@ function generate(info){
                     new Paragraph({children: [Branchline], alignment: AlignmentType.CENTER}),
                     new Paragraph({children: [Semesterline], alignment: AlignmentType.CENTER}),
                     new Paragraph({children: [Subjectline], alignment: AlignmentType.CENTER}),
-                    new Paragraph({children: [new TextRun({text: "Note:", bold: true, italics: true, font: DocFont})], alignment: AlignmentType.LEFT}),      
+                    new Paragraph({children: [new TextRun({text: "Note: ", bold: true, italics: true, font: DocFont})], alignment: AlignmentType.LEFT}),      
                 ]
             },
         ],

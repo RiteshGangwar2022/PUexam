@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const Assignments = () => {
   const [ass, setAss] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   async function getAssignments() {
     const res = await fetch("http://localhost:5000/api/r2/assigmnets");
@@ -15,11 +16,14 @@ const Assignments = () => {
 
     const data = await res.json();
     setAss(data);
+    setLoading(false);
   }
 
   useEffect(() => {
     getAssignments();
   }, []);
+     var date ;
+  if(loading) return <Examiner> <p className= " text-xl my-auto mx-auto ">fetching data...</p> </Examiner>
 
   return (
     <Examiner>
@@ -27,9 +31,13 @@ const Assignments = () => {
 
       {ass.map((assignment, index) => (
         <Link key={index} to={`/Examiner/Assignments/${assignment._id}`}>
-          <div className="p-2 flex gap-3 my-3 rounded-xl bg-white">
-            <h1>{assignment?.Subject?.Name}</h1>
-            <h1>{assignment?.Subject?.SubjectCode}</h1>
+          <div className="px-6 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+            <p className="  font-bold">{index}</p>
+            <h1 className="  ">{assignment?.Subject?.Name}</h1>
+            <h1 className="  ">{assignment?.Subject?.SubjectCode}</h1>
+            
+            <h1 className="  ">{ new Date(assignment?.DOE).toLocaleDateString()}  </h1>
+            <h1  className=" font-bold text-red-600" > pending  </h1>
           </div>
         </Link>
       ))}
