@@ -18,6 +18,8 @@ import AssignePapers from "./components/assigne/options/Papers"
 import AssigneExaminers from "./components/assigne/options/Examiner"
 import ConfidentialHome from "./components/Confidential/options/Home"
 import COnfidentialPapers from "./components/Confidential/options/Papers";
+import ExaminerSubject from "./components/Examiner/Subjects";
+import AssigneSubject from "./components/assigne/Subjects"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -74,6 +76,10 @@ const router = createBrowserRouter([
     element: <QuestionBankInterface/>,
   },
   {
+    path: "/Examiner/Subjects/:id",
+    element: <ExaminerSubject />,
+  },
+  {
     path: "/Assigne/Home",
     element: <AssigneHome/>,
   },
@@ -84,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: "/Assigne/Examiners",
     element: <AssigneExaminers/>,
+  },
+  {
+    path: "/Assigne/Subjects/:subjects",
+    element: <AssigneSubject/>,
   },
   {
     path: "/confidential/Home",
