@@ -9,6 +9,14 @@ const ExamSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Subject'
     },
+    Branch:{
+        type:String,
+        required:true,
+    },
+    SemesterNo:{
+        type:Number,
+        required:true,
+    },
     ExamCode: {
         type: String,
         required: [true, 'Please provide the Examination Code ']
@@ -17,7 +25,12 @@ const ExamSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Please Provide Date of Examination']
     },
-    Providers:[{ 
+    Ispending:{
+         type:Boolean,
+         required:true,
+         default:true
+    },
+    Examiners:[{ 
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Professor'
         }],

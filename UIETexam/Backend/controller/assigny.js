@@ -7,6 +7,8 @@ const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
 const Subject = require("../Database/Models/Subject");
+const Professor = require("../Database/Models/Professor");
+const Subjectassign = require("../Database/Models/Subjectassign");
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -119,55 +121,80 @@ const verifyOtp = async (req, res) => {
 };
 
 const Assignment = async (req, res) => {
-  const { DOE, ExamCode, Providers } = req.body;
-  if (!DOE || !ExamCode || !Providers) {
+  const { DOE, ExamCode, Branch, SemesterNo, Examiners, Subject } = req.body;
+  if (!DOE || !ExamCode || !Branch || !SemesterNo || !Examiners || !Subject) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
 
-  console.log(req.body);
+  //console.log(req.body);
 
-  var users = JSON.parse(req.body.Providers);
+  var users = JSON.parse(req.body.Examiners);
   var sub = JSON.parse(req.body.Subject);
 
   try {
     const newExam = new Exam({
       DOE,
       ExamCode,
-      Providers: users,
+      Branch,
+      SemesterNo,
+      Examiners: users,
       Subject: sub,
     });
 
-    //console.log(newExam)
+    //console.log(newExam);
 
     const data = await newExam.save();
 
     const Assignment = await Exam.findOne({ _id: data._id })
-      .populate("Providers", "-password")
+      .populate("Examiners", "-password")
       .populate("Subject");
-    //console.log(Assignment)
+    //console.log(Assignment);
 
     res.status(200).json(Assignment);
   } catch (error) {
-    console.log(error);
+     //console.log(error);
     res.status(400).json(error);
   }
 };
 
-
-const AllExaminers = async (req, res) => {
-
+const Allsubject = async (req, res) => {
   try {
-
-    const data = await Professor.find({});
+    const data = await Subject.find({});
     //console.log(data);
     res.status(200).json(data);
-    
   } catch (err) {
-
+    //console.log(err)
     res.status(422).json(err);
-
   }
 };
 
+const AllExaminers = async (req, res) => {
+  try {
+    //getting id of the particular product from database on clicking to the image of that item
 
-module.exports = { Login, Signup, verifyOtp, Assignment,AllExaminers};
+    const _id = req.params.id;
+    //console.log(_id);
+
+    const allexaminers = await Subjectassign.find({ Subject: _id })
+      .populate("Examiners", "-password")
+      .populate("Subject");
+
+      if(!allexaminers){
+        res.status(400).json({message:"No examiner found"});
+      }
+   // console.log(allexaminers);
+    res.status(201).json(allexaminers);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
+
+module.exports = {
+  Login,
+  Signup,
+  verifyOtp,
+  Assignment,
+  AllExaminers,
+  Allsubject,
+};
