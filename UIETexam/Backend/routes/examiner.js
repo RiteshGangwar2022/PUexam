@@ -7,8 +7,8 @@ const {Login,Signup,verifyOtp,GetAssignments,SingleAssignment} = require("../con
 router.post("/login", Login);
 router.post("/register", Signup);
 router.post("/verifyOtp", verifyOtp);
-router.get("/assigmnets",GetAssignments);
-router.get("/singleassigmnet/:id",SingleAssignment);
+router.get("/assignments",GetAssignments);
+router.get("/singleassignment/:id",SingleAssignment);
 
 module.exports = router;
 
