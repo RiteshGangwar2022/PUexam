@@ -42,7 +42,6 @@ const Home = () => {
           <h1 className="text-3xl font-bold p-2">Payments</h1>
           <div className="flex gap-4">
             <div>
-            
               <Piechart data={data1}></Piechart>
             </div>
             <div className=" bg-gray-100 shadow-md rounded-xl w-60 h-50 border-2 border-gray-500 p-6 font-bold  ">

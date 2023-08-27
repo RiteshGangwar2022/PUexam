@@ -22,8 +22,12 @@ const Assignments = () => {
   useEffect(() => {
     getAssignments();
   }, []);
-     var date ;
-  if(loading) return <Examiner> <p className= " text-xl my-auto mx-auto ">fetching data...</p> </Examiner>
+  if (loading)
+    return (
+      <Examiner>
+        <p className=" text-xl my-auto mx-auto ">fetching data...</p>{" "}
+      </Examiner>
+    );
 
   return (
     <Examiner>
@@ -35,9 +39,11 @@ const Assignments = () => {
             <p className="  font-bold">{index}</p>
             <h1 className="  ">{assignment?.Subject?.Name}</h1>
             <h1 className="  ">{assignment?.Subject?.SubjectCode}</h1>
-            
-            <h1 className="  ">{ new Date(assignment?.DOE).toLocaleDateString()}  </h1>
-            <h1  className=" font-bold text-red-600" > pending  </h1>
+
+            <h1 className="  ">
+              {new Date(assignment?.DOE).toLocaleDateString()}{" "}
+            </h1>
+            <h1 className=" font-bold text-red-600"> pending </h1>
           </div>
         </Link>
       ))}
