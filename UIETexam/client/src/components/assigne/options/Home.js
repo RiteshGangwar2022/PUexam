@@ -3,6 +3,7 @@ import Assigne from "../Assigne";
 import Piechart from './Piechart';
 import { useState,useEffect } from "react";
 import TrackingPage from './TrackingPage';
+import { useNavigate } from 'react-router-dom';
 const Home = () => {
     const data = [
         {  students: 13, fill: 'red' },
@@ -22,6 +23,11 @@ const Home = () => {
           setCurrentYear(year);
         
       }, []);
+      const navigate = useNavigate();
+
+      const handleRedirect = (url, data) => {
+        navigate(url, { state: data });
+      };
   return (
     <>
     <Assigne>
@@ -80,24 +86,17 @@ const Home = () => {
         <div className="bg-white shadow-md rounded-xl    p-3">
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl">
-              Subject A
+          {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} onClick={() => handleRedirect( `/Assigne/Subjects/subject${index + 1}`, { items: ["Examiner1","Examiner2","Examiner3","Examiner4","Examiner5","Examiner6"],
+        Subject: `Subject ${index + 1}`,
+         })}>  
+        
+            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl cursor-pointer">
+            <span className="mr-2">Subject {index + 1}</span>
             </div>
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl">
-              Subject B
+                
             </div>
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl ">
-              Subject C
-            </div>
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl">
-              Subject D
-            </div>
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl">
-              Subject E
-            </div>
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500 font-bold text-xl">
-              Subject F
-            </div>
+      ))}
           </div>
         </div>
       </div>{" "}
