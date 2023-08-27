@@ -12,7 +12,7 @@ const steps = ["setup", "questions", "preview", "publish"];
 const GetAssignmentInfo = async (id) => {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/r2/singleassigmnet/${id}`
+      `http://localhost:5000/api/r2/singleassignment/${id}`
     );
 
     return response;
@@ -47,7 +47,9 @@ const AssignmentInterface = () => {
   // }
 
   async function getAssignments() {
-    const res = await fetch("http://localhost:5000/api/r2/assigmnets");
+    const res = await fetch(
+      `http://localhost:5000/api/r2/singleassignment/${id}`
+    );
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary
@@ -69,35 +71,64 @@ const AssignmentInterface = () => {
         return (
           <div className=" flex justify-center items-center   relative border-2 p-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <div className="  p-3  gap-3 flex flex-col w-full bg-sky-50 rounded-xl border-slate-300 border-2 max-w-3xl ">
-              <h1 className=" text-2xl uppercase  mb-10 text-center">
+              <h1 className=" text-2xl uppercase   text-center">
                 Assignment Information
               </h1>
 
-              <div className=" flex gap-2  items-center">
-                <h1 className=" text-xl    ">Exam Code</h1>
-                <h1 className=" text-xl bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                  {assignment[0]?.ExamCode}
-                </h1>
+              <div className=" grid grid-cols-2 my-3    gap-x-12  gap-y-3   grid-flow-row">
+                <div className=" flex gap-2  justify-between  items-center">
+                  <h1 className=" text-xl    ">Exam Code</h1>
+                  <h1 className=" text-xl  max-w-[200px]  w-full flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {assignment?.ExamCode}
+                  </h1>
+                </div>
+
+                <div className=" flex gap-2  justify-between items-center">
+                  <h1 className=" text-xl    ">Subject Code</h1>
+                  <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {assignment?.Subject?.SubjectCode}
+                  </h1>
+                </div>
+
+                <div className=" flex gap-2  justify-between items-center">
+                  <h1 className=" text-xl    ">Subject</h1>
+                  <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {assignment?.Subject?.Name}
+                  </h1>
+                </div>
+                <div className=" flex gap-2  justify-between items-center">
+                  <h1 className=" text-xl    ">Semester</h1>
+                  <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {assignment?.SemesterNo}
+                  </h1>
+                </div>
+                <div className=" flex gap-2  justify-between items-center">
+                  <h1 className=" text-xl    ">Date</h1>
+                  <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {new Date(assignment?.DOE).toLocaleDateString()}
+                  </h1>
+                </div>
+                <div className=" flex gap-2 justify-between  items-center">
+                  <h1 className=" text-xl    ">Branch</h1>
+                  <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                    {assignment?.Branch}
+                  </h1>
+                </div>
               </div>
 
-              <div className=" flex gap-2  items-center">
-                <h1 className=" text-xl    ">Subject Code</h1>
-                <h1 className=" text-xl bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                  {assignment[0]?.Subject?.SubjectCode}
-                </h1>
-              </div>
-
-              <div className=" flex gap-2  items-center">
-                <h1 className=" text-xl    ">Subject</h1>
-                <h1 className=" text-xl bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                  {assignment[0]?.Subject?.Name}
-                </h1>
-              </div>
+              <h1 className="text-base underline">Directions -</h1>
 
               <p className=" text-red-600">
-                short note on what to do with this Template can be given to an
-                examiner. or instruction can be given here if required.
+                1. Download the Template given below.
               </p>
+              <p className=" text-red-600">
+                2. Write questions on it and add corresponding images with
+                proper layout.
+              </p>
+              <p className=" text-red-600">
+                3. After checking layout,export word document to PDF file.
+              </p>
+              <p className=" text-red-600">4. At last, upload PDF file.</p>
 
               <p>Download Template given below </p>
               <button

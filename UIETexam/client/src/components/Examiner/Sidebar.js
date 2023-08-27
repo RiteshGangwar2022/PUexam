@@ -9,12 +9,12 @@ import {
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
 
+
 const Sidebar = () => {
 
 
   const location = useLocation();
   const currentPath = location.pathname;
-
 
 
   return (

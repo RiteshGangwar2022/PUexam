@@ -7,7 +7,7 @@ const Assignments = () => {
   const [loading, setLoading] = useState(true);
 
   async function getAssignments() {
-    const res = await fetch("http://localhost:5000/api/r2/assigmnets");
+    const res = await fetch("http://localhost:5000/api/r2/assignments");
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary
@@ -41,7 +41,7 @@ const Assignments = () => {
             <h1 className="  ">{assignment?.Subject?.SubjectCode}</h1>
 
             <h1 className="  ">
-              {new Date(assignment?.DOE).toLocaleDateString()}{" "}
+              {new Date(assignment?.DOE).toLocaleDateString()}
             </h1>
             <h1 className=" font-bold text-red-600"> pending </h1>
           </div>
