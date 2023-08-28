@@ -3,8 +3,13 @@ import Assigne from "../Assigne";
 import Piechart from './Piechart';
 import { useState,useEffect } from "react";
 import TrackingPage from './TrackingPage';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const Home = () => {
+
+  const [subjects, setSubjects] = useState([]);
+  const [currentYear, setCurrentYear] = useState('');
+
     const data = [
         {  students: 13, fill: 'red' },
         { students: 37, fill: 'blue' },
@@ -14,13 +19,15 @@ const Home = () => {
         { students: 31, fill: 'green' },
       ];
     
-      const [currentYear, setCurrentYear] = useState('');
+      
     
       useEffect(() => {
         
           const currentDate = new Date();
           const year = currentDate.getFullYear();
           setCurrentYear(year);
+          FetchSubjects();
+       //   console.log("Hello"+subjects);
         
       }, []);
       const navigate = useNavigate();
@@ -28,6 +35,36 @@ const Home = () => {
       const handleRedirect = (url, data) => {
         navigate(url, { state: data });
       };
+      useEffect(() => {
+        console.log("Updated subjects:", subjects);
+      }, [subjects]);
+
+      const FetchSubjects = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/r3/getsubject"
+          );
+      
+          if (response.data) {
+          //  console.log(response.data);
+            setSubjects(response.data);
+            
+           
+            
+          } else {
+            alert("Not able to fetch");
+          }
+        } catch (error) {
+          console.error("Error: ", error);
+          alert("Some error is coming");
+        }
+      };
+      
+      
+
+ 
+
+
   return (
     <>
     <Assigne>
@@ -86,13 +123,13 @@ const Home = () => {
         <div className="bg-white shadow-md rounded-xl    p-3">
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} onClick={() => handleRedirect( `/Assigne/Subjects/subject${index + 1}`, { items: ["Examiner1","Examiner2","Examiner3","Examiner4","Examiner5","Examiner6"],
-        Subject: `Subject ${index + 1}`,
+          {subjects.map((obj, index) => (
+        <div key={index} onClick={() => handleRedirect( `/Assigne/Subjects/${obj.Name}`, { id: obj._id,
+        Subject: obj.Name,
          })}>  
         
             <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl cursor-pointer">
-            <span className="mr-2">Subject {index + 1}</span>
+            <span className="mr-2">{obj.Name}</span>
             </div>
                 
             </div>

@@ -15,7 +15,8 @@ const Login = async (req, res) => {
   try {
     const { email, role, password } = req.body;
     //console.log(req.body);
-
+    console.log("Helloo");
+    console.log(email+role+password);
     if (!email || !role || !password) {
       res.status(422).json({ error: "enter details properly" });
     }

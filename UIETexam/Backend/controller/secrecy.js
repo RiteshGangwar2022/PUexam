@@ -14,13 +14,17 @@ const Login = async (req, res) => {
     try {
         const { email,role, password } = req.body;
         //console.log(req.body);
-
+        
+        console.log("Helloo");
         if (!email || !role || !password) {
+          console.log("Ho0");
             res.status(422).json({ error: "enter details properly" });
         }
+        console.log("1");
         const secrecydata = await Secrecy.findOne({ email: email });
-
-        if (admindata) {
+         
+        console.log(secrecydata);
+        if (secrecydata) {
             const ismatch = await bcrpt.compare(password, secrecydata.password);
            
            
@@ -28,10 +32,11 @@ const Login = async (req, res) => {
             
 
             if (!ismatch) {
-                
+                console.log("Ho1");
                 res.status(422).json({ message: "invalid credential" });
             }
             else if(checkrole!=true){
+              console.log("Ho2");
               res.status(422).json({ message: "invalid role" });
             }
             else {

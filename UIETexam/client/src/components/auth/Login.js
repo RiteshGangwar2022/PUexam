@@ -27,6 +27,8 @@ const Login = () => {
         navigate("/Examiner/Home");
        else if(role==="Assigny")
        navigate("/Assigne/Home");
+      else if(role==="Secrecy")
+      navigate("/Confidential/Home");
 
       } else {
         alert("Invalid OTP. Please try again.");
@@ -119,6 +121,34 @@ const Login = () => {
       console.log("error: " + e);
     }
    }
+   else if(role==="Secrecy")
+   {
+    console.log("Yes");
+    try {
+      await axios
+        .post("http://localhost:5000/api/r4/login", {
+          email,
+          role,
+          password 
+        })
+        .then((res) => {
+          if (res.data) {
+            
+              Setid(res.data._id);
+              setShowotp(true);
+           // navigate("/otpPage");
+          } else if (res.data === "notexist") {
+            alert("User Not Registered");
+          }
+        })
+        .catch((e) => {
+          alert("Wrong");
+          console.log(e);
+        });
+    } catch (e) {
+      console.log("error: " + e);
+    }
+   }
   }
 
   return (
@@ -143,6 +173,7 @@ const Login = () => {
               <option value="Admin">Admin</option>
               <option value="Professor">Professor</option>
               <option value="Assigny">Assigny</option>
+              <option value="Secrecy">Secrecy</option>
             </select>
           </div>
           
