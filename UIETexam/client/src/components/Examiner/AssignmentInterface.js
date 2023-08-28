@@ -8,6 +8,10 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { AiFillFilePdf } from "react-icons/ai";
 import { BiSolidDownload } from "react-icons/bi";
 import { pdfjs, Document, Page } from "react-pdf";
+import Loader from "../loader";
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
 const steps = ["setup", "upload", "preview", "publish"];
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -46,21 +50,15 @@ const AssignmentInterface = () => {
   const [document, setDocument] = useState();
   const [upload, setUpload] = useState("upload PDF only");
   const [numPages, setNumPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+
 
   function onDocumentLoadSuccess({ numPages: nextNumPages }) {
     setNumPages(nextNumPages);
   }
 
-  // const pdf = {
-  //   input: document,
-  //   output: "/tmp/encrypted.pdf",
-  //   password: "1234",
-  // }
-
-  // async function encryptPDF (){
-
-  //   const encPdf =  await encrypt(pdf);
-  // }
+ 
 
   async function getAssignments() {
     const res = await fetch(
@@ -74,6 +72,8 @@ const AssignmentInterface = () => {
 
     const data = await res.json();
     setAssignment(data);
+    setLoading(false);
+
     // console.log("d=", data);
   }
 
@@ -203,7 +203,7 @@ const AssignmentInterface = () => {
         );
       case 2:
         return (
-          <div className=" relative flex  flex-col items-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+          <div className=" relative flex  flex-col items-center  justify-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <h1 className=" text-xl text-red-600 my-3 ">
               This is a preview of a paper you are going to be submitting.
             </h1>
@@ -211,21 +211,22 @@ const AssignmentInterface = () => {
               file={document}
               onLoadSuccess={onDocumentLoadSuccess}
               options={options}
+              loading="Loading PDF…"
             >
               {Array.from(new Array(numPages), (el, index) => (
-                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                <Page width={800} key={`page_${index + 1}`} pageNumber={index + 1} />
               ))}
             </Document>
 
             <button
               onClick={() => setActive((active - 1) % 4)}
-              className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+              className=" absolute z-10  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
               Back
             </button>
             <button
               onClick={() => setActive((active + 1) % 4)}
-              className=" absolute  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+              className=" absolute  z-10 bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
               Next
             </button>
@@ -274,6 +275,14 @@ const AssignmentInterface = () => {
         return <h1>error </h1>;
     }
   };
+
+  if (loading)
+  return (
+    <Examiner>
+         <Loader/>
+          </Examiner>
+  );
+
 
   return (
     <Examiner>
