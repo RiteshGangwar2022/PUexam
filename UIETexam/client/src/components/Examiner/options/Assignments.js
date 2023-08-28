@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Examiner from "../Examiner";
 import { Link } from "react-router-dom";
+import Loader from "../../loader";
 
 const Assignments = () => {
   const [ass, setAss] = useState([]);
@@ -25,7 +26,7 @@ const Assignments = () => {
   if (loading)
     return (
       <Examiner>
-        <p className=" text-xl my-auto mx-auto ">fetching data...</p>{" "}
+      <Loader/>
       </Examiner>
     );
 
