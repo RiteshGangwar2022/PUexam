@@ -7,7 +7,18 @@ import { generate } from "./TemplateGen";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { AiFillFilePdf } from "react-icons/ai";
 import { BiSolidDownload } from "react-icons/bi";
-const steps = ["setup", "questions", "preview", "publish"];
+import { pdfjs, Document, Page } from "react-pdf";
+const steps = ["setup", "upload", "preview", "publish"];
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
+
+const options = {
+  cMapUrl: "/cmaps/",
+  standardFontDataUrl: "/standard_fonts/",
+};
 
 const GetAssignmentInfo = async (id) => {
   try {
@@ -34,6 +45,11 @@ const AssignmentInterface = () => {
   const [assignment, setAssignment] = useState([]);
   const [document, setDocument] = useState();
   const [upload, setUpload] = useState("upload PDF only");
+  const [numPages, setNumPages] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+    setNumPages(nextNumPages);
+  }
 
   // const pdf = {
   //   input: document,
@@ -152,10 +168,25 @@ const AssignmentInterface = () => {
             </button>
           </div>
         );
-      case 1:
+      case 3:
         return (
-          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
-            questions
+          <div className=" flex justify-center flex-col items-center relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            <h1 className=" text-xl text-red-600 my-3 ">
+              Review document before publishing it under Preview section.
+            </h1>
+
+            <button
+              className={clsx(
+                " w-full  my-5 text-white text-xl rounded-full   p-2 uppercase font-bold bg-green-500 max-w-xl",
+                {
+                  "  opacity-25     pointer-events-none :": !document,
+                }
+              )}
+              onClick={() => console.log("pdf = ", document)}
+            >
+              upload paper
+            </button>
+
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
@@ -172,8 +203,20 @@ const AssignmentInterface = () => {
         );
       case 2:
         return (
-          <div className=" relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
-            preview
+          <div className=" relative flex  flex-col items-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
+            <h1 className=" text-xl text-red-600 my-3 ">
+              This is a preview of a paper you are going to be submitting.
+            </h1>
+            <Document
+              file={document}
+              onLoadSuccess={onDocumentLoadSuccess}
+              options={options}
+            >
+              {Array.from(new Array(numPages), (el, index) => (
+                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+              ))}
+            </Document>
+
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
@@ -188,7 +231,7 @@ const AssignmentInterface = () => {
             </button>
           </div>
         );
-      case 3:
+      case 1:
         return (
           <div className="  flex flex-col  justify-center items-center relative border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <div className=" relative border-slate-300 gap-3  h-60 p-4 rounded-2xl font-semibold  border-2 bg-sky-50 px-2 flex flex-col justify-center items-center">
@@ -203,7 +246,7 @@ const AssignmentInterface = () => {
               </div>
               <input
                 type="file"
-                className=" border-2     opacity-0  h-60 cursor-pointer"
+                className=" border-2   opacity-0  h-60 cursor-pointer"
                 onChange={(e) =>
                   setUpload(
                     e?.target?.files[0]?.name,
@@ -213,17 +256,6 @@ const AssignmentInterface = () => {
               />
             </div>
 
-            <button
-              className={clsx(
-                " w-full  my-5 text-white text-xl rounded-full   p-2 uppercase font-bold bg-green-500 max-w-xl",
-                {
-                  " hidden": !document,
-                }
-              )}
-              onClick={() => console.log("pdf = ", document)}
-            >
-              upload paper
-            </button>
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
