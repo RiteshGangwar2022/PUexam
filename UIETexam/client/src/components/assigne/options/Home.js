@@ -123,7 +123,8 @@ const Home = () => {
         <div className="bg-white shadow-md rounded-xl    p-3">
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
-          {subjects.map((obj, index) => (
+          
+          { subjects.map((obj, index) => (
         <div key={index} onClick={() => handleRedirect( `/Assigne/Subjects/${obj.Name}`, { id: obj._id,
         Subject: obj.Name,
          })}>  

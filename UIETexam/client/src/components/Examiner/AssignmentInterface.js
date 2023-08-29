@@ -7,10 +7,13 @@ import { generate } from "./TemplateGen";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { AiFillFilePdf } from "react-icons/ai";
 import { BiSolidDownload } from "react-icons/bi";
+import { BiUpload } from "react-icons/bi";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { pdfjs, Document, Page } from "react-pdf";
 import Loader from "../loader";
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 
 const steps = ["setup", "upload", "preview", "publish"];
 
@@ -52,13 +55,9 @@ const AssignmentInterface = () => {
   const [numPages, setNumPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-
-
   function onDocumentLoadSuccess({ numPages: nextNumPages }) {
     setNumPages(nextNumPages);
   }
-
- 
 
   async function getAssignments() {
     const res = await fetch(
@@ -156,15 +155,15 @@ const AssignmentInterface = () => {
             </div>
             <button
               onClick={() => setActive((active - 1) % 4)}
-              className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+              className=" pointer-events-none  opacity-25 absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Back
+              <AiOutlineArrowLeft />
             </button>
             <button
               onClick={() => setActive((active + 1) % 4)}
-              className=" absolute  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+              className="  absolute  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Next
+              <AiOutlineArrowRight />
             </button>
           </div>
         );
@@ -177,27 +176,28 @@ const AssignmentInterface = () => {
 
             <button
               className={clsx(
-                " w-full  my-5 text-white text-xl rounded-full   p-2 uppercase font-bold bg-green-500 max-w-xl",
+                " w-full flex justify-center items-center gap-3  my-5 text-white text-xl rounded-full   p-2 uppercase font-bold bg-green-500 max-w-xl",
                 {
                   "  opacity-25     pointer-events-none :": !document,
                 }
               )}
               onClick={() => console.log("pdf = ", document)}
             >
-              upload paper
+              <BiUpload />
+              publish paper
             </button>
 
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Back
+              <AiOutlineArrowLeft />
             </button>
             <button
               onClick={() => setActive((active + 1) % 4)}
-              className=" absolute  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
+              className=" absolute pointer-events-none  opacity-25  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Next
+              <AiOutlineArrowRight />
             </button>
           </div>
         );
@@ -214,7 +214,11 @@ const AssignmentInterface = () => {
               loading="Loading PDF…"
             >
               {Array.from(new Array(numPages), (el, index) => (
-                <Page width={800} key={`page_${index + 1}`} pageNumber={index + 1} />
+                <Page
+                  width={800}
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
+                />
               ))}
             </Document>
 
@@ -222,13 +226,13 @@ const AssignmentInterface = () => {
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute z-10  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Back
+              <AiOutlineArrowLeft />
             </button>
             <button
               onClick={() => setActive((active + 1) % 4)}
               className=" absolute  z-10 bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Next
+              <AiOutlineArrowRight />
             </button>
           </div>
         );
@@ -261,13 +265,13 @@ const AssignmentInterface = () => {
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Back
+              <AiOutlineArrowLeft />
             </button>
             <button
               onClick={() => setActive((active + 1) % 4)}
               className="  absolute  bottom-2  left-2/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
             >
-              Next
+              <AiOutlineArrowRight />
             </button>
           </div>
         );
@@ -277,12 +281,11 @@ const AssignmentInterface = () => {
   };
 
   if (loading)
-  return (
-    <Examiner>
-         <Loader/>
-          </Examiner>
-  );
-
+    return (
+      <Examiner>
+        <Loader />
+      </Examiner>
+    );
 
   return (
     <Examiner>

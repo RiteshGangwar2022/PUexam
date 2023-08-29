@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import Assigne from "./Assigne";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
+import Loader from "../loader";
 
 const Subjects = () => {
     const location = useLocation();
     const [examObj, setExamObj] = useState();
     const [selectedExaminers, setSelectedExaminers] = useState([]);
     const { id, Subject } = location.state;
+    const [loading,setLoading] = useState(true)
 
     useEffect(() => {
         fetchExaminers();
@@ -20,6 +22,7 @@ const Subjects = () => {
             );
 
             if (response.data && response.data[0]) {
+               setLoading(false)
                 setExamObj(response.data[0]);
             } else {
                 alert("Not able to fetch");
@@ -52,6 +55,9 @@ const Subjects = () => {
 
       
     }
+
+
+    if(loading) return <Assigne> <Loader/> </Assigne>
 
     return (
         <Assigne>
