@@ -10,8 +10,8 @@ import { BiSolidDownload } from "react-icons/bi";
 import { BiUpload } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { pdfjs, Document, Page } from "react-pdf";
 import Loader from "../loader";
+import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -125,7 +125,7 @@ const AssignmentInterface = () => {
                 </div>
                 <div className=" flex gap-2 justify-between  items-center">
                   <h1 className=" text-xl    ">Branch</h1>
-                  <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
+                  <h1 className=" text-xl         w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
                     {assignment?.Branch}
                   </h1>
                 </div>
