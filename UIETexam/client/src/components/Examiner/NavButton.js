@@ -1,27 +1,10 @@
 import React,{useContext, useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
-import MyContext from "../../Context/MyContext";
+import { useAuth } from '../../Context/AuthContext';
 
 const NavButton = ({ text, to, icon, active }) => {
   
-  const { globalVariable, setGlobalVariable } = useContext(MyContext);
-  function check(path)
-  {
-    const pattern = /^\/Examiner\/QuestionBanks(\/|$)/;
 
-    // Test if the path matches the pattern
-    const isPathMatching = pattern.test(path);
-  
-    // Set the global variable based on the result
-    if (isPathMatching) {
-      setGlobalVariable(true);
-      return false;
-    } else {
-      setGlobalVariable(false);
-      return false;
-    }
- 
-  }
 
 
   return (

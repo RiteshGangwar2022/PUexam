@@ -207,20 +207,23 @@ const AssignmentInterface = () => {
             <h1 className=" text-xl text-red-600 my-3 ">
               This is a preview of a paper you are going to be submitting.
             </h1>
-            <Document
-              file={document}
-              onLoadSuccess={onDocumentLoadSuccess}
-              options={options}
-              loading="Loading PDF…"
-            >
-              {Array.from(new Array(numPages), (el, index) => (
-                <Page
-                  width={800}
-                  key={`page_${index + 1}`}
-                  pageNumber={index + 1}
-                />
-              ))}
-            </Document>
+            {document && ( // Only render if the document is available
+              <Document
+                file={document}
+                onLoadSuccess={onDocumentLoadSuccess}
+                options={options}
+                loading="Loading PDF…"
+              >
+                {Array.from(new Array(numPages), (el, index) => (
+                  <Page
+                    width={800}
+                    key={`page_${index + 1}`}
+                    pageNumber={index + 1}
+                  />
+                ))}
+              </Document>
+            )}
+
 
             <button
               onClick={() => setActive((active - 1) % 4)}

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {
   FaEye
 } from "react-icons/fa";
-import MyContext from "../../../Context/MyContext";
+
 
 const QuestionBanks = () => {
   
@@ -14,7 +14,7 @@ const QuestionBanks = () => {
     { subject: 'Maths',questions: 50,},
     { subject: 'Physics',questions: 50,},
   ];
-  const { globalVariable, setGlobalVariable } = useContext(MyContext);
+  
 
   return (
     <Examiner>
@@ -38,7 +38,7 @@ const QuestionBanks = () => {
                         
         
       
-                        <Link to={`/Examiner/QuestionBanks/${i+1}`}  className="w-2/12 flex items-center justify-center" onClick={() => setGlobalVariable(true)}>
+                        <Link to={`/Examiner/QuestionBanks/${i+1}`}  className="w-2/12 flex items-center justify-center" >
                         
             <button className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded-2xl">
               <span className="mr-2">View</span>

@@ -1,12 +1,15 @@
 import React from 'react'
 import Assigne from "../Assigne";
 import Piechart from './Piechart';
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import TrackingPage from './TrackingPage';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const Home = () => {
+import { useAuth } from '../../../Context/AuthContext';
 
+const Home = () => {
+  const { globalResponseData, setGlobalResponseData } = useAuth();
+//console.log("This is data User Global " + globalResponseData);
   const [subjects, setSubjects] = useState([]);
   const [currentYear, setCurrentYear] = useState('');
 

@@ -23,6 +23,7 @@ const Login = async (req, res) => {
     const assignydata = await Assigny.findOne({ email: email });
 
     if (assignydata) {
+      
       const ismatch = await bcrpt.compare(password, assignydata.password);
 
       const checkrole = assignydata.role == role;

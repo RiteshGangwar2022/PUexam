@@ -1,8 +1,10 @@
-import React, { useState } from "react"; // Import useState
+import React, { useState,useContext,useEffect } from "react"; // Import useState
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import { useAuth } from '../../Context/AuthContext';
 const Login = () => {
+  const { globalResponseData, setGlobalResponseData } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setSelectedRole] = useState(""); // New state for selected role
@@ -10,6 +12,11 @@ const Login = () => {
   const [show,setShowotp]= useState(false);
   const [otp, setOTP] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+   console.log("Yes");
+    console.log(globalResponseData);
+
+  }, [globalResponseData]);
   const handleVerifyOTP = async () => {
     try {
       const response = await axios.post(
@@ -21,6 +28,8 @@ const Login = () => {
       );
 
       if (response.data.status === "success") {
+        
+        
         if(role==="Admin")
         navigate("/controller1/Home");
         else if(role==="Professor")
@@ -31,9 +40,11 @@ const Login = () => {
       navigate("/Confidential/Home");
 
       } else {
+        setGlobalResponseData(null);
         alert("Invalid OTP. Please try again.");
       }
     } catch (error) {
+      setGlobalResponseData(null);
       console.error("Error verifying OTP:", error);
       alert("Error verifying OTP. Please try again later.");
     }
@@ -51,20 +62,23 @@ const Login = () => {
           })
           .then((res) => {
             if (res.data) {
-              
+              setGlobalResponseData(res.data);
                 Setid(res.data._id);
                 setShowotp(true);
              // navigate("/otpPage");
             } else if (res.data === "notexist") {
               alert("User Not Registered");
+              setGlobalResponseData(null);
             }
           })
           .catch((e) => {
             alert("Wrong");
+            setGlobalResponseData(null);
             console.log(e);
           });
       } catch (e) {
         console.log("error: " + e);
+        setGlobalResponseData(null);
       }
     }
    else if(role==="Professor")
@@ -78,20 +92,23 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            
+            setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
+            setGlobalResponseData(null);
           }
         })
         .catch((e) => {
           alert("Wrong");
+          setGlobalResponseData(null);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
+      setGlobalResponseData(null);
     }
    }
    else if(role==="Assigny")
@@ -105,20 +122,23 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            
+            setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
+            setGlobalResponseData(null);
           }
         })
         .catch((e) => {
           alert("Wrong");
+          setGlobalResponseData(null);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
+      setGlobalResponseData(null);
     }
    }
    else if(role==="Secrecy")
@@ -133,20 +153,23 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            
+            setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
+            setGlobalResponseData(null);
           }
         })
         .catch((e) => {
           alert("Wrong");
+          setGlobalResponseData(null);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
+      setGlobalResponseData(null);
     }
    }
   }

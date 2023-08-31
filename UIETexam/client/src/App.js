@@ -12,7 +12,7 @@ import ExaminerLogouts from "./components/Examiner/options/Logout";
 import AssignmentInterface from "./components/Examiner/AssignmentInterface"
 import Login from "./components/auth/Login";
 import QuestionBankInterface from "./components/Examiner/QuestionBankInterface";
-import MyContextProvider from "./Context/MyContextProvider";
+import { AuthProvider } from './Context/AuthContext';
 import AssigneHome from "./components/assigne/options/Home";
 import AssignePapers from "./components/assigne/options/Papers"
 import AssigneExaminers from "./components/assigne/options/Examiner"
@@ -108,9 +108,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <MyContextProvider>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </MyContextProvider>
+     </AuthProvider>
       
     
   );
