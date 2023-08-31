@@ -205,7 +205,7 @@ const AssignmentInterface = () => {
         return (
           <div className=" relative flex  flex-col items-center  justify-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <h1 className=" text-xl text-red-600 my-3 ">
-              This is a preview of a paper you are going to be submitting.
+              This is a preview of a paper {document?.name} you are going to be  submitting.
             </h1>
             <Document
               file={document}

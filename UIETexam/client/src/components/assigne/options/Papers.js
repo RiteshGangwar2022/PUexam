@@ -7,7 +7,6 @@ const Papers = () => {
   return (
     <Assigne>
       <h1 className="text-center text-3xl font-bold">Papers List</h1>
-      
     </Assigne>
   );
 };
