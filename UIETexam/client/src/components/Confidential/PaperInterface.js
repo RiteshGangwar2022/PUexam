@@ -3,7 +3,7 @@ import Assigne from "../assigne/Assigne";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-
+import Confidential from "./Confidential";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   import.meta.url
@@ -22,7 +22,7 @@ const PaperInterface = () => {
   }
 
   return (
-    <Assigne>
+    <Confidential>
         <div className=" flex   justify-center items-center flex-col">
 
       <h1 className=" text-xl  text-red-600 my-3 ">Paper view</h1>
@@ -37,7 +37,7 @@ const PaperInterface = () => {
             ))}
       </Document>
             </div>
-    </Assigne>
+    </Confidential>
   );
 };
 
