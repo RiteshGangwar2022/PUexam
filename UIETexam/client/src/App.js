@@ -20,6 +20,7 @@ import ConfidentialHome from "./components/Confidential/options/Home"
 import COnfidentialPapers from "./components/Confidential/options/Papers";
 import ExaminerSubject from "./components/Examiner/Subjects";
 import AssigneSubject from "./components/assigne/Subjects"
+import PaperInterface from "./components/Confidential/PaperInterface";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -87,6 +88,7 @@ const router = createBrowserRouter([
     path: "/Assigne/Papers",
     element: <AssignePapers/>,
   },
+  
   {
     path: "/Assigne/Examiners",
     element: <AssigneExaminers/>,
@@ -102,6 +104,10 @@ const router = createBrowserRouter([
   {
     path: "/confidential/Papers",
     element: <COnfidentialPapers/>,
+  },
+  {
+    path: "/confidential/Papers/:id",
+    element: <PaperInterface/>,
   },
  
 ]);
