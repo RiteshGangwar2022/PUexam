@@ -40,7 +40,6 @@ const Assignments = () => {
             <p className="  font-bold">{index}</p>
             <h1 className="  ">{assignment?.Subject?.Name}</h1>
             <h1 className="  ">{assignment?.Subject?.SubjectCode}</h1>
-
             <h1 className="  ">
               {new Date(assignment?.DOE).toLocaleDateString()}
             </h1>
