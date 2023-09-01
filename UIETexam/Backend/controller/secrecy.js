@@ -3,9 +3,24 @@ const Secrecy= require("../Database/Models/Secrecy");
 const bcrpt=require("bcrypt");
 
 
+//aws-sdk S3 setup
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+
+const BUCKET = process.env.BUCKET;
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: process.env.ACCESS_KEY,
+    secretAccessKey: process.env.ACCESS_SECRET,
+  },
+  region: process.env.REGION,
+});
+
+
+
 const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
+const { all } = require("../routes/examiner");
 
 
 //implementing two factor authentication(using password, second=>using OTP verification)
@@ -14,17 +29,13 @@ const Login = async (req, res) => {
     try {
         const { email,role, password } = req.body;
         //console.log(req.body);
-        
-        console.log("Helloo");
+
         if (!email || !role || !password) {
-          console.log("Ho0");
             res.status(422).json({ error: "enter details properly" });
         }
-        console.log("1");
         const secrecydata = await Secrecy.findOne({ email: email });
-         
-        console.log(secrecydata);
-        if (secrecydata) {
+
+        if (admindata) {
             const ismatch = await bcrpt.compare(password, secrecydata.password);
            
            
@@ -32,11 +43,10 @@ const Login = async (req, res) => {
             
 
             if (!ismatch) {
-                console.log("Ho1");
+                
                 res.status(422).json({ message: "invalid credential" });
             }
             else if(checkrole!=true){
-              console.log("Ho2");
               res.status(422).json({ message: "invalid role" });
             }
             else {
@@ -138,7 +148,38 @@ const verifyOtp = async (req, res) => {
     }
   };
   
-module.exports = {Login,Signup,verifyOtp};
+  const Getpdf=async(req,res)=>{
+    const { key } = req.params;
+    //console.log(key)
+    const params = {
+      Bucket: BUCKET,
+      Key: key,
+    };
+  
+    try {
+      const { Body } = await s3.send(new GetObjectCommand(params));
+  
+  
+      const pdfData = await streamToBuffer(Body);
+     // console.log("PDF data:", pdfData.toString("base64"));
+       //console.log("got pdf")
+      res.status(200).json(pdfData.toString("base64"));
+      //get pdf file in base64 format and fetch it on frontend
+    } catch (err) {
+      console.error(err);
+      res.status.json({message:"not pdf found"})
+    }
+  };
+
+  async function streamToBuffer(stream) {
+    return new Promise((resolve, reject) => {
+      const chunks = [];
+      stream.on("data", (chunk) => chunks.push(chunk));
+      stream.on("end", () => resolve(Buffer.concat(chunks)));
+      stream.on("error", reject);
+    });
+  }
+module.exports = {Login,Signup,verifyOtp,Getpdf};
 
 
 

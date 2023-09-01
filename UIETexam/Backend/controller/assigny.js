@@ -15,15 +15,13 @@ const Login = async (req, res) => {
   try {
     const { email, role, password } = req.body;
     //console.log(req.body);
-    console.log("Helloo");
-    console.log(email+role+password);
+
     if (!email || !role || !password) {
       res.status(422).json({ error: "enter details properly" });
     }
     const assignydata = await Assigny.findOne({ email: email });
 
     if (assignydata) {
-      
       const ismatch = await bcrpt.compare(password, assignydata.password);
 
       const checkrole = assignydata.role == role;
@@ -141,6 +139,7 @@ const Assignment = async (req, res) => {
       SemesterNo,
       Examiners: users,
       Subject: sub,
+      Pdfkey:""
     });
 
     //console.log(newExam);
