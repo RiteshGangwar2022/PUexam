@@ -15,7 +15,8 @@ const Sidebar = () => {
 
   const location = useLocation();
   const currentPath = location.pathname;
-
+  const pattern = /^\/Examiner\/Assignments\/.*$/;
+  const pattern1=/^\/Examiner\/QuestionBanks\/.*$/;
 
   return (
     <div className={` bg-white w-1/6 h-full `}>
@@ -41,14 +42,14 @@ const Sidebar = () => {
           to="/Examiner/Assignments"
           icon={<FaStickyNote className="mr-4" />}
       
-          active={currentPath === "/Examiner/Assignments"}
+          active={currentPath === "/Examiner/Assignments" || pattern.test(currentPath)}
         />
 
         <NavButton
           text="Question Banks"
           to="/Examiner/QuestionBanks"
           icon={<FaStickyNote className="mr-4" />}
-          active={currentPath === "/Examiner/QuestionBanks"}
+          active={currentPath === "/Examiner/QuestionBanks" ||  pattern1.test(currentPath)}
         />
         <NavButton
           text="Payments"

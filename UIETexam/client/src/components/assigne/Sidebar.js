@@ -19,6 +19,7 @@ const Sidebar = () => {
   const handleButtonClick = (text) => {
     setActiveButton(text);
   };
+  const pattern = /^\/Assigne\/Subjects\/.*$/;
 
   return (
     <div className={` bg-white w-1/6 h-full `}>
@@ -39,7 +40,8 @@ const Sidebar = () => {
           onClick={() => {
             handleButtonClick("Home");
           }}
-          active={currentPath === "/Assigne/Home"}
+          active={currentPath === "/Assigne/Home" || currentPath === "/assigne/Home" || pattern.test(currentPath)
+          }
         />
    
         <NavButton

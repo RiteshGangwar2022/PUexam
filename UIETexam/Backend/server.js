@@ -8,7 +8,6 @@ const examinerRoutes=require("./routes/examiner");
 const assignyRoutes=require("./routes/assigny");
 const SecrecyRoutes=require("./routes/secrecy");
 dotenv.config();
-
 //to connect backend to database
 const connectdb=require("./Database/DBconnection/conn");
 connectdb();

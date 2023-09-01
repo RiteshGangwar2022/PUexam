@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 const NavButton = ({ text, to, icon, active, onClick }) => {
   const { darkMode } = useState(false);
-
+ console.log("Hello" + active );
   return (
     <NavLink to={to} onClick={onClick} activeClassName="text-white">
       <li

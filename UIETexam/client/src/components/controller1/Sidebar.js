@@ -39,7 +39,7 @@ const Sidebar = () => {
           onClick={() => {
             handleButtonClick("Home");
           }}
-          active={currentPath === "/controller1/Home"}
+          active={currentPath === "/controller1/Home" || currentPath === "/Controller1/Home"}
         />
         <NavButton
           text="Examiners"

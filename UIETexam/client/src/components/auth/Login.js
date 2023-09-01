@@ -15,7 +15,6 @@ const Login = () => {
   useEffect(() => {
    console.log("Yes");
     console.log(globalResponseData);
-
   }, [globalResponseData]);
   const handleVerifyOTP = async () => {
     try {
@@ -28,7 +27,6 @@ const Login = () => {
       );
 
       if (response.data.status === "success") {
-        
         
         if(role==="Admin")
         navigate("/controller1/Home");
