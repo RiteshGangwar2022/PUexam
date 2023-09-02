@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FaSearch, FaUser,FaEnvelope,FaBell} from "react-icons/fa";
-
+import { useAuth } from '../../Context/AuthContext';
 const Topbar = () => {
 
-
+    const { globalResponseData } = useAuth();
     return ( 
         <div className={`flex w-full justify-between items-center border-b-2 py-4 h-16 bg-white`} >
             <div className="flex items-center px-4 pl-6 h-16">
@@ -34,7 +34,11 @@ const Topbar = () => {
                     <FaUser className={`text-gray-500 cursor-pointer w-8 h-8`} />
 
                   <div class="text-gray-600 text-lg font-bold  ml-4 font-custom-style text-crystal-grey"> 
-                            Username
+                  {globalResponseData ? (
+    <>{globalResponseData.name} </>
+  ) : (
+    <>Unknown User</>
+  )}
                         <div class="text-gray-400 text-sm font-normal">
                              Examiner
                                     </div>

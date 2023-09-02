@@ -8,11 +8,11 @@ import {
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
-
+import { useAuth } from '../../Context/AuthContext';
 
 const Sidebar = () => {
 
-
+  const { globalResponseData } = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
   const pattern = /^\/Examiner\/Assignments\/.*$/;
@@ -25,7 +25,11 @@ const Sidebar = () => {
           <FaUser className={`text-gray-500 cursor-pointer w-8 h-8`} />
 
           <div class="text-gray-600 text-lg font-bold  ml-4 font-custom-style text-crystal-grey">
-            Username
+          {globalResponseData ? (
+    <>{globalResponseData.name}</>
+  ) : (
+    <>Unknown User</>
+  )}
             <div class="text-gray-400 text-sm font-normal">Examiner</div>
           </div>
         </div>

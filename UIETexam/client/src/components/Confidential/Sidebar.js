@@ -9,17 +9,17 @@ import {
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
-
+import { useAuth } from '../../Context/AuthContext';
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState("");
-
+  const { globalResponseData } = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
 
   const handleButtonClick = (text) => {
     setActiveButton(text);
   };
-
+const pattern = /^\/confidential\/Papers\/.*$/;
   return (
     <div className={` bg-white w-1/6 h-full `}>
       <ul className={`flex-1 text-md overflow-y-auto text-black p-4 pr-0`}>
@@ -27,7 +27,11 @@ const Sidebar = () => {
           <FaUser className={`text-gray-500 cursor-pointer w-8 h-8`} />
 
           <div class="text-gray-600 text-lg font-bold  ml-4 font-custom-style text-crystal-grey">
-            Username
+          {globalResponseData ? (
+    <>{globalResponseData.name}</>
+  ) : (
+    <>Unknown User</>
+  )}
             <div class="text-gray-400 text-sm font-normal">Confedential</div>
           </div>
         </div>
@@ -39,7 +43,7 @@ const Sidebar = () => {
           onClick={() => {
             handleButtonClick("Home");
           }}
-          active={currentPath === "/confidential/Home"}
+          active={currentPath === "/confidential/Home" || currentPath === "/Confidential/Home" }
         />
 
 
@@ -48,7 +52,7 @@ const Sidebar = () => {
           to="/confidential/Papers"
           icon={<FaStickyNote className="mr-4" />}
           onClick={() => handleButtonClick("Ques. Papers")}
-          active={currentPath === "/confidential/Papers"}
+          active={currentPath === "/confidential/Papers" ||  pattern.test(currentPath)}
         />
 
         <NavButton

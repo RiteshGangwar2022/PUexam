@@ -1,9 +1,10 @@
 import React, { useState,useContext,useEffect } from "react"; // Import useState
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import Loader from "../loader";
 import { useAuth } from '../../Context/AuthContext';
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const { globalResponseData, setGlobalResponseData } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,6 +49,7 @@ const Login = () => {
     }
   };
   async function submit(e) {
+    setLoading(true);
     e.preventDefault();
     if(role==="Admin")
     {
@@ -62,21 +64,25 @@ const Login = () => {
             if (res.data) {
               setGlobalResponseData(res.data);
                 Setid(res.data._id);
+                setLoading(false);
                 setShowotp(true);
              // navigate("/otpPage");
             } else if (res.data === "notexist") {
               alert("User Not Registered");
               setGlobalResponseData(null);
+              setLoading(false);
             }
           })
           .catch((e) => {
             alert("Wrong");
             setGlobalResponseData(null);
+            setLoading(false);
             console.log(e);
           });
       } catch (e) {
         console.log("error: " + e);
         setGlobalResponseData(null);
+        setLoading(false);
       }
     }
    else if(role==="Professor")
@@ -93,20 +99,24 @@ const Login = () => {
             setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
+              setLoading(false);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
             setGlobalResponseData(null);
+            setLoading(false);
           }
         })
         .catch((e) => {
           alert("Wrong");
           setGlobalResponseData(null);
+          setLoading(false);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
       setGlobalResponseData(null);
+      setLoading(false);
     }
    }
    else if(role==="Assigny")
@@ -123,20 +133,24 @@ const Login = () => {
             setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
+              setLoading(false);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
             setGlobalResponseData(null);
+            setLoading(false);
           }
         })
         .catch((e) => {
           alert("Wrong");
           setGlobalResponseData(null);
+          setLoading(false);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
       setGlobalResponseData(null);
+      setLoading(false);
     }
    }
    else if(role==="Secrecy")
@@ -154,20 +168,24 @@ const Login = () => {
             setGlobalResponseData(res.data);
               Setid(res.data._id);
               setShowotp(true);
+              setLoading(false);
            // navigate("/otpPage");
           } else if (res.data === "notexist") {
             alert("User Not Registered");
             setGlobalResponseData(null);
+            setLoading(false);
           }
         })
         .catch((e) => {
           alert("Wrong");
           setGlobalResponseData(null);
+          setLoading(false);
           console.log(e);
         });
     } catch (e) {
       console.log("error: " + e);
       setGlobalResponseData(null);
+      setLoading(false);
     }
    }
   }
@@ -260,6 +278,10 @@ const Login = () => {
           </div>
         </div>
       )}
+      {loading &&   <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center  backdrop-blur">
+      <Loader/>
+      </div>
+      }
     </div>
   );
 };
