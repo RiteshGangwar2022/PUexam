@@ -60,7 +60,7 @@ const Assignments = () => {
           <div className="px-6 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
             <p className="  font-bold">{index}</p>
             <h1 className="  ">{assignment?.Subject?.Name}</h1>
-            <h1>{assignment?._id}</h1>
+            
             <h1 className="  ">{assignment?.Subject?.SubjectCode}</h1>
             <h1 className="  ">
             
