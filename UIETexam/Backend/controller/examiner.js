@@ -121,14 +121,22 @@ const verifyOtp = async (req, res) => {
 };
 
 const GetAssignments = async (req, res) => {
+
   try {
-    const data = await Exam.find({})
+    const _id = req.params.id;
+    
+    const data = await Exam.find({
+      Examiners: {
+        $in: [_id]
+      }
+    })
       .populate("Examiners", "-password")
       .populate("Subject");
     //console.log(data);
     if (!data) {
       res.status(422).json({ message: "No data found" });
     }
+    console.log("Here is the data"+data);
     res.status(200).json(data);
   } catch (err) {
     res.status(422).json(err);
@@ -140,10 +148,11 @@ const SingleAssignment = async (req, res) => {
     //getting id of the particular product from database on clicking to the image of that item
     const _id = req.params.id;
     console.log(_id);
+    //res.status(400).json({ message: "No assignment found" });
     const assigment = await Exam.findOne({ "Examiners.$oid": _id })
       .populate("Subject")
       .populate("Examiners", "-password");
-    console.log(assigment)
+    console.log("Her it is"+assigment)
     if (!assigment) {
       res.status(400).json({ message: "No assignment found" });
     }

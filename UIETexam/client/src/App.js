@@ -57,7 +57,7 @@ const router = createBrowserRouter([
     element: <ExaminerAssignments />,
   },
   {
-    path: "/Examiner/Assignments/:id",
+    path: "/Examiner/Assignment/:id",
     element:<AssignmentInterface/>,
   },
   {

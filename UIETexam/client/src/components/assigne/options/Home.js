@@ -52,7 +52,6 @@ const Home = () => {
           //  console.log(response.data);
             setSubjects(response.data);
             
-           
             
           } else {
             alert("Not able to fetch");

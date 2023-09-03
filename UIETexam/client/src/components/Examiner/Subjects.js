@@ -44,7 +44,7 @@ console.log(Subject);
       </div>
       <div className='flex flex-col justify-end items-end '>
       <button className=" uppercase  bg-sky-500 text-white rounded-full px-4 py-2 shadow-md ml-4 font-bold ">
-              Add Examiners
+              Assign Examiners
             </button>
       </div>
     

@@ -60,17 +60,36 @@ const AssignmentInterface = () => {
   }
 
   async function getAssignments() {
-    const res = await fetch(
-      `http://localhost:5000/api/r2/singleassignment/${id}`
+    // const res = await fetch(
+    //   `http://localhost:5000/api/r2/singleassignment/${id}`
+    // );
+
+    // if (!res.ok) {
+    //   // This will activate the closest `error.js` Error Boundary
+    //   throw new Error("Failed to fetch assignments data");
+    // }
+
+    // const data = await res.json();
+    // setAssignment(data);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/r2/singleassignment/${id}`
     );
-
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch assignments data");
+    if (response.status === 200) {
+      const data = response.data;
+      console.log("om1" +response);
+      // Handle the data as needed
+    } 
+     else {
+        alert("Not able to fetch");
+        console.log("om1" +response);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      alert("Some error is coming");
     }
-
-    const data = await res.json();
-    setAssignment(data);
+    console.log("om1");
+    console.log(id);
     setLoading(false);
 
     // console.log("d=", data);
@@ -283,12 +302,12 @@ const AssignmentInterface = () => {
     }
   };
 
-  if (loading)
-    return (
-      <Examiner>
-        <Loader />
-      </Examiner>
-    );
+  // if (loading)
+  //   return (
+  //     <Examiner>
+  //       <Loader />
+  //     </Examiner>
+  //   );
 
   return (
     <Examiner>

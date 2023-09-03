@@ -15,7 +15,7 @@ const Sidebar = () => {
   const { globalResponseData } = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
-  const pattern = /^\/Examiner\/Assignments\/.*$/;
+  const pattern = /^\/Examiner\/Assignment\/.*$/;
   const pattern1=/^\/Examiner\/QuestionBanks\/.*$/;
 
   return (

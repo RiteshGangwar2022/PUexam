@@ -3,8 +3,9 @@ import Assigne from "./Assigne";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import Loader from "../loader";
-
+import { useAuth } from '../../Context/AuthContext';
 const Subjects = () => {
+    const { globalResponseData, setGlobalResponseData } = useAuth();
     const location = useLocation();
     const [examObj, setExamObj] = useState();
     const [selectedExaminers, setSelectedExaminers] = useState([]);
@@ -51,7 +52,26 @@ const Subjects = () => {
         }
       });
     };
-    const sendExaminersList = ()=>{
+
+ 
+    const sendExaminersList = ()=>{    
+axios
+      .post('http://localhost:5000/api/r3/addassignment', {
+        DOE: new Date(),
+        ExamCode: "1234",
+        Branch: "Cse",
+        SemesterNo: 1,
+        Examiners: selectedExaminers,
+        Subject: id
+          
+      })
+      .then((response) => {
+        console.log('Response from the API:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Error");
+      });
 
       
     }
@@ -91,9 +111,9 @@ const Subjects = () => {
                     <div className='flex flex-col justify-end items-end '>
                         <button className="uppercase bg-sky-500 text-white rounded-full px-4 py-2 shadow-md ml-4 font-bold 
                         "
-                        onClick={()=>sendExaminersList()}
+                        onClick={sendExaminersList}
                         >
-                            Add Examiners
+                            Assign Exmainers
                         </button>
                     </div>
                 </div>
