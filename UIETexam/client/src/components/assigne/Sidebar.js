@@ -64,6 +64,15 @@ const Sidebar = () => {
           }}
           active={currentPath === "/Assigne/Examiners"}
         />
+             <NavButton
+          text="Assign"
+          to="/Assigne/Assign"
+          icon={<FaUsers className="mr-4" />}
+          onClick={() => {
+            handleButtonClick("Examiners");
+          }}
+          active={currentPath === "/Assigne/Assign"}
+        />
 
         <NavButton
           text="Logout"
