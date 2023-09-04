@@ -8,11 +8,8 @@ const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
 
 
-
-
-
-
 //implementing two factor authentication(using password, second=>using OTP verification)
+
 const Login = async (req, res) => {
   try {
     const { email, role, password } = req.body;
@@ -149,10 +146,12 @@ const SingleAssignment = async (req, res) => {
     const _id = req.params.id;
     console.log(_id);
     //res.status(400).json({ message: "No assignment found" });
-    const assigment = await Exam.findOne({ "Examiners.$oid": _id })
+    
+    const assigment = await Exam.findOne({ _id: _id })
       .populate("Subject")
       .populate("Examiners", "-password");
     console.log("Her it is"+assigment)
+
     if (!assigment) {
       res.status(400).json({ message: "No assignment found" });
     }

@@ -27,6 +27,48 @@ const options = {
   standardFontDataUrl: "/standard_fonts/",
 };
 
+
+
+const AssignmentInterface = () => {
+  const { id } = useParams();
+  const [active, setActive] = useState(0);
+  const [assignment, setAssignment] = useState([]);
+  const [document, setDocument] = useState();
+  const [upload, setUpload] = useState("upload PDF only");
+  const [numPages, setNumPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+    setNumPages(nextNumPages);
+  }
+
+  async function getAssignments() {
+    const res = await fetch(
+      `http://localhost:5000/api/r2/singleassignment/${id}`
+    );
+
+    if (!res.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch assignments data");
+    }
+
+    const data = await res.json();
+    setAssignment(data);
+    setLoading(false);
+    // console.log("d=", data);
+  }
+  useEffect(() => {
+    console.log("Hello");
+    console.log(assignment);
+    
+  }, [assignment]);
+
+  useEffect(() => {
+    getAssignments();
+    
+  }, []);
+
+  
 const GetAssignmentInfo = async (id) => {
   try {
     const response = await axios.get(
@@ -46,58 +88,6 @@ const Generate = async (id) => {
   generate(info.data);
 };
 
-const AssignmentInterface = () => {
-  const { id } = useParams();
-  const [active, setActive] = useState(0);
-  const [assignment, setAssignment] = useState([]);
-  const [document, setDocument] = useState();
-  const [upload, setUpload] = useState("upload PDF only");
-  const [numPages, setNumPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-
-  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
-    setNumPages(nextNumPages);
-  }
-
-  async function getAssignments() {
-    // const res = await fetch(
-    //   `http://localhost:5000/api/r2/singleassignment/${id}`
-    // );
-
-    // if (!res.ok) {
-    //   // This will activate the closest `error.js` Error Boundary
-    //   throw new Error("Failed to fetch assignments data");
-    // }
-
-    // const data = await res.json();
-    // setAssignment(data);
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/r2/singleassignment/${id}`
-    );
-    if (response.status === 200) {
-      const data = response.data;
-      console.log("om1" +response);
-      // Handle the data as needed
-    } 
-     else {
-        alert("Not able to fetch");
-        console.log("om1" +response);
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-      alert("Some error is coming");
-    }
-    console.log("om1");
-    console.log(id);
-    setLoading(false);
-
-    // console.log("d=", data);
-  }
-
-  useEffect(() => {
-    getAssignments();
-  }, []);
 
   const Tabs = () => {
     switch (active) {
@@ -302,12 +292,12 @@ const AssignmentInterface = () => {
     }
   };
 
-  // if (loading)
-  //   return (
-  //     <Examiner>
-  //       <Loader />
-  //     </Examiner>
-  //   );
+  if (loading)
+    return (
+      <Examiner>
+        <Loader />
+      </Examiner>
+    );
 
   return (
     <Examiner>
