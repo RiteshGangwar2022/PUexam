@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Assign = () => {
   const [subjects, setSubjects] = useState([]);
-
+  const [session, setSession] = useState("reappear"); 
   useEffect(() => {
     FetchSubjects();
   }, []);
@@ -43,6 +43,29 @@ const Assign = () => {
     <>
       <Assigne>
         <h1 className="text-center text-3xl mb-3 font-bold">Subjects List</h1>
+        <div className="mb-4">
+          <label className="text-sm font-semibold" htmlFor="session">
+            Session:
+            <div className="flex gap-12">
+              <div className="cursor-pointer" 
+              > 2021-2022</div>
+               <div className="cursor-pointer"
+              >2022-2023</div>
+            </div>
+          </label>
+          <select
+            id="session"
+            name="session"
+            className="w-full mt-1 p-2 border rounded-md shadow-sm focus:ring focus:white bg-white"
+            value={session}
+            onChange={(e) => setSession(e.target.value)}
+          >
+            <option value="reappear">Reappear</option>
+            <option value="regular">Regular</option>
+            <option value="golden-chance">Golden Chance</option>
+          </select>
+        </div>
+
 
         <div className="  grid  grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-3">
           {subjects.map((sub, index) => (
