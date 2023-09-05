@@ -22,6 +22,9 @@ import COnfidentialPapers from "./components/Confidential/options/Papers";
 import ExaminerSubject from "./components/Examiner/Subjects";
 import AssigneSubject from "./components/assigne/Subjects"
 import PaperInterface from "./components/Confidential/PaperInterface";
+import  { Toaster } from 'react-hot-toast';
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -121,6 +124,7 @@ function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster />
      </AuthProvider>
       
     
