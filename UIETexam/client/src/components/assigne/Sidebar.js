@@ -6,6 +6,8 @@ import {
   FaSignOutAlt,
   FaUsers,
   FaUser,
+  faCirclecheck,
+  FaCheckCircle
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
@@ -44,7 +46,7 @@ const Sidebar = () => {
           onClick={() => {
             handleButtonClick("Home");
           }}
-          active={currentPath === "/Assigne/Home" || currentPath === "/assigne/Home" || pattern.test(currentPath)
+          active={currentPath === "/Assigne/Home" || currentPath === "/assigne/Home" 
           }
         />
    
@@ -62,16 +64,16 @@ const Sidebar = () => {
           onClick={() => {
             handleButtonClick("Examiners");
           }}
-          active={currentPath === "/Assigne/Examiners"}
+          active={currentPath === "/Assigne/Examiners" }
         />
              <NavButton
           text="Assign"
           to="/Assigne/Assign"
-          icon={<FaUsers className="mr-4" />}
+          icon={<FaCheckCircle className="mr-4" />}
           onClick={() => {
             handleButtonClick("Examiners");
           }}
-          active={currentPath === "/Assigne/Assign"}
+          active={currentPath === "/Assigne/Assign" || pattern.test(currentPath)}
         />
 
         <NavButton
