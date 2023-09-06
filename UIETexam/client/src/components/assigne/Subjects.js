@@ -106,7 +106,7 @@ const Subjects = () => {
                   <div className="ml-10 mr-4">
                     <input
                       type="checkbox"
-                      // onChange={() => handleCheckboxChange(items.id)}
+                     
                       onChange={() => handleCheckboxChange(items._id)}
                       className="  scale-150"
                     />

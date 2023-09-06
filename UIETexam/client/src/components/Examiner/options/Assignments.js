@@ -33,15 +33,33 @@ const Assignments = () => {
     
     
   }
-
   useEffect(() => {
-    getAssignments();
+    const fetchData = async () => {
+      // Retrieve data from local storage when the component mounts
+      try {
+        const data = JSON.parse(localStorage.getItem('globalData'));
+        if (data) {
+          setGlobalResponseData(data);
+          // Load assignments asynchronously
+        }
+        // Further processing with parsedData
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    };
+  
+    // Call the fetchData function
+    fetchData();
   }, []);
+  
 
-  useEffect(() => {
-    console.log("Asse", JSON.stringify(ass, null, 2));
-    
-  }, [ass]);
+  useEffect(()=>{
+  if(globalResponseData) getAssignments();
+  },[globalResponseData])
+
+
+
+ 
 
   if (loading)
     return (
