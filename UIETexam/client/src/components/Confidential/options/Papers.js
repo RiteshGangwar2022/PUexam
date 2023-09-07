@@ -5,34 +5,34 @@ import Loader from '../../loader';
 import { Link } from 'react-router-dom';
 const Papers = () => {
   const [ass, setAss] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  async function getAssignments() {
-    const res = await fetch("http://localhost:5000/api/r2/assignments");
+  // async function getAssignments() {
+  //   const res = await fetch("http://localhost:5000/api/r2/assignments");
 
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch assignments data");
-    }
+  //   if (!res.ok) {
+  //     // This will activate the closest `error.js` Error Boundary
+  //     throw new Error("Failed to fetch assignments data");
+  //   }
 
-    const data = await res.json();
-    setAss(data);
-    setLoading(false);
-  }
+  //   const data = await res.json();
+  //   setAss(data);
+  //   setLoading(false);
+  // }
 
-  useEffect(() => {
-    getAssignments();
-  }, []);
-  if (loading)
-    return (
-      <Confidential>
-      <Loader/>
-      </Confidential>
-    );
+  // useEffect(() => {
+  //   getAssignments();
+  // }, []);
+  // if (loading)
+  //   return (
+  //     <Confidential>
+  //     <Loader/>
+  //     </Confidential>
+  //   );
 
   return (
     <Confidential>
-      <h1 className="text-center text-3xl font-bold">Assignments status</h1>
+      <h1 className="text-center text-3xl font-bold">Assignments </h1>
       <p>Just correct api calls when api is ready.right now using Examiner api list </p>
 
       {ass.map((assignment, index) => (
@@ -49,6 +49,17 @@ const Papers = () => {
           </div>
         </Link>
       ))}
+
+<div className="px-6 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+            <p className="  font-bold">1</p>
+            <h1 className="  ">DSA</h1>
+            <h1 className="  ">123</h1>
+
+            <h1 className="  ">
+              {12/3/4}
+            </h1>
+            <h1 className=" font-bold text-red-600"> pending </h1>
+          </div>
     </Confidential>
   );
 };
