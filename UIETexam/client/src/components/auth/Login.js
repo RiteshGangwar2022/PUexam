@@ -6,6 +6,7 @@ import { useAuth } from '../../Context/AuthContext';
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { globalResponseData, setGlobalResponseData } = useAuth();
+  const [temp,setTemp]=useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setSelectedRole] = useState(""); // New state for selected role
@@ -14,10 +15,10 @@ const Login = () => {
   const [otp, setOTP] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-   console.log("Yes");
     console.log(globalResponseData);
   }, [globalResponseData]);
   const handleVerifyOTP = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/r1/verifyOtp",
@@ -28,7 +29,11 @@ const Login = () => {
       );
 
       if (response.data.status === "success") {
+        localStorage.setItem('globalData', JSON.stringify(temp));
         
+      const data = JSON.parse(localStorage.getItem('globalData'));
+      setGlobalResponseData(data);
+      setLoading(false);
         if(role==="Admin")
         navigate("/controller1/Home");
         else if(role==="Professor")
@@ -39,10 +44,12 @@ const Login = () => {
       navigate("/Confidential/Home");
 
       } else {
+        setLoading(false);
         setGlobalResponseData(null);
         alert("Invalid OTP. Please try again.");
       }
     } catch (error) {
+      setLoading(false);
       setGlobalResponseData(null);
       console.error("Error verifying OTP:", error);
       alert("Error verifying OTP. Please try again later.");
@@ -62,26 +69,27 @@ const Login = () => {
           })
           .then((res) => {
             if (res.data) {
-              setGlobalResponseData(res.data);
+              setTemp(res.data);
+             
                 Setid(res.data._id);
                 setLoading(false);
                 setShowotp(true);
              // navigate("/otpPage");
             } else if (res.data === "notexist") {
               alert("User Not Registered");
-              setGlobalResponseData(null);
+             
               setLoading(false);
             }
           })
           .catch((e) => {
             alert("Wrong");
-            setGlobalResponseData(null);
+           
             setLoading(false);
             console.log(e);
           });
       } catch (e) {
         console.log("error: " + e);
-        setGlobalResponseData(null);
+       
         setLoading(false);
       }
     }
@@ -96,7 +104,7 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            setGlobalResponseData(res.data);
+           setTemp(res.data);
               Setid(res.data._id);
               setShowotp(true);
               setLoading(false);
@@ -130,7 +138,7 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            setGlobalResponseData(res.data);
+            setTemp(res.data);
               Setid(res.data._id);
               setShowotp(true);
               setLoading(false);
@@ -165,7 +173,7 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data) {
-            setGlobalResponseData(res.data);
+            setTemp(res.data);
               Setid(res.data._id);
               setShowotp(true);
               setLoading(false);

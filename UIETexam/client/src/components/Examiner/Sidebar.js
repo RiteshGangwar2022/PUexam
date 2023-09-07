@@ -9,15 +9,22 @@ import {
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
 import { useAuth } from '../../Context/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-
-  const { globalResponseData } = useAuth();
+  const navigate = useNavigate();
+  const { globalResponseData,setGlobalResponseData} = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
   const pattern = /^\/Examiner\/Assignment\/.*$/;
   const pattern1=/^\/Examiner\/QuestionBanks\/.*$/;
-
+const handleLogout=()=>{
+  const tellme=window.confirm("Are You Sure to Logout");
+  if(!tellme) return;
+  localStorage.removeItem('globalData');
+  setGlobalResponseData(null);
+  navigate("/");
+}
   return (
     <div className={` bg-white w-1/6 h-full `}>
       <ul className={`flex-1 text-md overflow-y-auto text-black p-4 pr-0`}>
@@ -61,12 +68,18 @@ const Sidebar = () => {
           icon={<FaMoneyBillWave className="mr-4" />}
           active={currentPath === "/Examiner/Payments"}
         />
-        <NavButton
-          text="Logout"
-          to="/Examiner/Logout"
-          icon={<FaSignOutAlt className="mr-4" />}
-          active={currentPath === "/Examiner/Logout"}
-        />
+       
+        <div className="my-1 p-2 py-4 rounded-tl-md rounded-bl-md  hover:rounded-l-md cursor-pointer"
+        onClick={handleLogout}
+        >
+        <div className="flex gap-4">
+             <div>
+             <FaSignOutAlt className="mr-4" />
+             </div>
+             <div>Logout</div>
+        </div>
+          
+        </div>
       </ul>
     </div>
   );

@@ -5,7 +5,9 @@ import { useState, useEffect } from "react";
 import TrackingPage from "./TrackingPage";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../../../Context/AuthContext";
 const Home = () => {
+  const {globalResponseData,setGlobalResponseData}=useAuth();
   const data = [
     { students: 13, fill: "red" },
     { students: 37, fill: "blue" },
@@ -27,6 +29,21 @@ const Home = () => {
   const handleRedirect = (url, data) => {
     navigate(url, { state: data });
   };
+
+  useEffect(() => {
+    // Retrieve data from local storage when the component mounts
+    try {
+
+      const data = JSON.parse(localStorage.getItem('globalData'));
+      if (data) {
+        setGlobalResponseData(data);
+      }
+      // Further processing with parsedData
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+    }
+   
+  }, []);
 
   return (
     <Examiner>
