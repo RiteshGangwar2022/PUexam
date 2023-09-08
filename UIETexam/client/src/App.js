@@ -9,27 +9,26 @@ import ExaminerAssignments from "./components/Examiner/options/Assignments";
 import ExaminerQuestionBank from "./components/Examiner/options/QuestionBanks";
 import ExaminerPayments from "./components/Examiner/options/Payments";
 import ExaminerLogouts from "./components/Examiner/options/Logout";
-import AssignmentInterface from "./components/Examiner/AssignmentInterface"
+import AssignmentInterface from "./components/Examiner/AssignmentInterface";
 import Login from "./components/auth/Login";
 import QuestionBankInterface from "./components/Examiner/QuestionBankInterface";
-import { AuthProvider } from './Context/AuthContext';
+import { AuthProvider } from "./Context/AuthContext";
 import AssigneHome from "./components/assigne/options/Home";
-import AssignePapers from "./components/assigne/options/Papers"
+import AssignePapers from "./components/assigne/options/Papers";
 import Assign from "./components/assigne/options/Assign";
-import AssigneExaminers from "./components/assigne/options/Examiner"
-import ConfidentialHome from "./components/Confidential/options/Home"
+import AssigneExaminers from "./components/assigne/options/Examiner";
+import ConfidentialHome from "./components/Confidential/options/Home";
 import COnfidentialPapers from "./components/Confidential/options/Papers";
 import ExaminerSubject from "./components/Examiner/Subjects";
-import AssigneSubject from "./components/assigne/Subjects"
+import AssigneSubject from "./components/assigne/Subjects";
 import PaperInterface from "./components/Confidential/PaperInterface";
-import  { Toaster } from 'react-hot-toast';
-
+import { Toaster } from "react-hot-toast";
+import { Worker } from "@react-pdf-viewer/core";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element:  <Login/>,
-  
+    element: <Login />,
   },
   {
     path: "/controller1/Home",
@@ -62,7 +61,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/Examiner/Assignment/:id",
-    element:<AssignmentInterface/>,
+    element: <AssignmentInterface />,
   },
   {
     path: "/Examiner/Logout",
@@ -78,7 +77,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/Examiner/QuestionBanks/:id",
-    element: <QuestionBankInterface/>,
+    element: <QuestionBankInterface />,
   },
   {
     path: "/Examiner/Subjects/:id",
@@ -86,48 +85,47 @@ const router = createBrowserRouter([
   },
   {
     path: "/Assigne/Home",
-    element: <AssigneHome/>,
+    element: <AssigneHome />,
   },
   {
     path: "/Assigne/Papers",
-    element: <AssignePapers/>,
+    element: <AssignePapers />,
   },
-  
+
   {
     path: "/Assigne/Examiners",
-    element: <AssigneExaminers/>,
+    element: <AssigneExaminers />,
   },
   {
     path: "/Assigne/Assign",
-    element: <Assign/>,
+    element: <Assign />,
   },
   {
     path: "/Assigne/Subjects/:subjects",
-    element: <AssigneSubject/>,
+    element: <AssigneSubject />,
   },
   {
     path: "/confidential/Home",
-    element: <ConfidentialHome/>,
+    element: <ConfidentialHome />,
   },
   {
     path: "/confidential/Papers",
-    element: <COnfidentialPapers/>,
+    element: <COnfidentialPapers />,
   },
   {
     path: "/confidential/Papers/:id",
-    element: <PaperInterface/>,
+    element: <PaperInterface />,
   },
- 
 ]);
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-      <Toaster />
-     </AuthProvider>
-      
-    
+    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </AuthProvider>
+    </Worker>
   );
 }
 

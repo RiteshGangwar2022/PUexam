@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Examiner from "./Examiner";
 import { clsx } from "clsx";
 import axios from "axios";
@@ -11,23 +11,24 @@ import { BiUpload } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import Loader from "../loader";
-import { pdfjs, Document, Page } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
+
+import { Viewer } from "@react-pdf-viewer/core";
+// import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
+// import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const steps = ["setup", "upload", "preview", "publish"];
+// const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.js",
-  import.meta.url
-).toString();
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//   'pdfjs-dist/build/pdf.worker.min.js',
+//   import.meta.url,
+// ).toString
 
-const options = {
-  cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
-};
-
-
+// const options = {
+//   cMapUrl: "/cmaps/",
+//   standardFontDataUrl: "/standard_fonts/",
+// };
 
 const AssignmentInterface = () => {
   const { id } = useParams();
@@ -35,12 +36,16 @@ const AssignmentInterface = () => {
   const [assignment, setAssignment] = useState([]);
   const [document, setDocument] = useState();
   const [upload, setUpload] = useState("upload PDF only");
-  const [numPages, setNumPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
-    setNumPages(nextNumPages);
-  }
+  const [url, setUrl] = useState("");
+
+  const onChange = (e) => {
+    const files = e?.target?.files;
+    files.length > 0 && setUrl(URL.createObjectURL(files[0]));
+    setDocument(e?.target?.files[0]);
+    setUpload(e?.target?.files[0].name);
+  };
 
   async function getAssignments() {
     const res = await fetch(
@@ -57,37 +62,34 @@ const AssignmentInterface = () => {
     setLoading(false);
     // console.log("d=", data);
   }
-  useEffect(() => {
-    console.log("Hello");
-    console.log(assignment);
-    
-  }, [assignment]);
+  // useEffect(() => {
+  //   console.log("Hello");
+  //   console.log(assignment);
+
+  // }, [assignment]);
 
   useEffect(() => {
     getAssignments();
-    
   }, []);
 
-  
-const GetAssignmentInfo = async (id) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/r2/singleassignment/${id}`
-    );
+  const GetAssignmentInfo = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/r2/singleassignment/${id}`
+      );
 
-    return response;
-  } catch (error) {
-    console.log("Exam not found");
-    alert("Exam not found. Try again.");
-  }
-};
+      return response;
+    } catch (error) {
+      console.log("Exam not found");
+      alert("Exam not found. Try again.");
+    }
+  };
 
-const Generate = async (id) => {
-  const info = await GetAssignmentInfo(id);
-  // console.log(info.data)
-  generate(info.data);
-};
-
+  const Generate = async (id) => {
+    const info = await GetAssignmentInfo(id);
+    // console.log(info.data)
+    generate(info.data);
+  };
 
   const Tabs = () => {
     switch (active) {
@@ -214,26 +216,16 @@ const Generate = async (id) => {
         return (
           <div className=" relative flex  flex-col items-center  justify-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <h1 className=" text-xl text-red-600 my-3 ">
-              This is a preview of a paper {document?.name} you are going to be  submitting.
+              This is a preview of a paper {document?.name} you are going to be
+              submitting.
             </h1>
-            {document && ( // Only render if the document is available
-              <Document
-                file={document}
-                onLoadSuccess={onDocumentLoadSuccess}
-                options={options}
-                loading="Loading PDF…"
+            {url && (
+              <div
+                className=" max-h-[700px]  border  mb-20 border-neutral-600 overflow-y-auto  w-3/4"
               >
-                {Array.from(new Array(numPages), (el, index) => (
-                  <Page
-                    width={800}
-                    key={`page_${index + 1}`}
-                    pageNumber={index + 1}
-                  />
-                ))}
-              </Document>
+                <Viewer fileUrl={url} />
+              </div>
             )}
-
-
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute z-10  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
@@ -264,12 +256,8 @@ const Generate = async (id) => {
               <input
                 type="file"
                 className=" border-2   opacity-0  h-60 cursor-pointer"
-                onChange={(e) =>
-                  setUpload(
-                    e?.target?.files[0]?.name,
-                    setDocument(e?.target?.files[0])
-                  )
-                }
+                accept=".pdf"
+                onChange={onChange}
               />
             </div>
 
