@@ -33,6 +33,9 @@ const ExamSchema = new mongoose.Schema({
     Pdfkey:{
         type:String
     },
+    password: {
+        type: String
+    },
     Examiners:[{ 
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Professor'
