@@ -12,7 +12,7 @@ const Subjects = () => {
   const [examObj, setExamObj] = useState();
   const { id, Subject } = location.state;
   const [loading, setLoading] = useState(true);
-
+ const [isEmpty,setEmpty] =useState(false);
   const optionRef = useRef(null);
   const sessionRef = useRef(null);
 
@@ -28,7 +28,10 @@ const Subjects = () => {
         setLoading(false);
         setExamObj(response.data[0]);
       } else {
-        alert("Not able to fetch");
+       
+        setLoading(false);
+        setEmpty(true);
+       
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -103,9 +106,21 @@ const Subjects = () => {
         <Loader />
       </Assigne>
     );
+    if(isEmpty)
+    {
+      return (
+        <Assigne>
+         <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+<p class="text-blue-500 font-semibold">No Examiner Found</p>
+</div>
+        </Assigne>
+      );
+
+    }
 
   return (
     <Assigne>
+    
       <div className="text-center text-3xl mb-3 font-bold">{Subject} </div>
       <div className="bg-white rounded mt-2 p-3 flex flex-col">
         <div className="p-3 border-[1px] flex flex-col gap-2  overflow-y-auto w-full max-w-lg ">

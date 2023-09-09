@@ -13,7 +13,7 @@ const Exam = require("../Database/Models/Exam");
 const Login = async (req, res) => {
   try {
     const { email, role, password } = req.body;
-    //console.log(req.body);
+    
 
     if (!email || !role || !password) {
       res.status(422).json({ error: "enter details properly" });
@@ -24,7 +24,7 @@ const Login = async (req, res) => {
       const ismatch = await bcrpt.compare(password, professordata.password);
 
       const checkrole = professordata.role == role;
-      // console.log(checkrole)
+      
       if (!ismatch) {
         res.status(422).json({ message: "invalid credential" });
       } else if (checkrole != true) {
