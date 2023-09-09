@@ -1,9 +1,66 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { PieChart, Pie, Cell, Label } from "recharts";
+import { useAuth } from "../../../Context/AuthContext";
+import axios from "axios";
 
 const Piechart = (props) => {
   // Destructure the data prop from props
   const { data } = props;
+
+
+  // const { globalResponseData, setGlobalResponseData } = useAuth();
+  // const [loading, setLoading] = useState(true);
+  // const [ass, setAss] = useState([]);
+
+  // async function getAssignments() {
+  //   const id = globalResponseData?._id;
+  //   if (!globalResponseData) return;
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:5000/api/r2/assignments/${id}`
+  //     );
+
+  //     if (response.statusText === "OK") {
+  //       console.log(response);
+  //       //  console.log(response.data);
+  //       const data = await response.data;
+  //       setAss(data);
+  //       setLoading(false);
+  //     } else {
+  //       alert("Not able to fetch");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error: ", error);
+  //     alert("Some error is coming");
+  //   }
+  // }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // Retrieve data from local storage when the component mounts
+  //     try {
+  //       const data = JSON.parse(localStorage.getItem("globalData"));
+  //       if (data) {
+  //         setGlobalResponseData(data);
+  //         // Load assignments asynchronously
+  //       }
+  //       // Further processing with parsedData
+  //     } catch (error) {
+  //       console.error("Error parsing JSON:", error);
+  //     }
+  //   };
+
+  //   // Call the fetchData function
+  //   fetchData();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (globalResponseData) getAssignments();
+  // }, [globalResponseData]);
+
+
+
+
+
 
   return (
     <div>

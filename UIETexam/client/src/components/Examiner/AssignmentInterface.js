@@ -13,22 +13,8 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import Loader from "../loader";
 
 import { Viewer } from "@react-pdf-viewer/core";
-// import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-// import "@react-pdf-viewer/core/lib/styles/index.css";
-// import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const steps = ["setup", "upload", "preview", "publish"];
-// const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   'pdfjs-dist/build/pdf.worker.min.js',
-//   import.meta.url,
-// ).toString
-
-// const options = {
-//   cMapUrl: "/cmaps/",
-//   standardFontDataUrl: "/standard_fonts/",
-// };
 
 const AssignmentInterface = () => {
   const { id } = useParams();
@@ -220,9 +206,7 @@ const AssignmentInterface = () => {
               submitting.
             </h1>
             {url && (
-              <div
-                className=" max-h-[700px]  border  mb-20 border-neutral-600 overflow-y-auto  w-3/4"
-              >
+              <div className=" max-h-[700px]  border  mb-20 border-neutral-600 overflow-y-auto  w-3/4">
                 <Viewer fileUrl={url} />
               </div>
             )}

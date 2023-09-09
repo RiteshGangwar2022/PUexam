@@ -24,6 +24,7 @@ import AssigneSubject from "./components/assigne/Subjects";
 import PaperInterface from "./components/Confidential/PaperInterface";
 import { Toaster } from "react-hot-toast";
 import { Worker } from "@react-pdf-viewer/core";
+import Preview from "./components/Confidential/Preview";
 
 const router = createBrowserRouter([
   {
@@ -113,8 +114,12 @@ const router = createBrowserRouter([
     element: <COnfidentialPapers />,
   },
   {
-    path: "/confidential/Papers/:id",
+    path: "/confidential/Papers/:aid",
     element: <PaperInterface />,
+  },
+  {
+    path: "/confidential/Papers/:aid/:eid", //aid = assignmentID eid = examinerID
+    element: <Preview />,
   },
 ]);
 

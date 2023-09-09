@@ -69,6 +69,7 @@ const Subjects = () => {
     
     if (!sessionValue) {
       toast.error("Select a session", { id: loadingToast });
+      return
     }
     console.log(sessionValue);
     console.log(optionValue);
@@ -113,6 +114,7 @@ const Subjects = () => {
               e.preventDefault();
               sendExaminersList();
             }}
+            className=" text-xl"
           >
             <select
               id="option"
@@ -123,7 +125,7 @@ const Subjects = () => {
               <option value="" selected disabled hidden>
                 Choose option
               </option>
-              <option value="regular">Regular</option>
+              <option  value="regular">Regular</option>
               <option value="reappear">Reappear</option>
               <option value="golden-chance">Golden Chance</option>
             </select>

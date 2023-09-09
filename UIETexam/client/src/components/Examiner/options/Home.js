@@ -4,18 +4,77 @@ import Piechart from "./Piechart";
 import { useState, useEffect } from "react";
 import TrackingPage from "./TrackingPage";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
+import axios from "axios";
 const Home = () => {
-  const {globalResponseData,setGlobalResponseData}=useAuth();
+  const { globalResponseData, setGlobalResponseData } = useAuth();
+
+  const [ass, setAss] = useState([]);
+
+  let done_ass = 0;
+  let total_ass = ass.length;
+
+  ass.map((x) => {
+    if (x.Ispending === false) {
+      done_ass++;
+    }
+  });
+
+  async function getAssignments() {
+    const id = globalResponseData?._id;
+    if (!globalResponseData) return;
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/r2/assignments/${id}`
+      );
+
+      if (response.statusText === "OK") {
+        // console.log(response);
+        //  console.log(response.data);
+        const data = await response.data;
+        setAss(data);
+        // setLoading(false);
+      } else {
+        alert("Not able to fetch");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      alert("Some error is coming");
+    }
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      // Retrieve data from local storage when the component mounts
+      try {
+        const data = JSON.parse(localStorage.getItem("globalData"));
+        if (data) {
+          setGlobalResponseData(data);
+          // Load assignments asynchronously
+        }
+        // Further processing with parsedData
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    };
+
+    // Call the fetchData function
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (globalResponseData) getAssignments();
+  }, [globalResponseData]);
+
   const data = [
-    { students: 13, fill: "red" },
-    { students: 37, fill: "blue" },
+    { students: done_ass, fill: "green" },
+    { students: total_ass - done_ass, fill: "red" },
   ];
   const data1 = [
     { students: 13, fill: "orange" },
     { students: 37, fill: "green" },
   ];
+
   const [currentYear, setCurrentYear] = useState("");
 
   useEffect(() => {
@@ -33,16 +92,14 @@ const Home = () => {
   useEffect(() => {
     // Retrieve data from local storage when the component mounts
     try {
-
-      const data = JSON.parse(localStorage.getItem('globalData'));
+      const data = JSON.parse(localStorage.getItem("globalData"));
       if (data) {
         setGlobalResponseData(data);
       }
       // Further processing with parsedData
     } catch (error) {
-      console.error('Error parsing JSON:', error);
+      console.error("Error parsing JSON:", error);
     }
-   
   }, []);
 
   return (
@@ -55,11 +112,11 @@ const Home = () => {
               <Piechart data={data}></Piechart>
             </div>
             <div className=" bg-gray-100 shadow-md rounded-xl w-60 h-50 border-2 border-gray-500 p-5 pt-5  font-bold  ">
-              Total Examiner: {data[0].students + data[1].students}
+              Total assignments: {total_ass}
               <br></br>
-              Assigned Subjects: {data[0].students}
+              Done assignments: {done_ass}
               <br></br>
-              Not Assigned Subjects: {data[1].students}
+              Pending assignments: {total_ass - done_ass}
             </div>
           </div>
         </div>
@@ -101,19 +158,28 @@ const Home = () => {
         <div className="bg-white shadow-md rounded-xl    p-3">
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
-         
-          {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} onClick={() => handleRedirect( `/Examiner/Subjects/${index + 1}`, { items: ["Examiner1","Examiner2","Examiner3","Examiner4","Examiner5","Examiner6"],
-        Subject: `Subject ${index + 1}`,
-         })}>  
-        
-            <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl cursor-pointer">
-            <span className="mr-2">Subject {index + 1}</span>
-            </div>
-                
-            </div>
-      ))}
-         
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                onClick={() =>
+                  handleRedirect(`/Examiner/Subjects/${index + 1}`, {
+                    items: [
+                      "Examiner1",
+                      "Examiner2",
+                      "Examiner3",
+                      "Examiner4",
+                      "Examiner5",
+                      "Examiner6",
+                    ],
+                    Subject: `Subject ${index + 1}`,
+                  })
+                }
+              >
+                <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl cursor-pointer">
+                  <span className="mr-2">Subject {index + 1}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>{" "}
