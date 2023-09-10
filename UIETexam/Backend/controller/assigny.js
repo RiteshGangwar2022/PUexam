@@ -122,45 +122,40 @@ const verifyOtp = async (req, res) => {
 
 const Assignment = async (req, res) => {
   const { DOE, ExamCode, Branch, SemesterNo, Examiners, Subject } = req.body;
-
   if (!DOE || !ExamCode || !Branch || !SemesterNo || !Examiners || !Subject) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
 
-  
-
   //console.log(req.body);
 
-  // var users = JSON.parse(req.body.Examiners);
-  // var sub = JSON.parse(req.body.Subject);
-console.log("1");
+  var users = JSON.parse(req.body.Examiners);
+  var sub = JSON.parse(req.body.Subject);
+
   try {
     const newExam = new Exam({
       DOE,
       ExamCode,
       Branch,
       SemesterNo,
-      Examiners, // Assuming Examiners and Subject are already in the expected format
-      Subject,   // and you don't need to parse them
-      Pdfkey: ""
+      Examiners: users,
+      Subject: sub,
+      Pdfkey:""
     });
-console.log("2");
+
     //console.log(newExam);
 
     const data = await newExam.save();
-console.log("3");
-const Assignment = await Exam.findOne({ _id: data._id })
-.populate("Examiners", "-password")
-.populate("Subject");
 
-// Respond with the populated Assignment document
-res.status(200).json(Assignment);
-console.log("4");
-} catch (error) {
-// Handle any errors that occur during the process
-console.error(error); // Log the error for debugging purposes
-res.status(400).json(error);
-}
+    const Assignment = await Exam.findOne({ _id: data._id })
+      .populate("Examiners", "-password")
+      .populate("Subject");
+    //console.log(Assignment);
+
+    res.status(200).json(Assignment);
+  } catch (error) {
+     //console.log(error);
+    res.status(400).json(error);
+  }
 };
 
 const Allsubject = async (req, res) => {

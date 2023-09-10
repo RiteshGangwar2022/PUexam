@@ -20,7 +20,7 @@ const s3 = new S3Client({
 const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
-const { all } = require("../routes/examiner");
+const Exam = require("../Database/Models/Exam");
 
 
 //implementing two factor authentication(using password, second=>using OTP verification)
@@ -35,7 +35,7 @@ const Login = async (req, res) => {
         }
         const secrecydata = await Secrecy.findOne({ email: email });
 
-        if (secrecydata) {
+        if (admindata) {
             const ismatch = await bcrpt.compare(password, secrecydata.password);
            
            
@@ -179,7 +179,24 @@ const verifyOtp = async (req, res) => {
       stream.on("error", reject);
     });
   }
-module.exports = {Login,Signup,verifyOtp,Getpdf};
+
+  const Allassignment=async(req,res)=>{
+    try {
+      const data = await Exam.find({})
+        .populate("Examiners", "-password")
+        .populate("Subject");
+      //console.log(data);
+      if (!data) {
+        res.status(422).json({ message: "No data found" });
+      }
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(422).json(err);
+    }
+        
+  }
+module.exports = {Login,Signup,verifyOtp,Allassignment,Getpdf};
 
 
 
+ 

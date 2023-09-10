@@ -65,11 +65,10 @@ const Signup = async(req,res)=>{
     
     try {
             const { name, email,mobile,gender,role, password} = req.body;
-                console.log(req.body.password);
+                 
             const hash= await hashPassword(req.body.password);
             const newadmin = new Admin({ name, email, mobile,gender,role, password:hash});
             const data = await newadmin.save();
-            console.log("Signup");
             console.log(data);
             res.status(201).json(data);
     }

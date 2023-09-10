@@ -8,12 +8,15 @@ const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
 
 
-//implementing two factor authentication(using password, second=>using OTP verification)
 
+
+
+
+//implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
   try {
     const { email, role, password } = req.body;
-    
+    //console.log(req.body);
 
     if (!email || !role || !password) {
       res.status(422).json({ error: "enter details properly" });
@@ -24,7 +27,7 @@ const Login = async (req, res) => {
       const ismatch = await bcrpt.compare(password, professordata.password);
 
       const checkrole = professordata.role == role;
-      
+     
       if (!ismatch) {
         res.status(422).json({ message: "invalid credential" });
       } else if (checkrole != true) {
@@ -118,22 +121,14 @@ const verifyOtp = async (req, res) => {
 };
 
 const GetAssignments = async (req, res) => {
-
   try {
-    const _id = req.params.id;
-    
-    const data = await Exam.find({
-      Examiners: {
-        $in: [_id]
-      }
-    })
+    const data = await Exam.find({})
       .populate("Examiners", "-password")
       .populate("Subject");
     //console.log(data);
     if (!data) {
       res.status(422).json({ message: "No data found" });
     }
-    console.log("Here is the data"+data);
     res.status(200).json(data);
   } catch (err) {
     res.status(422).json(err);
@@ -145,13 +140,10 @@ const SingleAssignment = async (req, res) => {
     //getting id of the particular product from database on clicking to the image of that item
     const _id = req.params.id;
     console.log(_id);
-    //res.status(400).json({ message: "No assignment found" });
-    
-    const assigment = await Exam.findOne({ _id: _id })
+    const assigment = await Exam.findOne({ "Examiners.$oid": _id })
       .populate("Subject")
       .populate("Examiners", "-password");
-    console.log("Her it is"+assigment)
-
+    console.log(assigment)
     if (!assigment) {
       res.status(400).json({ message: "No assignment found" });
     }
