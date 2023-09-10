@@ -92,7 +92,7 @@ const Home = () => {
   useEffect(() => {
     // Retrieve data from local storage when the component mounts
     try {
-      const data = JSON.parse(localStorage.getItem("globalData"));
+      const data = JSON.parse(localStorage.getItem('Professor'));
       if (data) {
         setGlobalResponseData(data);
       }

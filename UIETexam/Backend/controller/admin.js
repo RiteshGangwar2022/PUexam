@@ -84,6 +84,7 @@ const verifyOtp = async (req, res) => {
     try {
 
       const userId = req.body.id;
+      console.log("her"+userId);
       const body_otp = req.body.otp;
   
   
@@ -105,7 +106,7 @@ const verifyOtp = async (req, res) => {
           message: "Account Record doesnt exist . Please login or signin",
         });
       }
-   console.log(userOtpRecords); 
+   console.log("13"+userOtpRecords); 
       const otp=userOtpRecords[userOtpRecords.length-1].otp;
       const validOtp = await bcrpt.compare(body_otp, otp);
      /* console.log(body_otp);
@@ -121,9 +122,11 @@ const verifyOtp = async (req, res) => {
   
 
       //to delete otp from database
-      await otpModel.deleteMany({ _id: userId });
+      console.log("13"+userOtpRecords); 
+      console.log("Here It is Deleted 1");
+      await otpModel.deleteMany({ entityId: userId });
 
-  
+
       return res.status(200).json({
         status: "success",
         message: "User is verified",

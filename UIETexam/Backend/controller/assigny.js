@@ -94,13 +94,10 @@ const verifyOtp = async (req, res) => {
         message: "Account Record doesnt exist . Please login or signin",
       });
     }
-    console.log(userOtpRecords);
+    
     const otp = userOtpRecords[userOtpRecords.length - 1].otp;
     const validOtp = await bcrpt.compare(body_otp, otp);
-    /* console.log(body_otp);
-     console.log(otp);
-     console.log(validOtp); 
-    */
+
     if (!validOtp) {
       return res.status(500).json({
         status: "failure",

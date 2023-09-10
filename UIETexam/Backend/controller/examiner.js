@@ -7,11 +7,6 @@ const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
 
-
-
-
-
-
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
   try {
@@ -110,7 +105,7 @@ const verifyOtp = async (req, res) => {
 
     //to delete otp from database
     await otpModel.deleteMany({ _id: userId });
-
+ 
     return res.status(200).json({
       status: "success",
       message: "User is verified",

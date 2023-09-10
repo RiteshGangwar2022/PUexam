@@ -10,16 +10,26 @@ import {
 import { useLocation } from "react-router-dom";
 import NavButton from "./NavButton";
 import { useAuth } from '../../Context/AuthContext';
+import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
-  const { globalResponseData } = useAuth();
+  const { globalResponseData,setGlobalResponseData } = useAuth();
+  const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState("");
 
   const location = useLocation();
   const currentPath = location.pathname;
+  const handleLogout=()=>{
+    const tellme=window.confirm("Are You Sure to Logout");
+    if(!tellme) return;
+    localStorage.removeItem('Admin');
+    setGlobalResponseData(null);
+    navigate("/");
+  }
 
   const handleButtonClick = (text) => {
     setActiveButton(text);
   };
+  
 
   return (
     <div className={` bg-white w-1/6 h-full `}>
@@ -70,13 +80,17 @@ const Sidebar = () => {
           onClick={() => handleButtonClick("Payments")}
           active={currentPath === "/controller1/Payments"}
         />
-        <NavButton
-          text="Logout"
-          to="/controller1/Logout"
-          icon={<FaSignOutAlt className="mr-4" />}
-          onClick={() => handleButtonClick("Profile")}
-          active={currentPath === "/controller1/Logout"}
-        />
+         <div className="my-1 p-2 py-4 rounded-tl-md rounded-bl-md  hover:rounded-l-md cursor-pointer"
+        onClick={handleLogout}
+        >
+        <div className="flex gap-4">
+             <div>
+             <FaSignOutAlt className="mr-4" />
+             </div>
+             <div>Logout</div>
+        </div>
+          
+        </div>
       </ul>
     </div>
   );

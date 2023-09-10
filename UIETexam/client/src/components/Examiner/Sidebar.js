@@ -21,7 +21,7 @@ const Sidebar = () => {
 const handleLogout=()=>{
   const tellme=window.confirm("Are You Sure to Logout");
   if(!tellme) return;
-  localStorage.removeItem('globalData');
+  localStorage.removeItem('Professor');
   setGlobalResponseData(null);
   navigate("/");
 }

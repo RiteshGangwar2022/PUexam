@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaMoneyBillWave,
@@ -14,13 +15,21 @@ import NavButton from "./NavButton";
 import { useAuth } from '../../Context/AuthContext';
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState("");
-  const { globalResponseData } = useAuth();
+  const { globalResponseData ,setGlobalResponseData} = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
+   const navigate = useNavigate();
 
   const handleButtonClick = (text) => {
     setActiveButton(text);
   };
+  const handleLogout=()=>{
+    const tellme=window.confirm("Are You Sure to Logout");
+    if(!tellme) return;
+    localStorage.removeItem('Assigny');
+    setGlobalResponseData(null);
+    navigate("/");
+  }
   const pattern = /^\/Assigne\/Subjects\/.*$/;
 
   return (
@@ -76,13 +85,17 @@ const Sidebar = () => {
           active={currentPath === "/Assigne/Assign" || pattern.test(currentPath)}
         />
 
-        <NavButton
-          text="Logout"
+<div className="my-1 p-2 py-4 rounded-tl-md rounded-bl-md  hover:rounded-l-md cursor-pointer"
+        onClick={handleLogout}
+        >
+        <div className="flex gap-4">
+             <div>
+             <FaSignOutAlt className="mr-4" />
+             </div>
+             <div>Logout</div>
+        </div>
           
-          icon={<FaSignOutAlt className="mr-4" />}
-          onClick={() => handleButtonClick("Logout")}
-          active={false}
-        />
+        </div>
       </ul>
     </div>
   );

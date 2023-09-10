@@ -35,7 +35,7 @@ const Login = async (req, res) => {
         }
         const secrecydata = await Secrecy.findOne({ email: email });
 
-        if (admindata) {
+        if (secrecydata) {
             const ismatch = await bcrpt.compare(password, secrecydata.password);
            
            

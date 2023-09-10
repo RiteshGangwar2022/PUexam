@@ -29,9 +29,11 @@ const Login = () => {
       );
 
       if (response.data.status === "success") {
-        localStorage.setItem('globalData', JSON.stringify(temp));
         
-      const data = JSON.parse(localStorage.getItem('globalData'));
+        localStorage.setItem(role, JSON.stringify(temp));
+        
+      const data = JSON.parse(localStorage.getItem(role));
+     
       setGlobalResponseData(data);
       setLoading(false);
         if(role==="Admin")
@@ -42,7 +44,7 @@ const Login = () => {
        navigate("/Assigne/Home");
       else if(role==="Secrecy")
       navigate("/Confidential/Home");
-
+        
       } else {
         setLoading(false);
         setGlobalResponseData(null);
@@ -54,12 +56,22 @@ const Login = () => {
       console.error("Error verifying OTP:", error);
       alert("Error verifying OTP. Please try again later.");
     }
+  
   };
   async function submit(e) {
     setLoading(true);
     e.preventDefault();
+    if(localStorage.getItem(role))
+    {
+      const temp=window.confirm(`First Logout From ${role} Role or delete this Role's data from Local Storage`);
+      setLoading(false);
+      setShowotp(false);
+      return;
+    }
     if(role==="Admin")
     {
+      
+
       try {
         await axios
           .post("http://localhost:5000/api/r1/login", {
