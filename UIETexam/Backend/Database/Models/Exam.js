@@ -30,15 +30,15 @@ const ExamSchema = new mongoose.Schema({
          required:true,
          default:true
     },
-    Pdfkey:{
-        type:String
-    },
-    password: {
-        type: String
-    },
     Examiners:[{ 
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Professor'
+            ref: 'Professor',
+            Pdfkey:{
+                    type:String
+            },
+            password: {
+                type: String
+            },
         }],
 })
 
