@@ -22,7 +22,7 @@ const sendOtpEmail = async (email, _id) => {
     service: "gmail",
     auth: {
       user: "riteshgangwar2020@gmail.com",
-      pass: "bovjckzbkvucuwyj",
+      pass: "",
     },
   });
 
