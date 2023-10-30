@@ -39,7 +39,10 @@ const ExamSchema = new mongoose.Schema({
             password: {
                 type: String
             },
-        }],
+    }],
+    IsSelected: {
+        type: Boolean,
+    }
 })
 
 const Exam =new mongoose.model('Exam', ExamSchema);
