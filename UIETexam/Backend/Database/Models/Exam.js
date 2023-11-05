@@ -13,6 +13,15 @@ const ExamSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    option:{
+        type:String,
+        required:true,
+    },
+    session:{
+        type:String,
+        required:true,
+    },
+
     SemesterNo:{
         type:Number,
         required:true,
@@ -25,6 +34,7 @@ const ExamSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Please Provide Date of Examination']
     },
+
     Ispending:{
          type:Boolean,
          required:true,

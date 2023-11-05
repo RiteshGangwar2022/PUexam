@@ -116,44 +116,51 @@ const verifyOtp = async (req, res) => {
     console.log(error);
   }
 };
-
 const Assignment = async (req, res) => {
-  const { DOE, ExamCode, Branch, SemesterNo, Examiners, Subject } = req.body;
-  if (!DOE || !ExamCode || !Branch || !SemesterNo || !Examiners || !Subject) {
-    return res.status(400).send({ message: "Please Fill all the feilds" });
-  }
-
-  //console.log(req.body);
-
-  var users = JSON.parse(req.body.Examiners);
-  var sub = JSON.parse(req.body.Subject);
-
   try {
+    const {
+      DOE,
+      ExamCode,
+      Branch,
+      SemesterNo,
+      Examiners,
+      Subject,
+      option,
+      session
+    } = req.body;
+
+    if (!DOE || !ExamCode || !Branch || !SemesterNo || !Examiners || !Subject || !option || !session) {
+      return res.status(400).json({ message: "Please Fill all the fields" });
+    }
+
     const newExam = new Exam({
       DOE,
       ExamCode,
       Branch,
       SemesterNo,
-      Examiners: users,
-      Subject: sub,
-      Pdfkey:""
+      Examiners, // Examiners should be an array of ObjectIds
+      Subject,   // Subject should be an ObjectId
+      Pdfkey: "",
+      password: "12345",
+      IsSelected: false,
+      option,
+      session,
+      IsPending: true,
     });
-
-    //console.log(newExam);
 
     const data = await newExam.save();
 
     const Assignment = await Exam.findOne({ _id: data._id })
       .populate("Examiners", "-password")
       .populate("Subject");
-    //console.log(Assignment);
 
     res.status(200).json(Assignment);
   } catch (error) {
-     //console.log(error);
+    
     res.status(400).json(error);
   }
 };
+
 
 const Allsubject = async (req, res) => {
   try {

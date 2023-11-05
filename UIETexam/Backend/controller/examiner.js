@@ -117,7 +117,8 @@ const verifyOtp = async (req, res) => {
 
 const GetAssignments = async (req, res) => {
   try {
-    const data = await Exam.find({})
+    const id = req.params.id;
+    const data = await Exam.find({"_id": id})
       .populate("Examiners", "-password")
       .populate("Subject");
     //console.log(data);
@@ -132,24 +133,20 @@ const GetAssignments = async (req, res) => {
 
 const SingleAssignment = async (req, res) => {
   try {
-    //getting id of the particular product from database on clicking to the image of that item
+   
     const _id = req.params.id;
-    console.log(_id);
-    const assigment = await Exam.findOne({ "Examiners.$oid": _id })
+    
+    const assigment = await Exam.find({ "Examiners": _id})
       .populate("Subject")
       .populate("Examiners", "-password");
-    console.log(assigment)
     if (!assigment) {
-      res.status(400).json({ message: "No assignment found" });
+      return res.status(400).json({ message: "No assignment found" });
     }
-    res.status(201).json(assigment);
+    return res.status(200).json(assigment);
   } catch (err) {
-    console.log(err)
-    res.status(400).json(err);
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
 
 module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment};

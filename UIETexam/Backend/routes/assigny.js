@@ -11,4 +11,5 @@ router.post("/addassignment",Assignment);
 router.get("/getsubject",Allsubject);
 router.get("/allexaminers/:id", AllExaminers);
 
+
 module.exports = router;

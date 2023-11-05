@@ -16,12 +16,10 @@ const Assignments = () => {
     if (!globalResponseData) return;
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/r2/assignments/${id}`
+        `http://localhost:5000/api/r2/singleassignment/${id}`
       );
 
       if (response.statusText === "OK") {
-        console.log(response);
-        //  console.log(response.data);
         const data = await response.data;
         setAss(data);
         setLoading(false);
@@ -29,7 +27,6 @@ const Assignments = () => {
         alert("Not able to fetch");
       }
     } catch (error) {
-      console.error("Error: ", error);
       alert("Some error is coming");
     }
   }
@@ -40,9 +37,7 @@ const Assignments = () => {
         const data = JSON.parse(localStorage.getItem("globalData"));
         if (data) {
           setGlobalResponseData(data);
-          // Load assignments asynchronously
         }
-        // Further processing with parsedData
       } catch (error) {
         console.error("Error parsing JSON:", error);
       }

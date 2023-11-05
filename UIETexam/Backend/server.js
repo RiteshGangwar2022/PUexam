@@ -16,7 +16,6 @@ connectdb();
 app.use(express.json());
 app.use(cors());
 
-// admin routes
 app.use("/api/r1", adminRoutes);
 app.use("/api/r2", examinerRoutes);
 app.use("/api/r3", assignyRoutes);

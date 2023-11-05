@@ -35,7 +35,7 @@ const AssignmentInterface = () => {
 
   async function getAssignments() {
     const res = await fetch(
-      `http://localhost:5000/api/r2/singleassignment/${id}`
+      `http://localhost:5000/api/r2/assignments/${id}`
     );
 
     if (!res.ok) {
@@ -48,11 +48,11 @@ const AssignmentInterface = () => {
     setLoading(false);
     // console.log("d=", data);
   }
-  // useEffect(() => {
-  //   console.log("Hello");
-  //   console.log(assignment);
+  useEffect(() => {
+    console.log("Hello");
+    console.log(assignment);
 
-  // }, [assignment]);
+  }, [assignment]);
 
   useEffect(() => {
     getAssignments();
@@ -66,14 +66,14 @@ const AssignmentInterface = () => {
 
       return response;
     } catch (error) {
-      console.log("Exam not found");
+      
       alert("Exam not found. Try again.");
     }
   };
 
   const Generate = async (id) => {
     const info = await GetAssignmentInfo(id);
-    // console.log(info.data)
+    
     generate(info.data);
   };
 
@@ -91,39 +91,39 @@ const AssignmentInterface = () => {
                 <div className=" flex gap-2  justify-between  items-center">
                   <h1 className=" text-xl    ">Exam Code</h1>
                   <h1 className=" text-xl  max-w-[200px]  w-full flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment?.ExamCode}
+                    {assignment[0]?.ExamCode}
                   </h1>
                 </div>
 
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Subject Code</h1>
                   <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment?.Subject?.SubjectCode}
+                    {assignment[0]?.Subject?.SubjectCode}
                   </h1>
                 </div>
 
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Subject</h1>
                   <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment?.Subject?.Name}
+                    {assignment[0]?.Subject?.Name}
                   </h1>
                 </div>
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Semester</h1>
                   <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment?.SemesterNo}
+                    {assignment[0]?.SemesterNo}
                   </h1>
                 </div>
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Date</h1>
                   <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {new Date(assignment?.DOE).toLocaleDateString()}
+                    {new Date(assignment[0]?.DOE).toLocaleDateString()}
                   </h1>
                 </div>
                 <div className=" flex gap-2 justify-between  items-center">
                   <h1 className=" text-xl    ">Branch</h1>
                   <h1 className=" text-xl         w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment?.Branch}
+                    {assignment[0]?.Branch}
                   </h1>
                 </div>
               </div>

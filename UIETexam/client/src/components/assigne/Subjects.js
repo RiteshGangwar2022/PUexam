@@ -28,10 +28,8 @@ const Subjects = () => {
         setLoading(false);
         setExamObj(response.data[0]);
       } else {
-       
         setLoading(false);
         setEmpty(true);
-       
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -74,12 +72,10 @@ const Subjects = () => {
       toast.error("Select a session", { id: loadingToast });
       return
     }
-    console.log(sessionValue);
-    console.log(optionValue);
-    console.log(selectedExaminersRef);
-    return;
+
+    
     axios
-      .post("", {
+      .post("http://localhost:5000/api/r3/addassignment", {
         DOE: new Date(),
         ExamCode: "1234",
         Branch: "Cse",

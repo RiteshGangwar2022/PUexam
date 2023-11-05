@@ -39,7 +39,7 @@ const {
 router.post("/login", Login);
 router.post("/register", Signup);
 router.post("/verifyOtp", verifyOtp);
-router.get("/assignments", GetAssignments);
+router.get("/assignments/:id", GetAssignments);
 router.get("/singleassignment/:id", SingleAssignment);
 
 //to upload file on aws
