@@ -12,10 +12,6 @@ const Assign = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("Updated subjects:", subjects);
-  }, [subjects]);
-
   const FetchSubjects = async () => {
     try {
       const response = await axios.get(
@@ -29,7 +25,6 @@ const Assign = () => {
         alert("Not able to fetch");
       }
     } catch (error) {
-      console.error("Error: ", error);
       alert("Some error is coming");
     }
   };

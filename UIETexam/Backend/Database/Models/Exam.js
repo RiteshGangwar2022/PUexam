@@ -41,18 +41,24 @@ const ExamSchema = new mongoose.Schema({
          default:true
     },
     Examiners:[{ 
+          Exam_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Professor',
+            ref: 'Professor'
+          },
             Pdfkey:{
                     type:String
             },
             password: {
                 type: String
             },
+            IsSelected: {
+                type: Number,
+                required:true,
+                default:0
+            }
+
     }],
-    IsSelected: {
-        type: Boolean,
-    }
+    
 })
 
 const Exam =new mongoose.model('Exam', ExamSchema);

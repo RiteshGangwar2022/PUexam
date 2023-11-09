@@ -140,9 +140,6 @@ const Assignment = async (req, res) => {
       SemesterNo,
       Examiners, // Examiners should be an array of ObjectIds
       Subject,   // Subject should be an ObjectId
-      Pdfkey: "",
-      password: "12345",
-      IsSelected: false,
       option,
       session,
       IsPending: true,

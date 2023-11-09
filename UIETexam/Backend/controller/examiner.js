@@ -133,20 +133,36 @@ const GetAssignments = async (req, res) => {
 
 const SingleAssignment = async (req, res) => {
   try {
-   
-    const _id = req.params.id;
-    
-    const assigment = await Exam.find({ "Examiners": _id})
+    const Eid = req.params.id;
+
+    const assignment = await Exam.find({ "Examiners.Exam_id": Eid })
       .populate("Subject")
       .populate("Examiners", "-password");
-    if (!assigment) {
+
+    if (!assignment) {
       return res.status(400).json({ message: "No assignment found" });
     }
-    return res.status(200).json(assigment);
+
+  const arrayIndex=assignment.map(assign => {
+    const examinersArray = assign.Examiners;
+    const index = examinersArray.findIndex(examiner => examiner.Exam_id == Eid);
+    return {
+     index
+    };
+  });
+  
+    const response = {
+      assignmentData: assignment,
+      indexOfExamIdInExaminersArray: arrayIndex,
+    };
+
+    return res.status(200).json(response);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
 
 module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment};
