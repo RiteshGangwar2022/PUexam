@@ -56,6 +56,9 @@ const ExamSchema = new mongoose.Schema({
                 required:true,
                 default:0
             }
+            ,Name:{
+                type:String
+        }
 
     }],
     

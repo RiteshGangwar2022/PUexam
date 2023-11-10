@@ -173,7 +173,6 @@ const Allsubject = async (req, res) => {
 const AllExaminers = async (req, res) => {
   try {
     //getting id of the particular product from database on clicking to the image of that item
-
     const _id = req.params.id;
     //console.log(_id);
 
@@ -192,6 +191,26 @@ const AllExaminers = async (req, res) => {
   }
 };
 
+const ExamList= async(req,res)=>{
+
+  try {
+    
+    const examList = await Exam.find({})
+      .populate("Examiners", "-password")
+      .populate("Subject");
+      if(!examList){
+        res.status(400).json({message:"No examiner found"});
+      }
+   
+    res.status(201).json(examList);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+
+}
+
+
 module.exports = {
   Login,
   Signup,
@@ -199,4 +218,5 @@ module.exports = {
   Assignment,
   AllExaminers,
   Allsubject,
+  ExamList
 };

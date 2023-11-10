@@ -41,7 +41,7 @@ const Subjects = () => {
     fetchExaminers();
   }, []);
 
- const handleCheckboxChange = (examinerId) => {
+ const handleCheckboxChange = (examinerId,name) => {
   const existingExaminerIndex = selectedExaminersRef.current.findIndex(
     (examiner) => examiner.Examiners === examinerId
   );
@@ -53,6 +53,7 @@ const Subjects = () => {
     // If the examinerId is not in the array, add a new object
     const obj = {
       Exam_id: examinerId,
+      Name: name,
       Pdfkey: "top",
       password: "12345",
       IsSelected: 0,
@@ -179,7 +180,7 @@ const Subjects = () => {
                         type="checkbox"
                         className="  scale-150"
                        
-                        onClick={() => handleCheckboxChange(items._id)}
+                        onClick={() => handleCheckboxChange(items._id,items.name)}
                       />
                     </div>
                   </div>

@@ -11,6 +11,28 @@ const Assignments = () => {
   const [ass, setAss] = useState([]);
   const [indexArr,setindexrArr] =useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSelected,setisSelected]= useState();
+  const [index,setIndex] =useState();
+  const [examId,setexamId]= useState();
+
+const[load,setReload]=useState(false);
+
+  const modify = async (index, isSelectedValue, id) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/r2/ModifySelect/${id}/${index}`, { isSelected: isSelectedValue });
+      console.log(response.data.message);
+      if(response){
+        window.location.reload();
+      }
+    
+    } catch (error) {
+      console.log(error);
+      alert("Update failed");
+    }
+  };
+
+
+
 
   async function getAssignments() {
     const id = globalResponseData?._id;
@@ -36,11 +58,14 @@ const Assignments = () => {
     const fetchData = async () => {
       // Retrieve data from local storage when the component mounts
       try {
-        const data = JSON.parse(localStorage.getItem("globalData"));
+        const data = JSON.parse(localStorage.getItem("Professor"));
         if (data) {
           setGlobalResponseData(data);
+          
+          setLoading(false);
         }
       } catch (error) {
+        
         console.error("Error parsing JSON:", error);
       }
     };
@@ -49,19 +74,10 @@ const Assignments = () => {
 
   useEffect(() => {
     if (globalResponseData) getAssignments();
+    else console.log("Nothing");
   }, [globalResponseData]);
 
-  useEffect(() => {
-    console.log("Data:");
-    ass.forEach((assignment, index) => {
-      const formattedAssignment = JSON.stringify(assignment, null, 2);
-      console.log(`Assignment ${index + 1}:`);
-      console.log(formattedAssignment);
-    });
-    console.log("data 1", indexArr);
-    console.log(ass)
 
-  }, [ass, indexArr]);
 
   if (loading)
     return (
@@ -86,44 +102,110 @@ const Assignments = () => {
       </div>
     
       {ass.map((assignment, index) => (
-  <Link key={index} to={`/Examiner/Assignment/${assignment._id}`}>
-    <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
-      <div className="flex items-center">
-        <p className="text-base font-bold">{index + 1}</p>
-        <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
-      </div>
+  <div  key={`${index}-${assignment._id}`}>
+    {assignment.Examiners && indexArr[index] !== undefined ? (
+      <div>
+        {assignment.Examiners[indexArr[index].index]?.IsSelected === 1 ? (
+          <Link to={`/Examiner/Assignment/${assignment._id}`}>
+            <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+              <div className="flex items-center">
+                <p className="text-base font-bold">{index + 1}</p>
+                <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
+              </div>
 
-      <h1>{assignment?.Subject?.SubjectCode}</h1>
-      <h1 className=" ml-24">{assignment?.Branch}</h1>
-      <h1>{assignment?.SemesterNo}</h1>
-      <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-      {assignment.Ispending ? (
-        <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
-      ) : (
-        <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
-      )}
-      {assignment.Examiners && indexArr[index] !== undefined ? (
-        assignment.Examiners[indexArr[index].index]?.IsSelected === 0 ? (
-          <div className="display flex justify-center gap-3">
-            <div className="text-green-500 text-lg">Accept</div>
-            <div className="text-red-500 text-lg">Decline</div>
+              <h1>{assignment?.Subject?.SubjectCode}</h1>
+              <h1 className=" ml-24">{assignment?.Branch}</h1>
+              <h1>{assignment?.SemesterNo}</h1>
+              <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
+              {assignment.Ispending ? (
+                <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
+              ) : (
+                <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
+              )}
+              {assignment.Examiners[indexArr[index].index]?.IsSelected === 0 ? (
+                <div className="display flex justify-center gap-3 cursor-pointer">
+                  <div
+                    className="text-green-500 text-lg "
+                    onClick={() => modify(indexArr[index].index, 1, assignment._id)}
+                  >
+                    Accept
+                  </div>
+                  <div
+                    className="text-red-500 text-lg  "
+                    onClick={() => modify(indexArr[index].index, -1, assignment._id)}
+                  >
+                    Decline
+                  </div>
+                </div>
+              ) : assignment.Examiners[indexArr[index].index]?.IsSelected === 1 ? (
+                <div className="text-green-500 text-lg">Accepted</div>
+              ) : assignment.Examiners[indexArr[index].index]?.IsSelected === -1 ? (
+                <div className="text-red-500 text-lg">Declined</div>
+              ) : (
+                <p>Something wrong here</p>
+              )}
+            </div>
+          </Link>
+        ) : (
+          <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+            <div className="flex items-center">
+              <p className="text-base font-bold">{index + 1}</p>
+              <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
+            </div>
+
+            <h1>{assignment?.Subject?.SubjectCode}</h1>
+            <h1 className=" ml-24">{assignment?.Branch}</h1>
+            <h1>{assignment?.SemesterNo}</h1>
+            <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
+            {assignment.Ispending ? (
+              <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
+            ) : (
+              <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
+            )}
+            {assignment.Examiners[indexArr[index].index]?.IsSelected === 0 ? (
+              <div className="display flex justify-center gap-3 cursor-pointer">
+                <div
+                  className="text-green-500 text-lg"
+                  onClick={() => modify(indexArr[index].index, 1, assignment._id)}
+                >
+                  Accept
+                </div>
+                <div
+                  className="text-red-500 text-lg"
+                  onClick={() => modify(indexArr[index].index, -1, assignment._id)}
+                >
+                  Decline
+                </div>
+              </div>
+            ) : assignment.Examiners[indexArr[index].index]?.IsSelected === -1 ? (
+              <div className="text-red-500 text-lg">Declined</div>
+            ) : (
+              <p>Something wrong here</p>
+            )}
           </div>
-        ) : assignment.Examiners[indexArr[index].index]?.IsSelected === 1 ?  (
-          <p>Render something when Examiners[index] is 1</p>
-        ) : 
-        assignment.Examiners[indexArr[index].index]?.IsSelected === -1 ?
-        (
-          <p>Render something when Examiners[index] is -1</p>
-        )
-        :(
-          <p>Something wrong here</p>
-        )
-      ) : (
-        <p>Examiners data not available</p>
-      )}
-    </div>
-  </Link>
+        )}
+      </div>
+    ) : (
+      <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+        <div className="flex items-center">
+          <p className="text-base font-bold">{index + 1}</p>
+          <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
+        </div>
+
+        <h1>{assignment?.Subject?.SubjectCode}</h1>
+        <h1 className=" ml-24">{assignment?.Branch}</h1>
+        <h1>{assignment?.SemesterNo}</h1>
+        <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
+        {assignment.Ispending ? (
+          <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
+        ) : (
+          <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
+        )}
+      </div>
+    )}
+  </div>
 ))}
+
 
          
     </Examiner>

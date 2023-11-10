@@ -14,9 +14,7 @@ const Login = () => {
   const [show,setShowotp]= useState(false);
   const [otp, setOTP] = useState("");
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log(globalResponseData);
-  }, [globalResponseData]);
+
   const handleVerifyOTP = async () => {
     setLoading(true);
     try {
@@ -129,6 +127,7 @@ const Login = () => {
         })
         .catch((e) => {
           alert("Wrong");
+          console.log(e);
           setGlobalResponseData(null);
           setLoading(false);
           console.log(e);

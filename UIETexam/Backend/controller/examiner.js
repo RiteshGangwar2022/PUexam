@@ -163,6 +163,35 @@ const SingleAssignment = async (req, res) => {
   }
 };
 
+const ModifySelect = async (req, res) => {
+  try {
+    const examId = req.params.id;
+    const index = req.params.index;
+    const isSelectedValue = req.body.isSelected; 
+
+    const exam = await Exam.findById(examId);
+
+    if (!exam) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    
+    if (index < 0 || index >= exam.Examiners.length) {
+      return res.status(400).json({ error: 'Invalid index' });
+    }
+
+    
+    exam.Examiners[index].IsSelected = isSelectedValue;
+
+    
+    await exam.save();
+
+    res.json({ message: 'IsSelected field updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
-module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment};
+
+module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment,ModifySelect};

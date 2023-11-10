@@ -34,6 +34,7 @@ const {
   verifyOtp,
   GetAssignments,
   SingleAssignment,
+  ModifySelect
 } = require("../controller/examiner");
 
 router.post("/login", Login);
@@ -41,6 +42,7 @@ router.post("/register", Signup);
 router.post("/verifyOtp", verifyOtp);
 router.get("/assignments/:id", GetAssignments);
 router.get("/singleassignment/:id", SingleAssignment);
+router.put("/ModifySelect/:id/:index",ModifySelect);
 
 //to upload file on aws
 
