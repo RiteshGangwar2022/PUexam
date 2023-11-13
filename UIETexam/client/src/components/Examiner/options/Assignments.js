@@ -117,7 +117,7 @@ const[load,setReload]=useState(false);
               <h1 className=" ml-24">{assignment?.Branch}</h1>
               <h1>{assignment?.SemesterNo}</h1>
               <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-              {assignment.Ispending ? (
+              {assignment.Examiners[indexArr[index].index]?.Ispending ? (
                 <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
               ) : (
                 <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
@@ -157,7 +157,7 @@ const[load,setReload]=useState(false);
             <h1 className=" ml-24">{assignment?.Branch}</h1>
             <h1>{assignment?.SemesterNo}</h1>
             <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-            {assignment.Ispending ? (
+            {assignment.Examiners[indexArr[index].index]?.Ispending? (
               <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
             ) : (
               <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
@@ -196,7 +196,7 @@ const[load,setReload]=useState(false);
         <h1 className=" ml-24">{assignment?.Branch}</h1>
         <h1>{assignment?.SemesterNo}</h1>
         <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-        {assignment.Ispending ? (
+        {assignment.Examiners[indexArr[index].index]?.Ispending ? (
           <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
         ) : (
           <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
