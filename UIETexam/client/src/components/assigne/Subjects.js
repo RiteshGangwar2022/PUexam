@@ -57,6 +57,7 @@ const Subjects = () => {
       Pdfkey: "top",
       password: "12345",
       IsSelected: 0,
+      IsPending:true
     };
     selectedExaminersRef.current.push(obj);
   }

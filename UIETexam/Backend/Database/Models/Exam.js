@@ -35,12 +35,7 @@ const ExamSchema = new mongoose.Schema({
         required: [true, 'Please Provide Date of Examination']
     },
 
-    Ispending:{
-         type:Boolean,
-         required:true,
-         default:true
-    },
-    Examiners:[{ 
+ Examiners:[{ 
           Exam_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Professor'
@@ -58,7 +53,13 @@ const ExamSchema = new mongoose.Schema({
             }
             ,Name:{
                 type:String
-        }
+        },
+        Ispending:{
+            type:Boolean,
+            required:true,
+            default:true
+       },
+       
 
     }],
     

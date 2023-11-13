@@ -142,7 +142,6 @@ const Assignment = async (req, res) => {
       Subject,   // Subject should be an ObjectId
       option,
       session,
-      IsPending: true,
     });
 
     const data = await newExam.save();
