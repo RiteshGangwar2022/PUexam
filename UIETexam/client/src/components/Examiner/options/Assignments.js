@@ -32,8 +32,6 @@ const[load,setReload]=useState(false);
   };
 
 
-
-
   async function getAssignments() {
     const id = globalResponseData?._id;
     if (!globalResponseData) return;
@@ -73,7 +71,9 @@ const[load,setReload]=useState(false);
   }, []);
 
   useEffect(() => {
-    if (globalResponseData) getAssignments();
+    if (globalResponseData) {
+      getAssignments();
+    }
     else console.log("Nothing");
   }, [globalResponseData]);
 

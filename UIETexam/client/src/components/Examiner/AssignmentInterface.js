@@ -11,16 +11,19 @@ import { BiUpload } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import Loader from "../loader";
-
 import { Viewer } from "@react-pdf-viewer/core";
-
+import { useAuth } from "../../Context/AuthContext";
 const steps = ["setup", "upload", "preview", "publish"];
 
 const AssignmentInterface = () => {
+  const { globalResponseData } = useAuth();
+
   const { id } = useParams();
+  
   const [active, setActive] = useState(0);
   const [assignment, setAssignment] = useState([]);
-  const [document, setDocument] = useState();
+  const [selectedFile, setSelectedFile] = useState();
+  
   const [upload, setUpload] = useState("upload PDF only");
   const [loading, setLoading] = useState(true);
 
@@ -29,9 +32,10 @@ const AssignmentInterface = () => {
   const onChange = (e) => {
     const files = e?.target?.files;
     files.length > 0 && setUrl(URL.createObjectURL(files[0]));
-    setDocument(e?.target?.files[0]);
+    setSelectedFile(e?.target?.files[0]);
     setUpload(e?.target?.files[0].name);
   };
+
 
   async function getAssignments() {
     const res = await fetch(
@@ -48,11 +52,7 @@ const AssignmentInterface = () => {
     setLoading(false);
     // console.log("d=", data);
   }
-  useEffect(() => {
-    console.log("Hello");
-    console.log(assignment);
 
-  }, [assignment]);
 
   useEffect(() => {
     getAssignments();
@@ -76,6 +76,40 @@ const AssignmentInterface = () => {
     
     generate(info.data);
   };
+
+  const handlePublish = async () => {
+      if (!selectedFile) {
+        
+        alert("No File Selected");
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+  
+      // Replace with the actual exam _id and examiner_id
+      const _id = id;
+      const examinerId = globalResponseData._id;
+  
+      try {
+        const response = await axios.post('http://localhost:5000/api/r2/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          params: {
+            _id: _id,
+            examiner_id: examinerId,
+          },
+        });
+    
+        if(response.statusText==="OK") {
+          alert("Document Uploaded SuccessFully");
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+
+  }
 
   const Tabs = () => {
     switch (active) {
@@ -175,10 +209,10 @@ const AssignmentInterface = () => {
               className={clsx(
                 " w-full flex justify-center items-center gap-3  my-5 text-white text-xl rounded-full   p-2 uppercase font-bold bg-green-500 max-w-xl",
                 {
-                  "  opacity-25     pointer-events-none :": !document,
+                  "  opacity-25     pointer-events-none :": !selectedFile,
                 }
               )}
-              onClick={() => console.log("pdf = ", document)}
+              onClick={handlePublish}
             >
               <BiUpload />
               publish paper
@@ -202,7 +236,7 @@ const AssignmentInterface = () => {
         return (
           <div className=" relative flex  flex-col items-center  justify-center   border-2 border-black min-h-[calc(100vh-10rem)] w-full max-w-6xl mx-auto rounded my-3 bg-white ">
             <h1 className=" text-xl text-red-600 my-3 ">
-              This is a preview of a paper {document?.name} you are going to be
+              This is a preview of a paper {selectedFile?.name} you are going to be
               submitting.
             </h1>
             {url && (
