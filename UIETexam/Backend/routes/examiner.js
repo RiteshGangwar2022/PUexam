@@ -110,13 +110,11 @@ router.post("/upload", upload.single('file'), async (req, res) => {
       const Encpdf = await GetEncryptPdf(data, password)
       console.log(Encpdf)
       // Now I want to update the existing pdf in AWS bucket
-      // Itta hissa glt hai
       data = {
         Bucket: BUCKET,
         Key: req.file.key,
         Body: Encpdf,
       }
-
       try{
         const response = await new Upload({client: s3, params: data})
         await response.done()
