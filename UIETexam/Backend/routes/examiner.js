@@ -54,7 +54,6 @@ router.put("/ModifySelect/:id/:index", ModifySelect);
 // ----------------------------------------------------------------------------------------
 const PDFDocument = require("pdf-lib-plus-encrypt").PDFDocument
 const crypto = require('crypto');
-const { NONAME } = require("dns");
 
 
 async function streamToBuffer(stream) {
@@ -95,7 +94,6 @@ router.post("/upload", upload.single('file'), async (req, res) => {
     }
 
     let password = 123
-    let pkey = req.file.key
     // Encryption
     // -------------------------------------------------------------------------------------------
     try{
@@ -108,7 +106,6 @@ router.post("/upload", upload.single('file'), async (req, res) => {
       data = await Encfile()
       password = crypto.randomBytes(16).toString('hex')
       const Encpdf = await GetEncryptPdf(data, password)
-      console.log(Encpdf)
       // Now I want to update the existing pdf in AWS bucket
       data = {
         Bucket: BUCKET,
@@ -141,7 +138,6 @@ router.post("/upload", upload.single('file'), async (req, res) => {
       if (result.nModified === 0) {
         return res.status(404).json({ error: "Document not found or no modifications made" });
       }
-      
       return res.status(200).json({ message: "Document updated successfully", file: req.file, password: password, key: req.file.key});
     } catch (err) {
       console.error('Error updating document:', err);
@@ -165,8 +161,6 @@ const GetUploadedPdf = async (req, res) => {
   
     try {
       const { Body } = await s3.send(new GetObjectCommand(params));
-  
-  
       const pdfData = await streamToBuffer(Body);
      // console.log("PDF data:", pdfData.toString("base64"));
        //console.log("got pdf")
