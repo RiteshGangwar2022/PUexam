@@ -150,6 +150,7 @@ const verifyOtp = async (req, res) => {
   
   const Getpdf=async(req,res)=>{
     const { key } = req.params;
+    console.log(key)
     //console.log(key)
     const params = {
       Bucket: BUCKET,
