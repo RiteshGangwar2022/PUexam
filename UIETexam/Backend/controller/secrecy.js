@@ -147,9 +147,25 @@ const verifyOtp = async (req, res) => {
       console.log(error);
     }
   };
-  
+  // Decryption
+  const algorithm = 'aes-256-cbc'
+  const crypto = require('crypto');
+const { type } = require("os");
+  const DecryptPdf = async function(b64, key, iv){
+    key = new Buffer.from(key, 'base64')
+    iv = new Buffer.from(iv, 'base64')
+    const decipherText = crypto.createDecipheriv(algorithm, key, iv)
+    return decipherText.update(b64, "base64", "base64") + decipherText.final('base64')
+  }
+
   const Getpdf=async(req,res)=>{
     const { key } = req.params;
+    const SecKey = req.query.key
+    const SecIv = req.query.iv
+
+    console.log(SecKey)
+    console.log(SecIv)
+    console.log("Hello World")
     console.log(key)
     //console.log(key)
     const params = {
@@ -158,13 +174,11 @@ const verifyOtp = async (req, res) => {
     };
   
     try {
-      const { Body } = await s3.send(new GetObjectCommand(params));
-  
-  
-      const pdfData = await streamToBuffer(Body);
-     // console.log("PDF data:", pdfData.toString("base64"));
-       //console.log("got pdf")
-      res.status(200).json(pdfData.toString("base64"));
+      const response = await s3.send(new GetObjectCommand(params));
+      const b64 = await response.Body.transformToString()
+      const decryptPdf = await DecryptPdf(b64, SecKey, SecIv)
+      console.log("got pdf")
+      res.status(200).json({pdf: decryptPdf});
       //get pdf file in base64 format and fetch it on frontend
     } catch (err) {
       console.error(err);

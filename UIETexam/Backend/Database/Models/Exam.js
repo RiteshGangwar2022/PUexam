@@ -59,8 +59,12 @@ const ExamSchema = new mongoose.Schema({
             required:true,
             default:true
        },
-       
-
+       EncryptionKey:{
+            type: String
+       },
+       EncryptionIv:{
+        type: String
+       },
     }],
     
 })
