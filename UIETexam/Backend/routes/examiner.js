@@ -53,6 +53,7 @@ router.put("/ModifySelect/:id/:index", ModifySelect);
 // ----------------------------------------------------------------------------------------
 const PDFDocument = require("pdf-lib-plus-encrypt").PDFDocument
 const crypto = require('crypto');
+const { default: mongoose } = require("mongoose");
 
 
 async function streamToBuffer(stream) {
@@ -118,26 +119,26 @@ router.post("/upload", multer().single('file'), async function(req, res) {
       return res.status(200).json({error: `Error in uploading file to AWS ${err}`})
     }
 
-    const _id = req.query._id
+    const _id = req.query.id
     const examinerId = req.query.examiner_id
-
+    console.log(examinerId)
     // updating in Mongo
     try{
       const result = await Exam.updateOne(
-        {"_id": new ObjectId(_id), "Examiners.Exam_id": new ObjectId(examinerId)},
+        {"_id": new ObjectId(_id), "Examiners._id": new ObjectId(examinerId)},
         {$set: {
           "Examiners.$.Ispending": false,
           "Examiners.$.Pdfkey": data.Key,
-          "Examiners.$.EncryptionKey": Key,
-          "Examiners.$.EncryptionIv": inVec
+          "Examiners.$.EncryptionKey": Key.toString('base64'),
+          "Examiners.$.EncryptionIv": inVec.toString('base64'),
+          "Examiners.$.password": password,
         }}
       )
-      console.log("Update result", result)
-
-      if (result.nModified === 0) {
+      console.log("result", result)
+      if (result.modifiedCount === 0) {
         return res.status(404).json({ error: "Document not found or no modifications made" });
       }
-      return res.status(200).json({ message: "Document updated successfully", Encfile: Encpdf, password: password, Pdfkey: data['Key'], SecKey: Key.toString('base64'), Iv: inVec.toString('base64')});
+      return res.status(200).json({ message: "Document updated successfully", Encfile: Encpdf, password: password, Pdfkey: data['Key'], SecKey: Key.toString('base64'), Iv: inVec.toString('base64'), examid: _id});
     } catch (err) {
       console.error('Error updating document:', err);
       return res.status(500).json({ error: "Error updating document" });
@@ -146,37 +147,5 @@ router.post("/upload", multer().single('file'), async function(req, res) {
   }catch(err){
     return res.status(400).json({error: `Error in Uploading file${err}`})
   }
-  
-  // try {
-  //   const _id = req.query._id; // Replace with the actual exam _id
-  //   const examinerId = req.query.examiner_id;
-
-  //   // Check if file was uploaded
-  //   if (!req.file) {
-  //     return res.status(400).json({ error: "No file uploaded" });
-  //   }      
-  //   }/ -----------------------------------------------------------------------------------------------
-
-  //   try {
-  //     const result = await Exam.updateOne(
-  //       { "_id": new ObjectId(_id), "Examiners.Exam_id": new ObjectId(examinerId) },
-  //       { $set: { "Examiners.$.Ispending": false } }
-  //     );
-
-  //     // Log additional information for debugging
-  //     console.log('Update Result:', result);
-
-  //     if (result.nModified === 0) {
-  //       return res.status(404).json({ error: "Document not found or no modifications made" });
-  //     }
-  //     return res.status(200).json({ message: "Document updated successfully", file: req.file, password: password, key: req.file.key});
-  //   } catch (err) {
-  //     console.error('Error updating document:', err);
-  //     return res.status(500).json({ error: "Error updating document" });
-  //   }
-  // } catch (err) {
-  //   console.error('Error in file upload:', err);
-  //   return res.status(400).json({ success: false, message: "File upload failed." });
-  // }
 });
 module.exports = router;

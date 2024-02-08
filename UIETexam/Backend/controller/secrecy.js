@@ -150,7 +150,8 @@ const verifyOtp = async (req, res) => {
   // Decryption
   const algorithm = 'aes-256-cbc'
   const crypto = require('crypto');
-const { type } = require("os");
+  const {ObjectId} = require('mongodb')
+
   const DecryptPdf = async function(b64, key, iv){
     key = new Buffer.from(key, 'base64')
     iv = new Buffer.from(iv, 'base64')
@@ -159,14 +160,14 @@ const { type } = require("os");
   }
 
   const Getpdf=async(req,res)=>{
-    const { key } = req.params;
-    const SecKey = req.query.key
-    const SecIv = req.query.iv
-
-    console.log(SecKey)
-    console.log(SecIv)
-    console.log("Hello World")
-    console.log(key)
+    const id = req.query.id.trim()
+    const examiner_id = req.query.examiner_id.trim()
+    const ExamObj = await Exam.findOne({_id: new ObjectId(id), "Examiners._id": new ObjectId(examiner_id)})
+    const ExamObjExamArrObj = ExamObj.Examiners[0]
+    const key = ExamObjExamArrObj.Pdfkey
+    const SecKey = ExamObjExamArrObj.EncryptionKey
+    const SecIv = ExamObjExamArrObj.EncryptionIv
+    console.log(ExamObjExamArrObj.Pdfkey)
     //console.log(key)
     const params = {
       Bucket: BUCKET,
@@ -177,7 +178,6 @@ const { type } = require("os");
       const response = await s3.send(new GetObjectCommand(params));
       const b64 = await response.Body.transformToString()
       const decryptPdf = await DecryptPdf(b64, SecKey, SecIv)
-      console.log("got pdf")
       res.status(200).json({pdf: decryptPdf});
       //get pdf file in base64 format and fetch it on frontend
     } catch (err) {
