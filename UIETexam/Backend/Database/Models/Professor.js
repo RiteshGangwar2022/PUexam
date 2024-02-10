@@ -1,8 +1,6 @@
 const mongoose=require("mongoose");
-const Subject = require('./Subject')
 
-const ProfessorSchema = new mongoose.Schema({
-    
+const ProfessorSchema = new mongoose.Schema({  
     name: {
         type: String,
         required: [true, 'Please provide name of the Professor']
@@ -26,7 +24,13 @@ const ProfessorSchema = new mongoose.Schema({
     role:{
         type:String,
         required:true
-     },
+    },
+    Subjects:[{
+        _id:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Subject'
+        }
+    }],
     password:{
         type:String,
         required:true

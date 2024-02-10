@@ -1,27 +1,22 @@
 const mongoose=require("mongoose");
 
-const Subject = require('./Subject')
-const Professor=require("./Professor")
-
-
 const ExamSchema = new mongoose.Schema({
-    Subject:{
-        type:mongoose.Schema.Types.ObjectId,
+    _id: {
+        type: mongoose.Schema.Types.String,
         ref: 'Subject'
     },
     Branch:{
         type:String,
         required:true,
     },
-    option:{
+    Option:{
         type:String,
         required:true,
     },
-    session:{
+    SessionInfo:{
         type:String,
         required:true,
     },
-
     SemesterNo:{
         type:Number,
         required:true,
@@ -34,39 +29,12 @@ const ExamSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Please Provide Date of Examination']
     },
-
- Examiners:[{ 
-          Exam_id: {
+    Sessions:[{ 
+          _id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Professor'
-          },
-            Pdfkey:{
-                    type:String
-            },
-            password: {
-                type: String
-            },
-            IsSelected: {
-                type: Number,
-                required:true,
-                default:0
-            }
-            ,Name:{
-                type:String
-        },
-        Ispending:{
-            type:Boolean,
-            required:true,
-            default:true
-       },
-       EncryptionKey:{
-            type: String,
-       },
-       EncryptionIv:{
-        type: String,
-       },
+            ref: "Session",
+          }
     }],
-    
 })
 
 const Exam =new mongoose.model('Exam', ExamSchema);

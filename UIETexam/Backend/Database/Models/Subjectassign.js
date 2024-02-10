@@ -1,18 +1,16 @@
 const mongoose=require("mongoose");
 
-const Subject = require('./Subject')
-const Professor=require("./Professor")
-
-
 const SubjectassignSchema = new mongoose.Schema({
-    Subject:{
-        type:mongoose.Schema.Types.ObjectId,
+    _id: {
+        type: mongoose.Schema.Types.String,
         ref: 'Subject'
     },
     Examiners:[{ 
+        _id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Professor'
-        }],
+        }
+    }],
 })
 
 const Subjectassign =new mongoose.model('Subjectassign', SubjectassignSchema );

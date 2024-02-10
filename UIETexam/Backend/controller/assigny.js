@@ -9,6 +9,8 @@ const Exam = require("../Database/Models/Exam");
 const Subject = require("../Database/Models/Subject");
 const Professor = require("../Database/Models/Professor");
 const Subjectassign = require("../Database/Models/Subjectassign");
+const Session = require("../Database/Models/Session");
+const AssignedExaminee = require('../Database/Models/AssignedExaminee')
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -116,33 +118,34 @@ const verifyOtp = async (req, res) => {
     console.log(error);
   }
 };
+// ******************************************************* (Fix It)
 const Assignment = async (req, res) => {
   try {
     const {
-      DOE,
-      ExamCode,
+      SubjectCode,
       Branch,
+      Option,
+      SessionInfo,
       SemesterNo,
-      Examiners,
-      Subject,
-      option,
-      session
+      ExamCode,
+      DOE,
     } = req.body;
 
-    if (!DOE || !ExamCode || !Branch || !SemesterNo || !Examiners || !Subject || !option || !session) {
+    if (!DOE || !ExamCode || !Branch || !SemesterNo || !SubjectCode || !Option || !SessionInfo) {
       return res.status(400).json({ message: "Please Fill all the fields" });
     }
 
     const newExam = new Exam({
-      DOE,
-      ExamCode,
-      Branch,
-      SemesterNo,
-      Examiners, // Examiners should be an array of ObjectIds
-      Subject,   // Subject should be an ObjectId
-      option,
-      session,
+      "_id": SubjectCode,
+      "Branch": Branch,
+      "Option": Option,
+      "SessionInfo": SessionInfo,
+      "SemesterNo": SemesterNo,
+      "ExamCode": ExamCode,
+      "DOE": DOE,
+      
     });
+    // ***********************************************************
 
     const data = await newExam.save();
 
@@ -168,7 +171,8 @@ const Allsubject = async (req, res) => {
     res.status(422).json(err);
   }
 };
-
+// *******************************************************************
+// Before
 const AllExaminers = async (req, res) => {
   try {
     //getting id of the particular product from database on clicking to the image of that item
@@ -190,6 +194,26 @@ const AllExaminers = async (req, res) => {
   }
 };
 
+// Replace 
+const AllSubjectProfessors = async(req, res) => {
+  try{
+    // get subject code (Now subject Code )
+    const SubjectCode = req.params.SubjectCode
+    console.log(SubjectCode)
+    const AllProffessors = await Subjectassign.find({"_id": SubjectCode}) 
+    .populate('Examiners', '-password')
+            
+    if (!AllProffessors){
+      res.status(400).json({message: "No Examiner found"})
+    }
+    res.status(201).json(AllProffessors)
+  }catch(err){
+    console.log(err)
+    res.status(400).json(err)
+  }
+}
+// *********************************************************************
+
 const ExamList= async(req,res)=>{
 
   try {
@@ -206,9 +230,28 @@ const ExamList= async(req,res)=>{
     console.log(err);
     res.status(400).json(err);
   }
-
 }
 
+// *************************************************************************
+
+const CreateSession = async(Year, SessionInfo, AssignedExaminers) => {
+  const newSession = new Session({
+    "Year": Year,
+    "Session": SessionInfo,
+    "AssignedExaminers": AssignedExaminers
+  })
+  const data = await newSession.save()
+}
+
+const CreateAssignedExaminee = async(SubjectCode, Examiners) => {
+  for (ProfessorId in Examiners){
+    const newAssignedExaminee = new AssignedExaminee({
+      "_id": ProfessorId,
+      "Subject": SubjectCode
+    })
+    const data = await newAssignedExaminee.save()
+  }
+}
 
 module.exports = {
   Login,
@@ -217,5 +260,6 @@ module.exports = {
   Assignment,
   AllExaminers,
   Allsubject,
-  ExamList
+  ExamList,
+  AllSubjectProfessors
 };

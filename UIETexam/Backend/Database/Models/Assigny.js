@@ -1,8 +1,6 @@
 const mongoose=require("mongoose");
-const Subject = require('./Subject')
 
-const AssignySchema = new mongoose.Schema({
-    
+const AssignySchema = new mongoose.Schema({    
     name: {
         type: String,
         required: [true, 'Please provide name of the Professor']

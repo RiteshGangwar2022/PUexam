@@ -1,13 +1,10 @@
 const mongoose=require("mongoose");
-const Exam=require("Exam");
-
-const Professor=require("Professor");
 
 const ExamineeSchema = new mongoose.Schema(
     {
-        Professor:{
+        _id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: ''
+            ref: 'Professor'
         },
         Exam:[{
                 type: mongoose.Schema.Types.ObjectId,
