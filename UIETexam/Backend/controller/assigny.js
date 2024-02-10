@@ -178,7 +178,6 @@ const AllExaminers = async (req, res) => {
     //getting id of the particular product from database on clicking to the image of that item
     const _id = req.params.id;
     //console.log(_id);
-
     const allexaminers = await Subjectassign.find({ Subject: _id })
       .populate("Examiners", "-password")
       .populate("Subject");
@@ -252,6 +251,20 @@ const CreateAssignedExaminee = async(SubjectCode, Examiners) => {
     const data = await newAssignedExaminee.save()
   }
 }
+const getProfessorDetail=async(req,res)=>{
+  try{
+    const _id = req.params.id;
+    console.log(_id);
+    if(!_id) return res.status(500).json("Null Data");
+    const examiner = await Professor.findOne({"_id": _id});
+     if(examiner) return res.status(200).json(examiner);
+     return res.status(500).json("Can't Find Professor");
+  }
+  catch(error)
+  {
+    console.log("Error in getProfessor Detail "+ error);
+  }
+}
 
 module.exports = {
   Login,
@@ -261,5 +274,6 @@ module.exports = {
   AllExaminers,
   Allsubject,
   ExamList,
-  AllSubjectProfessors
+  AllSubjectProfessors,
+  getProfessorDetail
 };

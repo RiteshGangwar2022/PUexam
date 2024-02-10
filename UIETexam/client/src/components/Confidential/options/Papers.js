@@ -50,7 +50,7 @@ const Papers = () => {
         </Link>
       ))}
 
-<div className="px-6 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+{/* <div className="px-6 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
             <p className="  font-bold">1</p>
             <h1 className="  ">DSA</h1>
             <h1 className="  ">123</h1>
@@ -59,7 +59,7 @@ const Papers = () => {
               {12/3/4}
             </h1>
             <h1 className=" font-bold text-red-600"> pending </h1>
-          </div>
+          </div> */}
     </Confidential>
   );
 };

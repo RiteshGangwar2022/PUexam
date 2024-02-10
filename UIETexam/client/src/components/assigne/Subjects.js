@@ -9,24 +9,60 @@ import { Toast, toast } from "react-hot-toast";
 const Subjects = () => {
   const { globalResponseData, setGlobalResponseData } = useAuth();
   const location = useLocation();
-  const [examObj, setExamObj] = useState();
+  const [examObj, setExamObj] = useState([]);
+  const [examObject, setExamObject] = useState([]);
+
   const { id, Subject } = location.state;
   const [loading, setLoading] = useState(true);
  const [isEmpty,setEmpty] =useState(false);
   const optionRef = useRef(null);
   const sessionRef = useRef(null);
+const [ExaminerIds,setExaminerIds]=useState([]);
+let flag=true;
+const selectedExaminersRef = useRef([]);
+useEffect(() => {
+  if (ExaminerIds && flag) {
+    const getExaminerData = async (id) => {
+      try {
+        const Examiner = await axios.get(`http://localhost:5000/api/r3/getProfessor/${id}`);
+        
+        setExamObj(prevState => [...prevState, Examiner?.data]);
+    
+      } catch (error) {
+        console.log("Error in getExaminerData", error);
+      }
+    }
+    // Use Promise.all to wait for all asynchronous calls to complete
+    Promise.all(ExaminerIds.map(async (item, index) => {
+      await getExaminerData(item?._id);
+    }));
+    flag=false;
+  }
+}, [ExaminerIds]);
+useEffect(() => {
+  const uniqueIds = [];
+  const uniqueExamObj = examObj.filter(item => {
+    if (!uniqueIds.includes(item._id)) {
+      uniqueIds.push(item._id);
+      return true;
+    }
+    return false;
+  });
+  setExamObject(uniqueExamObj); 
+ 
+}, [examObj]);
 
-  const selectedExaminersRef = useRef([]);
 
   const fetchExaminers = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/r3/allexaminers/${id}`
+        `http://localhost:5000/api/r3/allprofessors/${id}`
       );
-
-      if (response.data && response.data[0]) {
+       
+      if (response.data && response.data[0].Examiners) {
         setLoading(false);
-        setExamObj(response.data[0]);
+        setExaminerIds(response.data[0].Examiners);
+      
       } else {
         setLoading(false);
         setEmpty(true);
@@ -164,17 +200,17 @@ const Subjects = () => {
               <option value="july">July</option>
               <option value="january">January</option>
             </select>
-            {examObj && (
+            {examObject && (
               <div>
                 <h1 className="text-xl my-3">Choose examiners to assign :- </h1>
-                {examObj.Examiners.map((items, i) => (
+                {examObject.map((items, i) => (
                   <div
                     key={items.id}
                     className="flex  my-2  bg-neutral-100 px-2  items-center   gap-5"
                   >
                     <div className=" text-xl">{i + 1}.</div>
                     <div className="flex-grow py-[0.2669rem] rounded-md">
-                      <p className=" text-xl  ">{items.name}</p>
+                      <p className=" text-xl  ">{items?.name}</p>
                     </div>
                     <div className="ml-10 mr-4">
                       <input
