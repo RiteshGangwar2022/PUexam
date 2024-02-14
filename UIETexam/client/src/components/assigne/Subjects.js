@@ -79,23 +79,15 @@ useEffect(() => {
 
  const handleCheckboxChange = (examinerId,name) => {
   const existingExaminerIndex = selectedExaminersRef.current.findIndex(
-    (examiner) => examiner.Examiners === examinerId
+    (examiner) => examiner=== examinerId
   );
 
   if (existingExaminerIndex !== -1) {
     // If the examinerId is already in the array, remove it
     selectedExaminersRef.current.splice(existingExaminerIndex, 1);
   } else {
-    // If the examinerId is not in the array, add a new object
-    const obj = {
-      Exam_id: examinerId,
-      Name: name,
-      Pdfkey: "top",
-      password: "12345",
-      IsSelected: 0,
-      IsPending:true
-    };
-    selectedExaminersRef.current.push(obj);
+    
+    selectedExaminersRef.current.push(examinerId);
   }
 };
 
@@ -120,18 +112,19 @@ useEffect(() => {
       toast.error("Select a session", { id: loadingToast });
       return
     }
-
-    
+  
     axios
       .post("http://localhost:5000/api/r3/addassignment", {
-        DOE: new Date(),
-        ExamCode: "1234",
+        SubjectCode: id,
         Branch: "Cse",
-        SemesterNo: 1,
-        Examiners: selectedExaminersRef.current,
-        Subject: id,
         option: optionValue,
         session: sessionValue,
+        SemesterNo: 1,
+        ExamCode: "1234",
+        DOE: new Date(),
+        ExaminersId: selectedExaminersRef.current,
+        Year: new Date().getFullYear()
+        
       })
       .then((response) => {
         toast.success("success", { id: loadingToast });
