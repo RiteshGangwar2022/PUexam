@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Assigny = require("../Database/Models/Assigny");
 const bcrpt = require("bcrypt");
-
 const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
@@ -10,7 +9,8 @@ const Subject = require("../Database/Models/Subject");
 const Professor = require("../Database/Models/Professor");
 const Subjectassign = require("../Database/Models/Subjectassign");
 const Session = require("../Database/Models/Session");
-const AssignedExaminee = require('../Database/Models/AssignedExaminee')
+const AssignedExaminee = require('../Database/Models/AssignedExaminee');
+const Examinee = require("../Database/Models/Examinee");
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -129,33 +129,69 @@ const Assignment = async (req, res) => {
       SemesterNo,
       ExamCode,
       DOE,
+      ExaminersId,
+      Year,
     } = req.body;
 
-    if (!DOE || !ExamCode || !Branch || !SemesterNo || !SubjectCode || !Option || !SessionInfo) {
-      return res.status(400).json({ message: "Please Fill all the fields" });
+    // if (!DOE || !ExamCode || !Branch || !SemesterNo || !SubjectCode || !Option || !SessionInfo || !Year || !ExaminersId) {
+    //   return res.status(400).json({ message: "Please Fill all the fields" });
+    // }
+    // Updating assigned Examiners from ExaminerId to AssignedExaminee Db
+    for (id in ExaminersId){
+      assignExaminee = new AssignedExaminee({
+        "ExamineeId": ExaminersId[id],
+        "Subject": SubjectCode
+      }).save()
     }
+    // Creating a new Session object from given ExaminersId, Year, and SessionInfo
+    const ss = await new Session({
+      "Year": Year,
+      "Session": SessionInfo,
+    })
+    for (id in ExaminersId){
+      await ss.AssignedExaminers.push(ExaminersId[id])
+      // updating assignment info in examiners table
+      try{
+        // check if existing examiner exists
+        let examiner = await Examinee.findOne({_id: ExaminersId[id]}) 
+        if (examiner == null){
+          examiner = await new Examinee({
+            "_id": ExaminersId[id],
+          })
+        }
+        await examiner.Exam.push(SubjectCode)
+        examiner.save()
+      }catch(err){
+        console.log(err)
+      }
+    }
+    ss.save()
 
-    const newExam = new Exam({
-      "_id": SubjectCode,
-      "Branch": Branch,
-      "Option": Option,
-      "SessionInfo": SessionInfo,
-      "SemesterNo": SemesterNo,
-      "ExamCode": ExamCode,
-      "DOE": DOE,
-      
-    });
-    // ***********************************************************
 
-    const data = await newExam.save();
-
-    const Assignment = await Exam.findOne({ _id: data._id })
-      .populate("Examiners", "-password")
-      .populate("Subject");
+    // Check for previous existing Exam Record and then add new session to it.
+    let Assignment = await Exam.findOne({_id: SubjectCode})
+    if (Assignment == null){
+      // No existing exam exists for the given SubjectCode create a new Exam Object
+      Assignment = await new Exam({
+        "_id": SubjectCode,
+        "Branch": Branch,
+        "Option": Option,
+        "SessionInfo": SessionInfo,
+        "SemesterNo": SemesterNo,
+        "ExamCode": ExamCode,
+        "DOE": DOE, 
+      }).save();
+    }
+    try{
+      await Assignment.Sessions.push(ss)
+    }catch(err){
+      console.log(err)
+    }
+    console.log(Assignment)
+    await Assignment.save()
 
     res.status(200).json(Assignment);
   } catch (error) {
-    
     res.status(400).json(error);
   }
 };

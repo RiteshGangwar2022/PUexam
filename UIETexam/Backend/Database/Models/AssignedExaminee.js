@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
 
 const AssignedExamineeSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
+    ExamineeId: {
+        type: mongoose.Schema.Types.String,
         ref: 'Professor'
     },
     Subject:{

@@ -7,7 +7,6 @@ const { ObjectId } = require('mongodb');
 const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const multer = require("multer");
-const multerS3 = require("multer-s3");
 
 const BUCKET = process.env.BUCKET;
 const s3 = new S3Client({
@@ -17,18 +16,6 @@ const s3 = new S3Client({
   },
   region: process.env.REGION,
 });
-
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    acl: "public-read",
-    bucket: BUCKET,
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString() + "-" + file.originalname);
-    },
-  }),
-});
-
 
 
 // other routes
@@ -47,6 +34,7 @@ router.post("/verifyOtp", verifyOtp);
 router.get("/assignments/:id", GetAssignments);
 router.get("/singleassignment/:id", SingleAssignment);
 router.put("/ModifySelect/:id/:index", ModifySelect);
+const Session = require('../Database/Models/Session')
 
 
 // Encryption and Password 
@@ -54,16 +42,8 @@ router.put("/ModifySelect/:id/:index", ModifySelect);
 const PDFDocument = require("pdf-lib-plus-encrypt").PDFDocument
 const crypto = require('crypto');
 const { default: mongoose } = require("mongoose");
+const AssignedExaminee = require('../Database/Models/AssignedExaminee')
 
-
-async function streamToBuffer(stream) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    stream.on("data", (chunk) => chunks.push(chunk));
-    stream.on("end", () => resolve(Buffer.concat(chunks)));
-    stream.on("error", reject);
-  });
-}
 
 const PwdPdf = async function(pdfData, password){
   pdfData = 'data:application/pdf;base64,' + pdfData
@@ -118,27 +98,36 @@ router.post("/upload", multer().single('file'), async function(req, res) {
     }catch(err){
       return res.status(200).json({error: `Error in uploading file to AWS ${err}`})
     }
+    console.log("Upload to AWS success")
 
-    const _id = req.query.id
-    const examinerId = req.query.examiner_id
-    console.log(examinerId)
+    const SessionId = req.query.session_id
+    const ExaminerId = req.query.examiner_id    
+    const SubjectCode = req.query.subject_code
     // updating in Mongo
     try{
-      const result = await Exam.updateOne(
-        {"_id": new ObjectId(_id), "Examiners._id": new ObjectId(examinerId)},
-        {$set: {
-          "Examiners.$.Ispending": false,
-          "Examiners.$.Pdfkey": data.Key,
-          "Examiners.$.EncryptionKey": Key.toString('base64'),
-          "Examiners.$.EncryptionIv": inVec.toString('base64'),
-          "Examiners.$.password": password,
-        }}
-      )
+      const result = await Session.findOne(
+        {"_id": new ObjectId(SessionId)}
+      ).then(async function(){
+        try{
+            const result = await AssignedExaminee.findOneAndUpdate(
+                {"ExamineeId": new ObjectId(ExaminerId), "Subject": SubjectCode},
+                {$set: {
+                  "Pdfkey": data.key,
+                  "Ispending": false,
+                  "EncryptionKey": Key.toString('base64'),
+                  "EncryptionIv": inVec.toString('base64'),
+                }}              
+            )
+          return result
+        }catch(err){
+          console.log(err)
+        }
+      })
       console.log("result", result)
       if (result.modifiedCount === 0) {
         return res.status(404).json({ error: "Document not found or no modifications made" });
       }
-      return res.status(200).json({ message: "Document updated successfully", Encfile: Encpdf, password: password, Pdfkey: data['Key'], SecKey: Key.toString('base64'), Iv: inVec.toString('base64'), examid: _id});
+      return res.status(200).json({ message: "Document updated successfully", Encfile: Encpdf, password: password, Pdfkey: data['Key'], SecKey: Key.toString('base64'), Iv: inVec.toString('base64')});
     } catch (err) {
       console.error('Error updating document:', err);
       return res.status(500).json({ error: "Error updating document" });

@@ -6,6 +6,7 @@ const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
+const Examinee = require("../Database/Models/Examinee")
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -115,13 +116,12 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+// returns an array of Exams assigned to examiner
 const GetAssignments = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = await Exam.find({"_id": id})
-      .populate("Examiners", "-password")
-      .populate("Subject");
-    //console.log(data);
+    const ProfessorId = req.params.id;
+    const data = await Examinee.find({"_id": ProfessorId})
+      .populate("Exam", "-password")
     if (!data) {
       res.status(422).json({ message: "No data found" });
     }
@@ -131,6 +131,7 @@ const GetAssignments = async (req, res) => {
   }
 };
 
+// Get SingleAssignment info using GetAssignments (through data array stored in frontend) then remove singleAssignment
 const SingleAssignment = async (req, res) => {
   try {
     const Eid = req.params.id;
@@ -138,12 +139,12 @@ const SingleAssignment = async (req, res) => {
     const assignment = await Exam.find({ "Examiners.Exam_id": Eid })
       .populate("Subject")
       .populate("Examiners", "-password");
-
+    
     if (!assignment) {
       return res.status(400).json({ message: "No assignment found" });
     }
 
-  const arrayIndex=assignment.map(assign => {
+    const arrayIndex=assignment.map(assign => {
     const examinersArray = assign.Examiners;
     const index = examinersArray.findIndex(examiner => examiner.Exam_id == Eid);
     return {

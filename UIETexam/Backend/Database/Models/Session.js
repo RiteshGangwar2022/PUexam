@@ -9,9 +9,9 @@ const SessionSchema = mongoose.Schema({
     },
     AssignedExaminers: [{
         _id: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.String,
             ref:  'AssignedExaminee'
-        }
+        },
     }]
 })
 
