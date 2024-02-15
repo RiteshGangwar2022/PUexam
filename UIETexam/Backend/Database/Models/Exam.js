@@ -5,6 +5,10 @@ const ExamSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         ref: 'Subject'
     },
+     Subject_name:{
+       type:String,
+       required:true,
+    },
     Branch:{
         type:String,
         required:true,

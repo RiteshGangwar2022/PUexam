@@ -9,7 +9,7 @@ import { MdDone, MdQuestionMark } from "react-icons/md";
 const Assignments = () => {
   const { globalResponseData, setGlobalResponseData } = useAuth();
   const [ass, setAss] = useState([]);
-  const [indexArr,setindexrArr] =useState([]);
+  const [papers,setPapers]=useState([]);
   const [loading, setLoading] = useState(true);
   const [isSelected,setisSelected]= useState();
   const [index,setIndex] =useState();
@@ -33,17 +33,19 @@ const[load,setReload]=useState(false);
 
 
   async function getAssignments() {
+    
     const id = globalResponseData?._id;
     if (!globalResponseData) return;
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/r2/singleassignment/${id}`
+        `http://localhost:5000/api/r2/assignments/${id}`
       );
-
+         
       if (response.statusText === "OK") {
-        const data = await response.data;
-        setAss(data.assignmentData);
-        setindexrArr(data.indexOfExamIdInExaminersArray);
+       // console.log(response.data[0].Exam);
+       // console.log(response.data[0].Exam);
+        setAss(response.data[0].Exam);
+       // setindexrArr(data.indexOfExamIdInExaminersArray);
         setLoading(false);
       } else {
         alert("Not able to fetch");
@@ -52,6 +54,75 @@ const[load,setReload]=useState(false);
       alert("Some error is coming");
     }
   }
+ useEffect(() => {
+  const fetchDataForAssignments = async () => {
+    // Define an array to store promises for each API call
+    const promises = [];
+
+    // Loop through each assignment
+    ass.forEach((assignment) => {
+      // Push the promise for each API call into the promises array
+      promises.push(
+        axios.get(`http://localhost:5000/api/r2/singleassignment/${assignment._id}`)
+      );
+    });
+
+    try {
+      // Wait for all API calls to finish
+      const responses = await Promise.all(promises);
+
+      // Iterate over each response and add it to the papers array
+      responses.forEach((response) => {
+        setPapers((prevPapers) => [...prevPapers, response.data]);
+      });
+    } catch (error) {
+      console.log("Error fetching data for assignments:", error);
+    }
+  };
+
+  // Call the function to fetch data for assignments when 'ass' changes
+  if (ass.length > 0) {
+    fetchDataForAssignments();
+  }
+}, [ass]);
+useEffect(() => {
+  const fetchDataForAssignments = async () => {
+    // Define an array to store promises for each API call
+    const promises = [];
+
+    // Loop through each assignment
+    ass.forEach((assignment) => {
+      // Push the promise for each API call into the promises array
+      promises.push(
+        axios.get(`http://localhost:5000/api/r2/singleassignment/${assignment._id}`)
+      );
+    });
+
+    try {
+      // Wait for all API calls to finish
+      const responses = await Promise.all(promises);
+
+      // Flatten and filter responses to ensure only objects are included
+      const filteredResponses = responses.flatMap((response) => response.data).filter((item) => typeof item === "object");
+
+      // Update the papers state with the filtered array of objects
+      setPapers(filteredResponses);
+    } catch (error) {
+      console.log("Error fetching data for assignments:", error);
+    }
+  };
+
+  // Call the function to fetch data for assignments when 'ass' changes
+  if (ass.length > 0) {
+    fetchDataForAssignments();
+  }
+}, [ass]);
+
+  
+  useEffect(()=>{
+     console.log(papers);
+  },[papers])
+
   useEffect(() => {
     const fetchData = async () => {
       // Retrieve data from local storage when the component mounts
@@ -86,6 +157,7 @@ const[load,setReload]=useState(false);
       </Examiner>
     );
 
+  
   return (
     <Examiner>
       <h1 className="text-center text-3xl font-bold">Assignments List</h1>
@@ -100,111 +172,20 @@ const[load,setReload]=useState(false);
         <h1 className="  ">Status1</h1>
         <h1 className="  ">Status2</h1>
       </div>
-    
-      {ass.map((assignment, index) => (
-  <div  key={`${index}-${assignment._id}`}>
-    {assignment.Examiners && indexArr[index] !== undefined ? (
-      <div>
-        {assignment.Examiners[indexArr[index].index]?.IsSelected === 1 ? (
-          <Link to={`/Examiner/Assignment/${assignment._id}`}>
-            <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
-              <div className="flex items-center">
-                <p className="text-base font-bold">{index + 1}</p>
-                <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
-              </div>
-
-              <h1>{assignment?.Subject?.SubjectCode}</h1>
-              <h1 className=" ml-24">{assignment?.Branch}</h1>
-              <h1>{assignment?.SemesterNo}</h1>
-              <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-              {assignment.Examiners[indexArr[index].index]?.Ispending ? (
-                <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
-              ) : (
-                <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
-              )}
-              {assignment.Examiners[indexArr[index].index]?.IsSelected === 0 ? (
-                <div className="display flex justify-center gap-3 cursor-pointer">
-                  <div
-                    className="text-green-500 text-lg "
-                    onClick={() => modify(indexArr[index].index, 1, assignment._id)}
-                  >
-                    Accept
-                  </div>
-                  <div
-                    className="text-red-500 text-lg  "
-                    onClick={() => modify(indexArr[index].index, -1, assignment._id)}
-                  >
-                    Decline
-                  </div>
-                </div>
-              ) : assignment.Examiners[indexArr[index].index]?.IsSelected === 1 ? (
-                <div className="text-green-500 text-lg">Accepted</div>
-              ) : assignment.Examiners[indexArr[index].index]?.IsSelected === -1 ? (
-                <div className="text-red-500 text-lg">Declined</div>
-              ) : (
-                <p>Something wrong here</p>
-              )}
-            </div>
-          </Link>
-        ) : (
-          <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
-            <div className="flex items-center">
-              <p className="text-base font-bold">{index + 1}</p>
-              <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
-            </div>
-
-            <h1>{assignment?.Subject?.SubjectCode}</h1>
-            <h1 className=" ml-24">{assignment?.Branch}</h1>
-            <h1>{assignment?.SemesterNo}</h1>
-            <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-            {assignment.Examiners[indexArr[index].index]?.Ispending? (
-              <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
-            ) : (
-              <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
-            )}
-            {assignment.Examiners[indexArr[index].index]?.IsSelected === 0 ? (
-              <div className="display flex justify-center gap-3 cursor-pointer">
-                <div
-                  className="text-green-500 text-lg"
-                  onClick={() => modify(indexArr[index].index, 1, assignment._id)}
-                >
-                  Accept
-                </div>
-                <div
-                  className="text-red-500 text-lg"
-                  onClick={() => modify(indexArr[index].index, -1, assignment._id)}
-                >
-                  Decline
-                </div>
-              </div>
-            ) : assignment.Examiners[indexArr[index].index]?.IsSelected === -1 ? (
-              <div className="text-red-500 text-lg">Declined</div>
-            ) : (
-              <p>Something wrong here</p>
-            )}
-          </div>
-        )}
-      </div>
-    ) : (
-      <div className="px-9 py-3 text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
-        <div className="flex items-center">
-          <p className="text-base font-bold">{index + 1}</p>
-          <h1 className="ml-16">{assignment?.Subject?.Name}</h1>
-        </div>
-
-        <h1>{assignment?.Subject?.SubjectCode}</h1>
-        <h1 className=" ml-24">{assignment?.Branch}</h1>
-        <h1>{assignment?.SemesterNo}</h1>
-        <h1>{new Date(assignment?.DOE).toLocaleDateString()}</h1>
-        {assignment.Examiners[indexArr[index].index]?.Ispending ? (
-          <MdQuestionMark className="fill-red-500 border text-3xl rounded-full bg-white p-1" />
-        ) : (
-          <MdDone className="fill-green-500 border text-3xl rounded-full bg-white p-1" />
-        )}
-      </div>
-    )}
-  </div>
-))}
+      { papers.length>0 && papers.map((item, i) => (
+        <div className=" px-6 py-3 font-semibold text-2xl items-center flex justify-between my-3 rounded-xl bg-white">
+         <h1>{item.Subject_name}</h1>
+         <h1>{item._id}</h1>
+         <h1>{item.Branch}</h1>
+         <h1>{item.SemesterNo}</h1>
+         <h1>{item.DOE}</h1>
+        
+     </div>
+      
+     ))}
+     
+        
+      
 
 
          

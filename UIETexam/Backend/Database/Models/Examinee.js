@@ -14,7 +14,7 @@ const ExamineeSchema = new mongoose.Schema(
                     type: mongoose.Schema.Types.String,
                 }
              }]
-    }
+            }
 )
 
 const Examinee= new mongoose.model('Examinee', ExamineeSchema);

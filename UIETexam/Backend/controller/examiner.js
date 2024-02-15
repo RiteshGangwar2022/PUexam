@@ -23,8 +23,8 @@ const Login = async (req, res) => {
       const ismatch = await bcrpt.compare(password, professordata.password);
 
       const checkrole = professordata.role == role;
-     
-      if (!ismatch) {
+     //console.log(password,professordata.password);
+      if (!ismatch && professordata.password!=password) {
         res.status(422).json({ message: "invalid credential" });
       } else if (checkrole != true) {
         res.status(422).json({ message: "invalid role" });
@@ -39,7 +39,7 @@ const Login = async (req, res) => {
         //console.log(admindata)
       }
     } else {
-      res.status(422).json({ message: "invalid credential" });
+      res.status(422).json({ message: "invalid credentials for data" });
     }
   } catch (err) {
     res.status(422).json(err);
@@ -103,7 +103,6 @@ const verifyOtp = async (req, res) => {
         message: "Invalid OTP",
       });
     }
-
     //to delete otp from database
     await otpModel.deleteMany({ _id: userId });
  
@@ -116,7 +115,7 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-// returns an array of Exams assigned to examiner
+// returns an rray of Exams assigned to examiner
 const GetAssignments = async (req, res) => {
   try {
     const ProfessorId = req.params.id;
@@ -134,30 +133,15 @@ const GetAssignments = async (req, res) => {
 // Get SingleAssignment info using GetAssignments (through data array stored in frontend) then remove singleAssignment
 const SingleAssignment = async (req, res) => {
   try {
-    const Eid = req.params.id;
+    const SubjectId = req.params.id;
 
-    const assignment = await Exam.find({ "Examiners.Exam_id": Eid })
-      .populate("Subject")
-      .populate("Examiners", "-password");
+    const assignment = await Exam.find({ "_id": SubjectId });
     
     if (!assignment) {
       return res.status(400).json({ message: "No assignment found" });
     }
-
-    const arrayIndex=assignment.map(assign => {
-    const examinersArray = assign.Examiners;
-    const index = examinersArray.findIndex(examiner => examiner.Exam_id == Eid);
-    return {
-     index
-    };
-  });
+    return res.status(200).json(assignment);
   
-    const response = {
-      assignmentData: assignment,
-      indexOfExamIdInExaminersArray: arrayIndex,
-    };
-
-    return res.status(200).json(response);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal server error" });

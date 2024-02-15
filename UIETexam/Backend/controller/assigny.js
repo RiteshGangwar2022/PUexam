@@ -121,7 +121,6 @@ const verifyOtp = async (req, res) => {
 // ******************************************************* (Fix It)
 const Assignment = async (req, res) => {
   try {
-
     const {
       SubjectCode,
       Branch,
@@ -132,48 +131,54 @@ const Assignment = async (req, res) => {
       DOE,
       ExaminersId,
       Year,
+      Subject_name
     } = req.body;
+    console.log(req.body);
 
-    // if (!DOE || !ExamCode || !Branch || !SemesterNo || !SubjectCode || !Option || !SessionInfo || !Year || !ExaminersId) {
-    //   return res.status(400).json({ message: "Please Fill all the fields" });
-    // }
-    // Updating assigned Examiners from ExaminerId to AssignedExaminee Db
-    for (id in ExaminersId){
-      assignExaminee = new AssignedExaminee({
-        "ExamineeId": ExaminersId[id],
-        "Subject": SubjectCode
-      }).save()
+    // Check if Option and SessionInfo are provided
+    if (!Option || !SessionInfo) {
+      return res.status(400).json({ error: "Opton and SessionInfo are required fields." });
     }
-    // Creating a new Session object from given ExaminersId, Year, and SessionInfo
-    const ss = await new Session({
-      "Year": Year,
-      "Session": SessionInfo,
-    })
 
-    for (id in ExaminersId){
-      await ss.AssignedExaminers.push(ExaminersId[id])
-      // updating assignment info in examiners table
-      try{
-        // check if existing examiner exists
-        let examiner = await Examinee.findOne({_id: ExaminersId[id]}) 
-        if (examiner == null){
+    // Assigning Examiners
+    for (const id of ExaminersId){
+      await new AssignedExaminee({
+        "ExamineeId": id,
+        "Subject": SubjectCode
+      }).save();
+      
+      // Update assignment info in examiners table
+      try {
+        let examiner = await Examinee.findOne({_id: id});
+        if (!examiner) {
           examiner = await new Examinee({
-            "_id": ExaminersId[id],
-          })
+            "_id": id
+          });
         }
 
-        await examiner.Exam.push({"_id": SubjectCode, "SessionId": ss["_id"]})
-        examiner.save()
-      }catch(err){
-        console.log(err)
+        examiner.Exam.push({"_id": SubjectCode, "SessionId": ss._id});
+        await examiner.save();
+      } catch(err) {
+        console.log(err);
       }
     }
-    ss.save()
 
-    // Check for previous existing Exam Record and then add new session to it.
-    let Assignment = await Exam.findOne({_id: SubjectCode})
-    if (Assignment == null){
-      // No existing exam exists for the given SubjectCode create a new Exam Object
+    // Creating a new Session object
+    const ss = await new Session({
+      "Year": Year,
+      "Session": SessionInfo
+    }).save();
+
+    // Update AssignedExaminers in the Session
+    for (const id of ExaminersId){
+      ss.AssignedExaminers.push(id);
+    }
+    await ss.save();
+    
+    // Check for existing Exam record
+    let Assignment = await Exam.findById(SubjectCode);
+    if (!Assignment){
+      // Create a new Exam Object
       Assignment = await new Exam({
         "_id": SubjectCode,
         "Branch": Branch,
@@ -182,20 +187,21 @@ const Assignment = async (req, res) => {
         "SemesterNo": SemesterNo,
         "ExamCode": ExamCode,
         "DOE": DOE, 
+        "Subject_name": Subject_name
       }).save();
     }
-    try{
-      await Assignment.Sessions.push(ss)
-    }catch(err){
-      console.log(err)
-    }
-    await Assignment.save()
+
+    // Update Sessions in the Assignment
+    Assignment.Sessions.push(ss._id);
+    await Assignment.save();
 
     res.status(200).json(Assignment);
   } catch (error) {
-    res.status(400).json(error);
+    console.log(error);
+    res.status(400).json({ error: "An error occurred while processing the request." });
   }
 };
+
 
 
 const Allsubject = async (req, res) => {
@@ -229,7 +235,6 @@ const AllExaminers = async (req, res) => {
     res.status(400).json(err);
   }
 };
-
 // Replace 
 const AllSubjectProfessors = async(req, res) => {
   try{
@@ -302,7 +307,6 @@ const getProfessorDetail=async(req,res)=>{
     console.log("Error in getProfessor Detail "+ error);
   }
 }
-
 module.exports = {
   Login,
   Signup,

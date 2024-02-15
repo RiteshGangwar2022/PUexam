@@ -117,13 +117,14 @@ useEffect(() => {
       .post("http://localhost:5000/api/r3/addassignment", {
         SubjectCode: id,
         Branch: "Cse",
-        option: optionValue,
-        session: sessionValue,
+        Option: optionValue,
+        SessionInfo: sessionValue,
         SemesterNo: 1,
         ExamCode: "1234",
         DOE: new Date(),
         ExaminersId: selectedExaminersRef.current,
-        Year: new Date().getFullYear()
+        Year: new Date().getFullYear(),
+        Subject_name: Subject
         
       })
       .then((response) => {
