@@ -7,8 +7,13 @@ const ExamineeSchema = new mongoose.Schema(
             ref: 'Professor'
         },
         Exam:[{
-                type: mongoose.Schema.Types.String,
-                ref: 'Exam'
+                _id: {type: mongoose.Schema.Types.String,
+                    ref: 'Exam'
+                },
+                sessionId: {
+                    type: mongoose.Schema.Types.String,
+                    ref: 'Session'
+                }
              }]
     }
 )
