@@ -149,7 +149,7 @@ const Assignment = async (req, res) => {
       "Year": Year,
       "Session": SessionInfo,
     })
-    ss.save()
+
     for (id in ExaminersId){
       await ss.AssignedExaminers.push(ExaminersId[id])
       // updating assignment info in examiners table
@@ -159,16 +159,16 @@ const Assignment = async (req, res) => {
         if (examiner == null){
           examiner = await new Examinee({
             "_id": ExaminersId[id],
-            "sessionId": ss["_id"]
           })
         }
-        await examiner.Exam.push(SubjectCode)
+
+        await examiner.Exam.push({"_id": SubjectCode, "SessionId": ss["_id"]})
         examiner.save()
       }catch(err){
         console.log(err)
       }
     }
-
+    ss.save()
 
     // Check for previous existing Exam Record and then add new session to it.
     let Assignment = await Exam.findOne({_id: SubjectCode})
@@ -189,7 +189,6 @@ const Assignment = async (req, res) => {
     }catch(err){
       console.log(err)
     }
-    console.log(Assignment)
     await Assignment.save()
 
     res.status(200).json(Assignment);

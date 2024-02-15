@@ -10,9 +10,8 @@ const ExamineeSchema = new mongoose.Schema(
                 _id: {type: mongoose.Schema.Types.String,
                     ref: 'Exam'
                 },
-                sessionId: {
+                SessionId: {
                     type: mongoose.Schema.Types.String,
-                    ref: 'Session'
                 }
              }]
     }

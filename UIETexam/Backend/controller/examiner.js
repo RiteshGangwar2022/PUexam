@@ -181,9 +181,7 @@ const ModifySelect = async (req, res) => {
       return res.status(400).json({ error: 'Invalid index' });
     }
 
-    
     exam.Examiners[index].IsSelected = isSelectedValue;
-
     
     await exam.save();
 

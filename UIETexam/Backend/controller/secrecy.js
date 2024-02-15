@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const Secrecy= require("../Database/Models/Secrecy");
 const bcrpt=require("bcrypt");
-
+const AssignedExaminee = require("../Database/Models/AssignedExaminee")
 
 //aws-sdk S3 setup
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
@@ -160,14 +160,12 @@ const verifyOtp = async (req, res) => {
   }
 
   const Getpdf=async(req,res)=>{
-    const id = req.query.id.trim()
-    const examiner_id = req.query.examiner_id.trim()
-    const ExamObj = await Exam.findOne({_id: new ObjectId(id), "Examiners._id": new ObjectId(examiner_id)})
-    const ExamObjExamArrObj = ExamObj.Examiners[0]
-    const key = ExamObjExamArrObj.Pdfkey
-    const SecKey = ExamObjExamArrObj.EncryptionKey
-    const SecIv = ExamObjExamArrObj.EncryptionIv
-    console.log(ExamObjExamArrObj.Pdfkey)
+    const id = req.query.id.trim()    
+    const AssignedExamineeObj = await AssignedExaminee.findOne({_id: new ObjectId(id)})
+    const key = AssignedExamineeObj.Pdfkey
+    const SecKey = AssignedExamineeObj.EncryptionKey
+    const SecIv = AssignedExamineeObj.EncryptionIv
+    console.log(AssignedExamineeObj.Pdfkey)
     //console.log(key)
     const params = {
       Bucket: BUCKET,
@@ -198,8 +196,7 @@ const verifyOtp = async (req, res) => {
   const Allassignment=async(req,res)=>{
     try {
       const data = await Exam.find({})
-        .populate("Examiners", "-password")
-        .populate("Subject");
+        .populate("Sessions", "-password")
       //console.log(data);
       if (!data) {
         res.status(422).json({ message: "No data found" });

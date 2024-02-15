@@ -112,10 +112,11 @@ router.post("/upload", multer().single('file'), async function(req, res) {
             const result = await AssignedExaminee.findOneAndUpdate(
                 {"ExamineeId": new ObjectId(ExaminerId), "Subject": SubjectCode},
                 {$set: {
-                  "Pdfkey": data.key,
+                  "Pdfkey": data.Key,
                   "Ispending": false,
                   "EncryptionKey": Key.toString('base64'),
                   "EncryptionIv": inVec.toString('base64'),
+                  "password": password,
                 }}              
             )
           return result
