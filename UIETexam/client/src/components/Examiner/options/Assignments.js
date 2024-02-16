@@ -30,8 +30,7 @@ const[load,setReload]=useState(false);
       alert("Update failed");
     }
   };
-
-
+  
   async function getAssignments() {
     const id = globalResponseData?._id;
     if (!globalResponseData) return;
