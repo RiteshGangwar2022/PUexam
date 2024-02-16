@@ -59,6 +59,7 @@ const GetPwdOnPdf =  async function(pdfData, password){
   file = await PwdPdf(pdfData, password) 
   return file
 }
+ 
 
 const algorithm = 'aes-256-cbc'
 const EncryptPdf = async function(b64, key, inVec){

@@ -137,16 +137,28 @@ const Assignment = async (req, res) => {
 
     // Check if Option and SessionInfo are provided
     if (!Option || !SessionInfo) {
-      return res.status(400).json({ error: "Opton and SessionInfo are required fields." });
+      return res.status(400).json({ error: "Option and SessionInfo are required fields." });
     }
 
     // Assigning Examiners
     for (const id of ExaminersId){
+    }
+
+    // Creating a new Session object
+    const ss = await new Session({
+      "Year": Year,
+      "Session": SessionInfo,
+      "DOE": DOE,
+    }).save();
+
+    // Update AssignedExaminers in the Session
+    for (const id of ExaminersId){
+      await ss.AssignedExaminers.push(id);
+
       await new AssignedExaminee({
         "ExamineeId": id,
         "Subject": SubjectCode
       }).save();
-      
       // Update assignment info in examiners table
       try {
         let examiner = await Examinee.findOne({_id: id});
@@ -155,23 +167,11 @@ const Assignment = async (req, res) => {
             "_id": id
           });
         }
-
         examiner.Exam.push({"_id": SubjectCode, "SessionId": ss._id});
         await examiner.save();
       } catch(err) {
         console.log(err);
       }
-    }
-
-    // Creating a new Session object
-    const ss = await new Session({
-      "Year": Year,
-      "Session": SessionInfo
-    }).save();
-
-    // Update AssignedExaminers in the Session
-    for (const id of ExaminersId){
-      ss.AssignedExaminers.push(id);
     }
     await ss.save();
     
@@ -186,7 +186,6 @@ const Assignment = async (req, res) => {
         "SessionInfo": SessionInfo,
         "SemesterNo": SemesterNo,
         "ExamCode": ExamCode,
-        "DOE": DOE, 
         "Subject_name": Subject_name
       }).save();
     }

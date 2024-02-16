@@ -7,6 +7,9 @@ const SessionSchema = mongoose.Schema({
     Session: {
         type: String
     },
+    DOE: {
+        type: String
+    },
     AssignedExaminers: [{
         _id: {
             type: mongoose.Schema.Types.String,

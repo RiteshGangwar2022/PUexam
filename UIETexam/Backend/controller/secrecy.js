@@ -76,8 +76,6 @@ const Login = async (req, res) => {
 }
 
 const Signup = async(req,res)=>{
-
-    
     try {
             const { name, email,mobile,role, password} = req.body;
                  
@@ -150,7 +148,8 @@ const verifyOtp = async (req, res) => {
   // Decryption
   const algorithm = 'aes-256-cbc'
   const crypto = require('crypto');
-  const {ObjectId} = require('mongodb')
+  const {ObjectId} = require('mongodb');
+const Session = require("../Database/Models/Session");
 
   const DecryptPdf = async function(b64, key, iv){
     key = new Buffer.from(key, 'base64')
@@ -204,11 +203,21 @@ const verifyOtp = async (req, res) => {
       res.status(200).json(data);
     } catch (err) {
       res.status(422).json(err);
-    }
-        
+    }    
   }
-module.exports = {Login,Signup,verifyOtp,Allassignment,Getpdf};
 
+  const AllSessions = async(req, res) => {
+    const year = req.query.year
+    console.log(year)
+    try{
+      const data = await Session.find({
+        "Year": year,
+      })
+      console.log(data)
+      res.status(200).json({data})
+    }catch(err){
+      res.status(400).json(err)
+    }
+  }
 
-
- 
+module.exports = {Login,Signup,verifyOtp,Allassignment,Getpdf, AllSessions};

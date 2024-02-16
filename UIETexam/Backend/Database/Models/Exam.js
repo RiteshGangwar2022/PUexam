@@ -29,10 +29,6 @@ const ExamSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide the Examination Code ']
     },
-    DOE:{
-        type: Date,
-        required: [true, 'Please Provide Date of Examination']
-    },
     Sessions:[{ 
           _id: {
             type: mongoose.Schema.Types.ObjectId,
