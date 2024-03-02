@@ -8,6 +8,6 @@ router.post("/login", Login);
 router.post("/register", Signup);
 router.post("/verifyOtp", verifyOtp);
 router.get("/allassignment",Allassignment);
-router.get("/pdf/",Getpdf);
+router.get("/pdf/:id",Getpdf);
 router.get("/allsessions/", AllSessions)
 module.exports = router;

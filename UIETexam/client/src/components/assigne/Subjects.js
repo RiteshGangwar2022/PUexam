@@ -18,10 +18,10 @@ const Subjects = () => {
   const optionRef = useRef(null);
   const sessionRef = useRef(null);
 const [ExaminerIds,setExaminerIds]=useState([]);
-let flag=true;
+
 const selectedExaminersRef = useRef([]);
 useEffect(() => {
-  if (ExaminerIds && flag) {
+  if (ExaminerIds ) {
     const getExaminerData = async (id) => {
       try {
         const Examiner = await axios.get(`http://localhost:5000/api/r3/getProfessor/${id}`);
@@ -36,7 +36,7 @@ useEffect(() => {
     Promise.all(ExaminerIds.map(async (item, index) => {
       await getExaminerData(item?._id);
     }));
-    flag=false;
+    
   }
 }, [ExaminerIds]);
 useEffect(() => {
@@ -124,7 +124,8 @@ useEffect(() => {
         DOE: new Date(),
         ExaminersId: selectedExaminersRef.current,
         Year: new Date().getFullYear(),
-        Subject_name: Subject
+        Subject_name: Subject,
+        
         
       })
       .then((response) => {

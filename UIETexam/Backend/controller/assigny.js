@@ -141,8 +141,7 @@ const Assignment = async (req, res) => {
     }
 
     // Assigning Examiners
-    for (const id of ExaminersId){
-    }
+ 
 
     // Creating a new Session object
     const ss = await new Session({
@@ -157,7 +156,8 @@ const Assignment = async (req, res) => {
 
       await new AssignedExaminee({
         "ExamineeId": id,
-        "Subject": SubjectCode
+        "Subject": SubjectCode,
+        "SessionId": ss._id
       }).save();
       // Update assignment info in examiners table
       try {
@@ -198,6 +198,71 @@ const Assignment = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: "An error occurred while processing the request." });
+  }
+};
+
+const SingleAssignment = async (req, res) => {
+  try {
+    const SubjectId = req.params.id1;
+    const Session_id=req.params.id2;
+    console.log(SubjectId);
+
+    const assignment = await Exam.find({ "_id": SubjectId });
+    
+    if (!assignment) {
+      return res.status(400).json({ message: "No assignment found" });
+    }
+
+    const Status= await AssignedExaminee.findOne({"SessionId": Session_id});
+
+    if (!Status) {
+      return res.status(400).json({ message: "No Status found" });
+    }
+    
+    const Sssion=await Session.findOne({"_id": Session_id})
+    if(!Sssion) 
+    {
+      return res.status(400).json({ message: "No Session found" });
+    }
+    return res.status(200).json({assignment,Status,Sssion});
+  
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const SingleAssignment2 = async (req, res) => {
+  try {
+    const SubjectId = req.params.id1;
+    const Session_id=req.params.id2;
+    const _id=req.params.id3;
+    const Examiner_id=req.params.id4;
+
+    const assignment = await Exam.find({ "_id": SubjectId });
+    
+    if (!assignment) {
+      return res.status(400).json({ message: "No assignment found" });
+    }
+
+    const Status= await AssignedExaminee.findOne({"_id": _id});
+
+    if (!Status) {
+      return res.status(400).json({ message: "No Status found" });
+    }
+    
+    const Sssion=await Session.findOne({"_id": Session_id})
+    if(!Sssion) 
+    {
+      return res.status(400).json({ message: "No Session found" });
+    }
+    const Examiner= await Professor.findOne({"_id": Examiner_id});
+    if(!Examiner) return res.status(400).json({ message: "No Examiner found" });
+    return res.status(200).json({assignment,Status,Sssion,Examiner});
+  
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -258,9 +323,7 @@ const ExamList= async(req,res)=>{
 
   try {
     
-    const examList = await Exam.find({})
-      .populate("Examiners", "-password")
-      .populate("Subject");
+    const examList = await AssignedExaminee.find({});
       if(!examList){
         res.status(400).json({message:"No examiner found"});
       }
@@ -315,5 +378,7 @@ module.exports = {
   Allsubject,
   ExamList,
   AllSubjectProfessors,
-  getProfessorDetail
+  getProfessorDetail,
+  SingleAssignment,
+  SingleAssignment2
 };

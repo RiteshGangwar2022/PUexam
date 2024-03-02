@@ -17,7 +17,6 @@ const s3 = new S3Client({
   region: process.env.REGION,
 });
 
-
 // other routes
 const {
   Login,
@@ -32,8 +31,8 @@ router.post("/login", Login);
 router.post("/register", Signup);
 router.post("/verifyOtp", verifyOtp);
 router.get("/assignments/:id", GetAssignments);
-router.get("/singleassignment/:id", SingleAssignment);
-router.put("/ModifySelect/:id/:index", ModifySelect);
+router.get("/singleassignment/:id1/:id2", SingleAssignment);
+router.put("/ModifySelect/:id", ModifySelect);
 const Session = require('../Database/Models/Session')
 
 
@@ -67,7 +66,6 @@ const EncryptPdf = async function(b64, key, inVec){
   return cipherText.update(b64, 'base64', 'base64') + cipherText.final('base64')
 }
 // --------------------------------------------------------------------------------------------
-
 // 
 // to upload file on aws
 router.post("/upload", multer().single('file'), async function(req, res) {
@@ -104,6 +102,9 @@ router.post("/upload", multer().single('file'), async function(req, res) {
     const SessionId = req.query.session_id
     const ExaminerId = req.query.examiner_id    
     const SubjectCode = req.query.subject_code
+    const _id = req?.query?._id
+    console.log(req.query);
+   
     // updating in Mongo
     try{
       const result = await Session.findOne(
@@ -111,7 +112,7 @@ router.post("/upload", multer().single('file'), async function(req, res) {
       ).then(async function(){
         try{
             const result = await AssignedExaminee.findOneAndUpdate(
-                {"ExamineeId": new ObjectId(ExaminerId), "Subject": SubjectCode},
+                {"_id": new ObjectId(_id)},
                 {$set: {
                   "Pdfkey": data.Key,
                   "Ispending": false,
@@ -125,7 +126,7 @@ router.post("/upload", multer().single('file'), async function(req, res) {
           console.log(err)
         }
       })
-      console.log("result", result)
+      
       if (result.modifiedCount === 0) {
         return res.status(404).json({ error: "Document not found or no modifications made" });
       }

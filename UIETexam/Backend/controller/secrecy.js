@@ -159,7 +159,8 @@ const Session = require("../Database/Models/Session");
   }
 
   const Getpdf=async(req,res)=>{
-    const id = req.query.id.trim()    
+    const id = req.params.id;
+       
     const AssignedExamineeObj = await AssignedExaminee.findOne({_id: new ObjectId(id)})
     const key = AssignedExamineeObj.Pdfkey
     const SecKey = AssignedExamineeObj.EncryptionKey
@@ -182,7 +183,6 @@ const Session = require("../Database/Models/Session");
       res.status.json({message:"not pdf found"})
     }
   };
-
   async function streamToBuffer(stream) {
     return new Promise((resolve, reject) => {
       const chunks = [];
@@ -194,8 +194,7 @@ const Session = require("../Database/Models/Session");
 
   const Allassignment=async(req,res)=>{
     try {
-      const data = await Exam.find({})
-        .populate("Sessions", "-password")
+      const data = await AssignedExaminee.find({'Ispending': false});
       //console.log(data);
       if (!data) {
         res.status(422).json({ message: "No data found" });

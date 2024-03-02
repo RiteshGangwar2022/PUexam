@@ -19,8 +19,11 @@ const AssignedExamineeSchema = new mongoose.Schema({
         type: Number,
         required:true,
         default:0
-    }
-    ,Name:{
+    },
+    SessionId:{
+        type:String
+},
+    Name:{
         type:String
     },
     Ispending:{
@@ -34,6 +37,7 @@ const AssignedExamineeSchema = new mongoose.Schema({
     EncryptionIv:{
         type: String,
     },
+    
 })
 
 const AssignedExaminee = new mongoose.model('AssignedExaminee', AssignedExamineeSchema)

@@ -6,7 +6,9 @@ const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
-const Examinee = require("../Database/Models/Examinee")
+const Examinee = require("../Database/Models/Examinee");
+const AssignedExaminee = require("../Database/Models/AssignedExaminee");
+const Session =require("../Database/Models/Session");
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -119,6 +121,7 @@ const verifyOtp = async (req, res) => {
 const GetAssignments = async (req, res) => {
   try {
     const ProfessorId = req.params.id;
+    
     const data = await Examinee.find({"_id": ProfessorId})
       .populate("Exam", "-password")
     if (!data) {
@@ -133,42 +136,48 @@ const GetAssignments = async (req, res) => {
 // Get SingleAssignment info using GetAssignments (through data array stored in frontend) then remove singleAssignment
 const SingleAssignment = async (req, res) => {
   try {
-    const SubjectId = req.params.id;
+    const SubjectId = req.params.id1;
+    const Session_id=req.params.id2;
+    console.log(SubjectId);
 
     const assignment = await Exam.find({ "_id": SubjectId });
     
     if (!assignment) {
       return res.status(400).json({ message: "No assignment found" });
     }
-    return res.status(200).json(assignment);
+
+    const Status= await AssignedExaminee.findOne({"SessionId": Session_id});
+
+    if (!Status) {
+      return res.status(400).json({ message: "No Status found" });
+    }
+    
+    const Sssion=await Session.findOne({"_id": Session_id})
+    if(!Sssion) 
+    {
+      return res.status(400).json({ message: "No Session found" });
+    }
+    return res.status(200).json({assignment,Status,Sssion});
   
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 const ModifySelect = async (req, res) => {
   try {
-    const examId = req.params.id;
-    const index = req.params.index;
+    const _id = req.params.id;
+    console.log(_id);
     const isSelectedValue = req.body.isSelected; 
-
-    const exam = await Exam.findById(examId);
-
+    console.log(_id," ",isSelectedValue);
+    const exam = await AssignedExaminee.findById(_id);
+console.log(exam);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
 
-    
-    if (index < 0 || index >= exam.Examiners.length) {
-      return res.status(400).json({ error: 'Invalid index' });
-    }
-
-    exam.Examiners[index].IsSelected = isSelectedValue;
-    
+    exam.IsSelected = isSelectedValue;
     await exam.save();
-
     res.json({ message: 'IsSelected field updated successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
