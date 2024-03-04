@@ -5,6 +5,10 @@ const ExamSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         ref: 'Subject'
     },
+     Subject_name:{
+       type:String,
+       required:true,
+    },
     Branch:{
         type:String,
         required:true,
@@ -24,10 +28,6 @@ const ExamSchema = new mongoose.Schema({
     ExamCode: {
         type: String,
         required: [true, 'Please provide the Examination Code ']
-    },
-    DOE:{
-        type: Date,
-        required: [true, 'Please Provide Date of Examination']
     },
     Sessions:[{ 
           _id: {

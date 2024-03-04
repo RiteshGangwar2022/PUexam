@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const Secrecy= require("../Database/Models/Secrecy");
 const bcrpt=require("bcrypt");
-
+const AssignedExaminee = require("../Database/Models/AssignedExaminee")
 
 //aws-sdk S3 setup
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
@@ -76,8 +76,6 @@ const Login = async (req, res) => {
 }
 
 const Signup = async(req,res)=>{
-
-    
     try {
             const { name, email,mobile,role, password} = req.body;
                  
@@ -150,7 +148,8 @@ const verifyOtp = async (req, res) => {
   // Decryption
   const algorithm = 'aes-256-cbc'
   const crypto = require('crypto');
-  const {ObjectId} = require('mongodb')
+  const {ObjectId} = require('mongodb');
+const Session = require("../Database/Models/Session");
 
   const DecryptPdf = async function(b64, key, iv){
     key = new Buffer.from(key, 'base64')
@@ -160,14 +159,13 @@ const verifyOtp = async (req, res) => {
   }
 
   const Getpdf=async(req,res)=>{
-    const id = req.query.id.trim()
-    const examiner_id = req.query.examiner_id.trim()
-    const ExamObj = await Exam.findOne({_id: new ObjectId(id), "Examiners._id": new ObjectId(examiner_id)})
-    const ExamObjExamArrObj = ExamObj.Examiners[0]
-    const key = ExamObjExamArrObj.Pdfkey
-    const SecKey = ExamObjExamArrObj.EncryptionKey
-    const SecIv = ExamObjExamArrObj.EncryptionIv
-    console.log(ExamObjExamArrObj.Pdfkey)
+    const id = req.params.id;
+       
+    const AssignedExamineeObj = await AssignedExaminee.findOne({_id: new ObjectId(id)})
+    const key = AssignedExamineeObj.Pdfkey
+    const SecKey = AssignedExamineeObj.EncryptionKey
+    const SecIv = AssignedExamineeObj.EncryptionIv
+    console.log(AssignedExamineeObj.Pdfkey)
     //console.log(key)
     const params = {
       Bucket: BUCKET,
@@ -185,7 +183,6 @@ const verifyOtp = async (req, res) => {
       res.status.json({message:"not pdf found"})
     }
   };
-
   async function streamToBuffer(stream) {
     return new Promise((resolve, reject) => {
       const chunks = [];
@@ -197,9 +194,7 @@ const verifyOtp = async (req, res) => {
 
   const Allassignment=async(req,res)=>{
     try {
-      const data = await Exam.find({})
-        .populate("Examiners", "-password")
-        .populate("Subject");
+      const data = await AssignedExaminee.find({'Ispending': false});
       //console.log(data);
       if (!data) {
         res.status(422).json({ message: "No data found" });
@@ -207,11 +202,21 @@ const verifyOtp = async (req, res) => {
       res.status(200).json(data);
     } catch (err) {
       res.status(422).json(err);
-    }
-        
+    }    
   }
-module.exports = {Login,Signup,verifyOtp,Allassignment,Getpdf};
 
+  const AllSessions = async(req, res) => {
+    const year = req.query.year
+    console.log(year)
+    try{
+      const data = await Session.find({
+        "Year": year,
+      })
+      console.log(data)
+      res.status(200).json({data})
+    }catch(err){
+      res.status(400).json(err)
+    }
+  }
 
-
- 
+module.exports = {Login,Signup,verifyOtp,Allassignment,Getpdf, AllSessions};

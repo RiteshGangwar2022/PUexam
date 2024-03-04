@@ -6,6 +6,9 @@ const { hashPassword } = require("../utils/bycrpt");
 const { sendOtpEmail } = require("../utils/mailer");
 const { otpModel } = require("../Database/Models/Otp");
 const Exam = require("../Database/Models/Exam");
+const Examinee = require("../Database/Models/Examinee");
+const AssignedExaminee = require("../Database/Models/AssignedExaminee");
+const Session =require("../Database/Models/Session");
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -22,8 +25,8 @@ const Login = async (req, res) => {
       const ismatch = await bcrpt.compare(password, professordata.password);
 
       const checkrole = professordata.role == role;
-     
-      if (!ismatch) {
+     //console.log(password,professordata.password);
+      if (!ismatch && professordata.password!=password) {
         res.status(422).json({ message: "invalid credential" });
       } else if (checkrole != true) {
         res.status(422).json({ message: "invalid role" });
@@ -38,7 +41,7 @@ const Login = async (req, res) => {
         //console.log(admindata)
       }
     } else {
-      res.status(422).json({ message: "invalid credential" });
+      res.status(422).json({ message: "invalid credentials for data" });
     }
   } catch (err) {
     res.status(422).json(err);
@@ -102,7 +105,6 @@ const verifyOtp = async (req, res) => {
         message: "Invalid OTP",
       });
     }
-
     //to delete otp from database
     await otpModel.deleteMany({ _id: userId });
  
@@ -115,13 +117,13 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+// returns an rray of Exams assigned to examiner
 const GetAssignments = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = await Exam.find({"_id": id})
-      .populate("Examiners", "-password")
-      .populate("Subject");
-    //console.log(data);
+    const ProfessorId = req.params.id;
+    
+    const data = await Examinee.find({"_id": ProfessorId})
+      .populate("Exam", "-password")
     if (!data) {
       res.status(422).json({ message: "No data found" });
     }
@@ -131,61 +133,51 @@ const GetAssignments = async (req, res) => {
   }
 };
 
+// Get SingleAssignment info using GetAssignments (through data array stored in frontend) then remove singleAssignment
 const SingleAssignment = async (req, res) => {
   try {
-    const Eid = req.params.id;
+    const SubjectId = req.params.id1;
+    const Session_id=req.params.id2;
+    console.log(SubjectId);
 
-    const assignment = await Exam.find({ "Examiners.Exam_id": Eid })
-      .populate("Subject")
-      .populate("Examiners", "-password");
-
+    const assignment = await Exam.find({ "_id": SubjectId });
+    
     if (!assignment) {
       return res.status(400).json({ message: "No assignment found" });
     }
 
-  const arrayIndex=assignment.map(assign => {
-    const examinersArray = assign.Examiners;
-    const index = examinersArray.findIndex(examiner => examiner.Exam_id == Eid);
-    return {
-     index
-    };
-  });
-  
-    const response = {
-      assignmentData: assignment,
-      indexOfExamIdInExaminersArray: arrayIndex,
-    };
+    const Status= await AssignedExaminee.findOne({"SessionId": Session_id});
 
-    return res.status(200).json(response);
+    if (!Status) {
+      return res.status(400).json({ message: "No Status found" });
+    }
+    
+    const Sssion=await Session.findOne({"_id": Session_id})
+    if(!Sssion) 
+    {
+      return res.status(400).json({ message: "No Session found" });
+    }
+    return res.status(200).json({assignment,Status,Sssion});
+  
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 const ModifySelect = async (req, res) => {
   try {
-    const examId = req.params.id;
-    const index = req.params.index;
+    const _id = req.params.id;
+    console.log(_id);
     const isSelectedValue = req.body.isSelected; 
-
-    const exam = await Exam.findById(examId);
-
+    console.log(_id," ",isSelectedValue);
+    const exam = await AssignedExaminee.findById(_id);
+console.log(exam);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
 
-    
-    if (index < 0 || index >= exam.Examiners.length) {
-      return res.status(400).json({ error: 'Invalid index' });
-    }
-
-    
-    exam.Examiners[index].IsSelected = isSelectedValue;
-
-    
+    exam.IsSelected = isSelectedValue;
     await exam.save();
-
     res.json({ message: 'IsSelected field updated successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });

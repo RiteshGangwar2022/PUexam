@@ -12,104 +12,90 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import Loader from "../loader";
 import { Viewer } from "@react-pdf-viewer/core";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-const steps = ["setup", "upload", "preview", "publish"];
 
+
+const steps = ["setup", "upload", "preview", "publish"];
 const AssignmentInterface = () => {
   const { globalResponseData } = useAuth();
 
-  const { id } = useParams();
-  
+  const location = useLocation();
+  const { Obj } = location.state;
+   console.log(Obj);
   const [active, setActive] = useState(0);
   const [assignment, setAssignment] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   
   const [upload, setUpload] = useState("upload PDF only");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState("");
 
   const onChange = (e) => {
     const files = e?.target?.files;
+    console.log(URL.createObjectURL(files[0]));
     files.length > 0 && setUrl(URL.createObjectURL(files[0]));
     setSelectedFile(e?.target?.files[0]);
     setUpload(e?.target?.files[0].name);
   };
 
-
-  async function getAssignments() {
-    const res = await fetch(
-      `http://localhost:5000/api/r2/assignments/${id}`
-    );
-
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch assignments data");
-    }
-
-    const data = await res.json();
-    setAssignment(data);
-    setLoading(false);
-    // console.log("d=", data);
-  }
-
-
-  useEffect(() => {
-    getAssignments();
-  }, []);
-
-  const GetAssignmentInfo = async (id) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/r2/singleassignment/${id}`
-      );
-
-      return response;
-    } catch (error) {
-      
-      alert("Exam not found. Try again.");
-    }
-  };
-
-  const Generate = async (id) => {
-    const info = await GetAssignmentInfo(id);
-    
-    generate(info.data);
-  };
-
   const handlePublish = async () => {
+   
       if (!selectedFile) {
-        
         alert("No File Selected");
         return;
       }
-  
       const formData = new FormData();
       formData.append('file', selectedFile);
-  
       // Replace with the actual exam _id and examiner_id
-      const _id = id;
-      const examinerId = globalResponseData._id;
-  
+      setLoading(true);
       try {
         const response = await axios.post('http://localhost:5000/api/r2/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
           params: {
-            _id: _id,
-            examiner_id: examinerId,
+            session_id: `${Obj.Sssion._id}`,
+            examiner_id: `${Obj.Status.ExamineeId}`,
+            subject_code: `${Obj.Status.Subject}`,
+            _id: `${Obj.Status._id}`
           },
         });
     
-        if(response.statusText==="OK") {
-          alert("Document Uploaded SuccessFully");
+        if (response.status === 200) {
+          setLoading(false);
+          alert("Document Uploaded Successfully");
+        } else {
+          setLoading(false);
+          alert("Failed to upload document");
         }
       } catch (error) {
+        setLoading(false);
         console.error('Error uploading file:', error);
       }
 
   }
+  const handleDownload = () => {
+    // Create a blob with the content of the Word file
+    const wordContent = "You Can Make Here";
+    const blob = new Blob([wordContent], { type: 'application/msword' });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    // Set the attributes for the link
+    link.href = url;
+    link.download = `Paper.doc`; // Specify the file name
+
+    // Append the link to the document body
+    document.body.appendChild(link);
+    // Click the link to trigger the download
+    link.click();
+    // Cleanup: remove the link and revoke the URL
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
 
   const Tabs = () => {
     switch (active) {
@@ -125,39 +111,39 @@ const AssignmentInterface = () => {
                 <div className=" flex gap-2  justify-between  items-center">
                   <h1 className=" text-xl    ">Exam Code</h1>
                   <h1 className=" text-xl  max-w-[200px]  w-full flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment[0]?.ExamCode}
+                    {Obj?.assignment[0].ExamCode}
                   </h1>
                 </div>
 
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Subject Code</h1>
                   <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment[0]?.Subject?.SubjectCode}
+                    {Obj?.assignment[0]._id}
                   </h1>
                 </div>
 
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Subject</h1>
                   <h1 className=" text-xl w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment[0]?.Subject?.Name}
+                    {Obj?.assignment[0].Subject_name}
                   </h1>
                 </div>
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Semester</h1>
                   <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment[0]?.SemesterNo}
+                    {Obj?.assignment[0].SemesterNo}
                   </h1>
                 </div>
                 <div className=" flex gap-2  justify-between items-center">
                   <h1 className=" text-xl    ">Date</h1>
                   <h1 className=" text-xl w-full flex max-w-[200px] justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {new Date(assignment[0]?.DOE).toLocaleDateString()}
+                    {new Date(Obj?.Sssion?.DOE).toLocaleDateString()}
                   </h1>
                 </div>
                 <div className=" flex gap-2 justify-between  items-center">
                   <h1 className=" text-xl    ">Branch</h1>
                   <h1 className=" text-xl         w-full max-w-[200px] flex justify-center bg-slate-100 font-semibold rounded-sm border-slate-900  border-[1px] p-1">
-                    {assignment[0]?.Branch}
+                    {Obj?.assignment[0].Branch}
                   </h1>
                 </div>
               </div>
@@ -178,7 +164,7 @@ const AssignmentInterface = () => {
 
               <p>Download Template given below </p>
               <button
-                onClick={() => Generate(id)}
+                onClick={handleDownload}
                 className=" bg-green-500 px-5 py-2 uppercase  flex justify-center items-center gap-3   rounded-full text-white font-bold text-xl"
               >
                 <BiSolidDownload /> Download Template
@@ -217,7 +203,7 @@ const AssignmentInterface = () => {
               <BiUpload />
               publish paper
             </button>
-
+           
             <button
               onClick={() => setActive((active - 1) % 4)}
               className=" absolute  bottom-2  left-1/3 bg-sky-400 px-5 py-2   rounded-full text-white font-bold text-xl "
@@ -230,6 +216,10 @@ const AssignmentInterface = () => {
             >
               <AiOutlineArrowRight />
             </button>
+            {loading &&   <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center  backdrop-blur">
+      <Loader/>
+      </div>
+      }
           </div>
         );
       case 2:
@@ -298,12 +288,7 @@ const AssignmentInterface = () => {
     }
   };
 
-  if (loading)
-    return (
-      <Examiner>
-        <Loader />
-      </Examiner>
-    );
+
 
   return (
     <Examiner>
@@ -327,8 +312,10 @@ const AssignmentInterface = () => {
         </div>
         {Tabs()}
       </div>
+    
     </Examiner>
   );
+  
 };
 
 export default AssignmentInterface;
