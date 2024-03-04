@@ -223,7 +223,7 @@ console.log(papersObject);
   <select
     id="Subject"
     name="Subject"
-    className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none text-center cursor-pointer"
+    className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none text-center cursor-pointer bg-gray-200"
     onChange={(e) => setSubject(e.target.value)} 
   >
     <option value="$" className="text-base" >Subject</option>
@@ -238,7 +238,7 @@ console.log(papersObject);
                 <select
   id="branch"
   name="branch"
-  className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none cursor-pointer"
+  className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none cursor-pointer bg-gray-200"
   onChange={(e) => setBranchVal(e.target.value)} 
 >
   <option value="$" className="text-base" >Branch</option>
@@ -253,7 +253,7 @@ console.log(papersObject);
                <select
   id="session"
   name="session"
-  className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none cursor-pointer"
+  className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none cursor-pointer bg-gray-200"
   onChange={(e) => setSessVal(e.target.value)} 
 >
   <option value="$" className="text-base" >Session</option>
@@ -270,7 +270,7 @@ console.log(papersObject);
   <select
     id="Year"
     name="Year"
-    className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none text-center cursor-pointer"
+    className="w-full px-2 text-black text-3xl font-bold mt-3 appearance-none text-center cursor-pointer bg-gray-200"
     onChange={(e) => setYear(e.target.value)} 
   >
     <option value="$" className="text-base" >Year</option>
