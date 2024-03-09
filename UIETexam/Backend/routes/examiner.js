@@ -4,7 +4,7 @@ const Exam = require("../Database/Models/Exam");
 const { ObjectId } = require('mongodb');
 
 // aws-sdk S3 setup
-const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const multer = require("multer");
 
@@ -24,7 +24,8 @@ const {
   verifyOtp,
   GetAssignments,
   SingleAssignment,
-  ModifySelect
+  ModifySelect,
+  getLog
 } = require("../controller/examiner");
 
 router.post("/login", Login);
@@ -33,6 +34,7 @@ router.post("/verifyOtp", verifyOtp);
 router.get("/assignments/:id", GetAssignments);
 router.get("/singleassignment/:id1/:id2", SingleAssignment);
 router.put("/ModifySelect/:id", ModifySelect);
+router.get("/getLog", getLog)
 const Session = require('../Database/Models/Session')
 
 

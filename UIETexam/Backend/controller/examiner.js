@@ -9,6 +9,8 @@ const Exam = require("../Database/Models/Exam");
 const Examinee = require("../Database/Models/Examinee");
 const AssignedExaminee = require("../Database/Models/AssignedExaminee");
 const Session =require("../Database/Models/Session");
+const Log = require("../Database/Models/logs");
+const {ObjectId} = require('mongodb')
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -36,9 +38,8 @@ const Login = async (req, res) => {
 
         //it will send otp to user
         const sendCode = await sendOtpEmail(req.body.email, professordata._id);
-
+        const result = await updateLog(professordata._id, "Checked In")
         res.status(200).json(professordata);
-        //console.log(admindata)
       }
     } else {
       res.status(422).json({ message: "invalid credentials for data" });
@@ -185,5 +186,44 @@ console.log(exam);
 };
 
 
+const updateLog = async(professorId, msg) =>{ 
+  try{
+    console.log(professorId)
+    var result = await Log.findOne(
+      {"_id": professorId}  
+    )
+    if (result == null){
+      const log = new Log({
+        "_id": professorId
+      })
+      result = await log.save()
+    }
+    result = await Log.updateOne(
+      {"_id": professorId},
+      {$push: {
+          "logs": {
+            "info" : msg 
+          }
+      }}
+    )
+    return result
+  }catch(err){
+    console.log(err)
+  }
+}
 
-module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment,ModifySelect};
+const getLog = async(req, res) => {
+  try{
+    const professorId = req.query.id 
+    console.log(professorId)
+    const result = await Log.findOne(
+      {"_id": new ObjectId(professorId)},
+    )
+    return res.status(200).json(result)
+  }catch(err){
+    console.log(err)
+    return res.status(404).json(err)
+  }
+}
+
+module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment,ModifySelect, getLog};

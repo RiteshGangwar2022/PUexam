@@ -11,6 +11,7 @@ const Subjectassign = require("../Database/Models/Subjectassign");
 const Session = require("../Database/Models/Session");
 const AssignedExaminee = require('../Database/Models/AssignedExaminee');
 const Examinee = require("../Database/Models/Examinee");
+const Log = require("../Database/Models/logs")
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -153,7 +154,7 @@ const Assignment = async (req, res) => {
     // Update AssignedExaminers in the Session
     for (const id of ExaminersId){
       await ss.AssignedExaminers.push(id);
-
+      // updateLog(id, `Exam Assigned ${SubjectCode}, DOE ${DOE}`)
       await new AssignedExaminee({
         "ExamineeId": id,
         "Subject": SubjectCode,
@@ -369,6 +370,33 @@ const getProfessorDetail=async(req,res)=>{
     console.log("Error in getProfessor Detail "+ error);
   }
 }
+
+const updateLog = async(professorId, msg) =>{ 
+  try{
+    console.log(professorId)
+    var result = await Log.findOne(
+      {"_id": professorId}  
+    )
+    if (result == null){
+      const log = new Log({
+        "_id": professorId
+      })
+      result = await log.save()
+    }
+    result = await Log.updateOne(
+      {"_id": professorId},
+      {$push: {
+          "logs": {
+            "info" : msg 
+          }
+      }}
+    )
+    return result
+  }catch(err){
+    console.log(err)
+  }
+}
+
 module.exports = {
   Login,
   Signup,
