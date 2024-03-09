@@ -10,7 +10,9 @@ const Examinee = require("../Database/Models/Examinee");
 const AssignedExaminee = require("../Database/Models/AssignedExaminee");
 const Session =require("../Database/Models/Session");
 const Log = require("../Database/Models/logs");
-const {ObjectId} = require('mongodb')
+const { ObjectId } = require('mongodb');
+//var ObjectId = require('mongodb').ObjectID;
+
 
 //implementing two factor authentication(using password, second=>using OTP verification)
 const Login = async (req, res) => {
@@ -186,9 +188,11 @@ console.log(exam);
 };
 
 
-const updateLog = async(professorId, msg) =>{ 
+const updateLog = async(req, res) =>{ 
   try{
-    console.log(professorId)
+    const {professorId,msg}=req.body;
+ 
+  
     var result = await Log.findOne(
       {"_id": professorId}  
     )
@@ -206,7 +210,8 @@ const updateLog = async(professorId, msg) =>{
           }
       }}
     )
-    return result
+    if(!result) return res.status(400).json("wrong");
+    return res.status(200).json(result);
   }catch(err){
     console.log(err)
   }
@@ -214,11 +219,10 @@ const updateLog = async(professorId, msg) =>{
 
 const getLog = async(req, res) => {
   try{
-    const professorId = req.query.id 
-    console.log(professorId)
-    const result = await Log.findOne(
-      {"_id": new ObjectId(professorId)},
-    )
+    let professorId = req.query.id;
+
+    const result = await Log.findOne({'_id':professorId});
+console.log("2");
     return res.status(200).json(result)
   }catch(err){
     console.log(err)
@@ -226,4 +230,4 @@ const getLog = async(req, res) => {
   }
 }
 
-module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment,ModifySelect, getLog};
+module.exports = { Login, Signup, verifyOtp, GetAssignments, SingleAssignment,ModifySelect, updateLog,getLog};

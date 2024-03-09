@@ -25,7 +25,8 @@ const {
   GetAssignments,
   SingleAssignment,
   ModifySelect,
-  getLog
+  getLog,
+  updateLog
 } = require("../controller/examiner");
 
 router.post("/login", Login);
@@ -34,7 +35,8 @@ router.post("/verifyOtp", verifyOtp);
 router.get("/assignments/:id", GetAssignments);
 router.get("/singleassignment/:id1/:id2", SingleAssignment);
 router.put("/ModifySelect/:id", ModifySelect);
-router.get("/getLog", getLog)
+router.get("/getLog", getLog);
+router.post("/updateLog",updateLog);
 const Session = require('../Database/Models/Session')
 
 

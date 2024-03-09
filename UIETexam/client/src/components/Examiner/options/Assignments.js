@@ -29,8 +29,9 @@ const Assignments = () => {
     navigate(url, { state: data });
   };
   useEffect(()=>{
-console.log(papersObject);
-  },[papersObject])
+    if(globalResponseData)
+console.log(globalResponseData);
+  },[globalResponseData])
   useEffect(() => {
     const uniqueIds = [];
     const uniqueSession=[];
@@ -39,8 +40,8 @@ console.log(papersObject);
     const uniqueyear=[];
     
     const uniquePaperObj = papers.filter(item => {
-      if (!uniqueIds.includes(item.Sssion._id)) {
-        uniqueIds.push(item.Sssion._id);
+      if (!uniqueIds.includes(item?.Sssion?._id)) {
+        uniqueIds.push(item?.Sssion?._id);
         return true;
       }
       return false;
@@ -54,23 +55,23 @@ console.log(papersObject);
     });
     const uniqueBranches = papers.filter(item => {
     
-      if (!uniqueBranch.includes(item.assignment[0].Branch)) {
-        uniqueBranch.push(item.assignment[0].Branch);
+      if (!uniqueBranch.includes(item?.assignment[0]?.Branch)) {
+        uniqueBranch.push(item?.assignment[0]?.Branch);
         return true;
       }
       return false;
     });
     const uniqueSubjext = papers.filter(item => {
     
-      if (!uniqueSubjects.includes(item.assignment[0].Subject_name)) {
-        uniqueSubjects.push(item.assignment[0].Subject_name);
+      if (!uniqueSubjects.includes(item?.assignment[0]?.Subject_name)) {
+        uniqueSubjects.push(item?.assignment[0]?.Subject_name);
         return true;
       }
       return false;
     });
     const uniqueYr = papers.filter(item => {
-      if (!uniqueyear.includes(item.Sssion.Year)) {
-        uniqueyear.push(item.Sssion.Year);
+      if (!uniqueyear.includes(item?.Sssion.Year)) {
+        uniqueyear.push(item?.Sssion.Year);
         return true;
       }
       return false;
@@ -288,14 +289,14 @@ console.log(papersObject);
     papersObject.map((item, i) => (
       check(item) && (
         <tr key={i} className={i % 2 === 0 ? 'bg-gray-100 c' : 'bg-white '}>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.assignment[0].Subject_name}</td>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.assignment[0]._id}</td>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.assignment[0].Branch}</td>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.Sssion.Session}</td>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.assignment[0].SemesterNo}</td>
-          <td className="border px-4 py-3 text-lg font-bold text-center">{item.Sssion.Year}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.assignment[0]?.Subject_name}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.assignment[0]?._id}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.assignment[0]?.Branch}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.Sssion?.Session}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.assignment[0]?.SemesterNo}</td>
+          <td className="border px-4 py-3 text-lg font-bold text-center">{item?.Sssion?.Year}</td>
           <td className="border px-4 py-3">
-            {item.Status.IsSelected === 0 ? (
+            {item?.Status.IsSelected === 0 ? (
               <div className="flex gap-3">
                 <div
                   className="bg-green-500 text-white px-1 rounded cursor-pointer text-center"
@@ -312,7 +313,7 @@ console.log(papersObject);
               </div>
             ) : (
               <>
-                {item.Status.IsSelected === 1 ? (
+                {item?.Status.IsSelected === 1 ? (
                   <div
                     className="text-green-700 font-bold px-2 text-lg rounded text-center cursor-pointer"
                     onClick={() => handleRedirect(`/Examiner/Assignment/${item.assignment[0].ExamCode}`, { Obj: item })}
@@ -326,7 +327,7 @@ console.log(papersObject);
             )}
           </td>
           <td className="border px-4 py-3">
-            {item.Status.Ispending ? (
+            {item?.Status.Ispending ? (
               <div className="text-red-800 font-bold px-2 rounded text-center">Pending</div>
             ) : (
               <div className="text-green-700 text-lg font-bold px-2 rounded text-center">Completed</div>

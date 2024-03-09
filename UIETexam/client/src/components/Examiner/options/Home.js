@@ -137,7 +137,8 @@ const Home = () => {
         </div>
         <div className="bg-white row-span-2 p-3 shadow-md rounded-xl ">
           <h1 className="text-3xl font-bold ">Activities</h1>
-          <TrackingPage />
+
+          <TrackingPage proff_id={globalResponseData?._id}/>
         </div>
 
         <div className="bg-white shadow-md rounded-xl   p-3">
@@ -159,22 +160,7 @@ const Home = () => {
           <h1 className="text-3xl font-bold p-2">Subjects</h1>
           <div className="grid grid-cols-2 gap-4">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={index}
-                onClick={() =>
-                  handleRedirect(`/Examiner/Subjects/${index + 1}`, {
-                    items: [
-                      "Examiner1",
-                      "Examiner2",
-                      "Examiner3",
-                      "Examiner4",
-                      "Examiner5",
-                      "Examiner6",
-                    ],
-                    Subject: `Subject ${index + 1}`,
-                  })
-                }
-              >
+              <div>
                 <div className="flex items-center justify-center bg-gray-200  shadow-md rounded-xl border-2 border-gray-500  font-bold text-xl cursor-pointer">
                   <span className="mr-2">Subject {index + 1}</span>
                 </div>

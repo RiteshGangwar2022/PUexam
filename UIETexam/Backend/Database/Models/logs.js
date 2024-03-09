@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const LogSchema = new mongoose.Schema({
     _id: {
-        type: mongoose.Schema.ObjectId,
+        type: String,
         ref: 'Professor'
     },
     logs: [{
