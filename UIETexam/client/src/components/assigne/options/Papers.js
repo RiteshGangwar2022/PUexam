@@ -130,7 +130,13 @@ const Papers = () => {
                   <div className="text-green-500 text-lg">Accepted</div>
                 ) : examiner?.Status.IsSelected === -1 ? (
                   <div className="text-red-500 text-lg">Declined</div>
-                ) : (
+                ) : examiner?.Status.IsSelected === 2 ? (
+                  <div className="text-red-500 text-lg">Rejected</div>
+                ):
+                examiner?.Status.IsSelected === 3? (
+                  <div className="text-green-500 text-lg">Accepted</div>
+                ):
+                (
                   <p>Something wrong here</p>
                 )}
               </td>

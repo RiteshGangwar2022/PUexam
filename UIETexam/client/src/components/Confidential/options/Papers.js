@@ -94,7 +94,18 @@ const Papers = () => {
     fetchAllPapers();
   }, []);
 
-
+  const modify = async (id, isSelectedValue) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/r2/ModifySelect/${id}`, { isSelected: isSelectedValue });
+      //console.log(response.data.message);
+      if (response) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Update failed");
+    }
+  };
 
   const handleDownload = async (id, index) => {
     try {
@@ -129,6 +140,7 @@ const Papers = () => {
                 <th className="px-4 py-2 text-3xl">Year</th>
                 <th className="px-4 py-2 text-3xl">Semester</th>
                 <th className="px-4 py-2 text-3xl">password</th>
+                <th className="px-4 py-2 text-3xl">Status</th>
                 <th className="px-4 py-2 text-3xl ">Visibility</th>
               </tr>
             </thead>
@@ -142,6 +154,37 @@ const Papers = () => {
                   <td className="border px-4 py-3 text-lg font-bold text-center">{item.Sssion.Year}</td>
                   <td className="border px-4 py-3 text-lg font-bold text-center">{item.assignment[0].SemesterNo}</td>
                   <td className="border px-4 py-3 text-lg font-bold text-center">{item?.Status.password}</td>
+                  <td className="border px-4 py-3">
+            {item?.Status.IsSelected === 1 ? (
+              <div className="flex gap-3">
+                <div
+                  className="bg-green-500 text-white px-1 rounded cursor-pointer text-center"
+                  onClick={() => { modify(item.Status._id, 3) }}
+                >
+                  Accept
+                </div>
+                <div
+                  className="bg-red-500 text-white px-1 rounded  text-center cursor-pointer"
+                  onClick={() => { modify(item.Status._id, 2) }}
+                >
+                  Reject
+                </div>
+              </div>
+            ) : (
+              <>
+  {item?.Status.IsSelected === 3 ? (
+    <div className="text-green-700 font-bold px-2 text-lg rounded text-center cursor-pointer">
+      Accepted
+    </div>
+  ) : item?.Status.IsSelected === 2 ? (
+    <div className="text-red-800 font-bold px-2 rounded text-center text-lg">
+      Rejected
+    </div>
+  ) : null}
+</>
+            )}
+          </td>
+          
 
                   <td className="border px-4 py-3 text-lg font-bold text-center cursor-pointer" onClick={() => handleDownload(item.Status._id, index)}>
                     {loading[index] ? 

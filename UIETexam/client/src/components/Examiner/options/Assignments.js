@@ -313,17 +313,25 @@ console.log(globalResponseData);
               </div>
             ) : (
               <>
-                {item?.Status.IsSelected === 1 ? (
-                  <div
-                    className="text-green-700 font-bold px-2 text-lg rounded text-center cursor-pointer"
-                    onClick={() => handleRedirect(`/Examiner/Assignment/${item.assignment[0].ExamCode}`, { Obj: item })}
-                  >
-                    GO
-                  </div>
-                ) : (
-                  <div className="text-red-800 font-bold px-2 rounded text-center text-lg">Declined</div>
-                )}
-              </>
+              {item?.Status.IsSelected === 1 ? (
+  <div
+    className="text-green-700 font-bold px-2 text-lg rounded text-center cursor-pointer"
+    onClick={() => handleRedirect(`/Examiner/Assignment/${item.assignment[0].ExamCode}`, { Obj: item })}
+  >
+    GO
+  </div>
+) : item?.Status.IsSelected === -1 ? (
+  <div className="text-red-800 font-bold px-2 rounded text-center text-lg">Declined</div>
+) : item?.Status.IsSelected === 2 ? (
+  <div className="text-red-800 font-bold px-2 rounded text-center text-lg">Rejected</div>
+) : item?.Status.IsSelected === 3 ? (
+  <div className="text-green-700 font-bold px-2 text-lg rounded text-center ">
+    Accepted
+  </div>
+) : null}
+
+</>
+
             )}
           </td>
           <td className="border px-4 py-3">
